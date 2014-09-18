@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="post" id="post">
+	<div class="title">
+		<h2 itemprop="name">
+			{{ item.object|d('n/a') }}
+		</h2>
+	</div>
+	<div class="description">
+		<p itemprop="description">
+		{{ item.description|d('no description') }}
+		</p>
+	</div>
+	<ul class="metas">
+		<li>
+		<span class="meta">
+			<i class="fa fa-info"></i>
+			<span  itemprop="contentSize">{{ item.contentSize }}</span>
+		</span>
+		</li>
+		<li>
+		<span class="meta">
+			<i class="fa fa-calendar"></i>
+			<span itemprop="dateModified">{{ item.dateModified.format('short') }}</span>
+		</span>
+		</li>
+		<li>
+		<span class="meta">
+			<i class="fa fa-bookmark-o"></i>
+			<span>{{ item.subject|d('n/a') }}</span>
+		</span>
+		</li>
+		<li>
+		<span class="meta">
+			<i class="fa fa-ticket"></i>
+			<span>{{ item.category|d('n/a') }}</span>
+		</span>
+		</li>
+	</ul>
+</div>
+
+{% endblock %}

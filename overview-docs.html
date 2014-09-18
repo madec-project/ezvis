@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row">
+	<div class="col-lg-3 col-md-6">
+		<div class="panel panel-green">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-xs-3">
+						<i class="fa fa-file-o fa-5x"></i>
+					</div>
+					<div class="col-xs-9 text-right">
+						<div class="huge">{{ totalItems }}</div>
+						<div>Documents</div>
+					</div>
+				</div>
+			</div>
+			<a href="#">
+				<div class="panel-footer">
+					<a href="browse.html" class="pull-left">View Details</a>
+					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+					<div class="clearfix"></div>
+				</div>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-xs-3">
+						<i class="fa fa-tags fa-5x"></i>
+					</div>
+					<div class="col-xs-9 text-right">
+						<div class="huge">?</div>
+						<div>MIME types</div>
+					</div>
+				</div>
+			</div>
+			<a href="#">
+				<div class="panel-footer">
+					<span class="pull-left">View Details</span>
+					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+					<div class="clearfix"></div>
+				</div>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6">
+		<div class="panel panel-yellow">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-xs-3">
+						<i class="fa fa-dollar fa-5x"></i>
+					</div>
+					<div class="col-xs-9 text-right">
+						<div class="huge">?</div>
+						<div>Total size</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-6">
+		<div class="panel panel-red">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-xs-3">
+						<i class="fa fa-support fa-5x"></i>
+					</div>
+					<div class="col-xs-9 text-right">
+						<div class="huge">?</div>
+						<div>?</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<ul>
+	{% for field in fields %}
+	<li><a href="/distinct.html?field={{field}}">{{ field }}</a></li>
+	{% endfor %}
+</ul>
+
+{% endblock %}

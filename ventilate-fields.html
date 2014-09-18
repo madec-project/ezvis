@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<ul>
+{% for item in items %}
+<li>
+{{ item._id }} : <ul>
+  {% for v in item.values %}
+  <li>{{ v }}</li>
+  {% endfor %}
+</ul>
+</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

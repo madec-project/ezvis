@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /assets
+Sitemap: {{ url.protocol }}//{{ url.host }}/sitemap.xml

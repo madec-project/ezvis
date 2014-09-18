@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="panel-body">
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+			<thead>
+				<tr>
+					<th>Document</th>
+					<th>Date Modified</th>
+					<th>Content Size</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in items %}
+				<tr>
+					<td><a href="./display/{{ item.wid }}.html">{{ item.object|d('n/a') }}</a></td>
+					<td>{{ item.dateModified.format('short') }}</td>
+					<td>{{ item.contentSize }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+		{% endblock %}
