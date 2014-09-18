@@ -17,6 +17,9 @@
     <!-- MetisMenu CSS -->
     <link href="./assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
 
+    <!-- DataTables CSS -->
+    <link href="./assets/css/plugins/dataTables.bootstrap.css" rel="stylesheet">
+
     <!-- Custom CSS -->
     <link href="./assets/css/sb-admin-2.css" rel="stylesheet">
 
@@ -147,7 +150,7 @@
                             <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="browse.html"><i class="fa fa-table fa-fw"></i>Browse</a>
+                            <a href="documents.html"><i class="fa fa-table fa-fw"></i>Documents</a>
                         </li>
 						<li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Charts<span class="fa arrow"></span></a>
@@ -196,7 +199,6 @@
     </div>
     <!-- /#wrapper -->
 
-    {% block scripts %}
     <!-- jQuery Version 1.11.0 -->
     <script src="./assets/js/jquery-1.11.0.js"></script>
 
@@ -205,6 +207,10 @@
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="./assets/js/plugins/metisMenu/metisMenu.min.js"></script>
+
+	<!-- DataTables JavaScript -->
+    <script src="./assets/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="./assets/js/plugins/dataTables/dataTables.bootstrap.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="./assets/js/sb-admin-2.js"></script>
@@ -219,6 +225,7 @@
     primus.on('added', function(doc) { console.log('added', doc); });
     });
     </script>
+    {% block scripts %}
     {% endblock %}
 
 

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="panel-body">
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover" id="dataTables-documents">
+      <thead>
+				<tr>
+					<th>ID</th>
+					<th>Document</th>
+					<th>Date Modified</th>
+					<th>Content Size</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+		{% endblock %}
+
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('#dataTables-documents').dataTable({
+      ordering: true,
+      ajax: {
+        url: "/browse.json",
+        dataSrc: "items"
+      },
+      columns: [
+        { data: 'wid' },
+        { data: 'object' },
+        { data: 'dateModified' },
+        { data: 'contentSize' }
+    ]
+    });
+});
+</script>
+{% endblock %}
+
