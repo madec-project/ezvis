@@ -26,6 +26,12 @@
     <!-- Custom Fonts -->
     <link href="./assets/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
+    <!-- C3 CSS -->
+    <link href="assets/css/c3.css" rel="stylesheet" type="text/css">
+
+    <!-- Dashboard CSS -->
+    <link href="/assets/css/dashboard.css" rel="stylesheet" type="text/css">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -154,13 +160,7 @@
                         </li>
 						<li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Charts<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level collapse in" style="">
-                                <li>
-                                    <a href="chart.html?id=1">Chart 1</a>
-                                </li>
-                                <li>
-                                    <a href="chart.html?id=2">Chart 2</a>
-                                </li>
+                            <ul id="charts-list" class="nav nav-second-level collapse in" style="">
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -224,6 +224,7 @@
     primus.on('dropped', function(doc) { console.log('dropped', doc); });
     primus.on('added', function(doc) { console.log('added', doc); });
     });
+    var pathname = "{{url.pathname}}";
     </script>
     {% block scripts %}
     {% endblock %}
