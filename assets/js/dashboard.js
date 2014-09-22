@@ -238,6 +238,14 @@ $(document).ready(function () {
           else if (pref.type === 'pie') {
             generatePie(id, pref);
           }
+
+          if (!isOnlyChart(id)) {
+            $('#' + id).after('<div class="panel-footer">'+
+              '<a href="chart.html?id='+ id + '" class="pull-left">View Details</a>'+
+              '<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>'+
+              '<div class="clearfix"></div>'+
+            '</div>');            
+          }
         }
         else {
           console.log('Bad preference for "%s" chart :', id);
