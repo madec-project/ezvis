@@ -5,7 +5,17 @@ $(document).ready(function () {
   var request = superagent;
   var self = this;
 
+  var isOnlyChart = function isOnlyChart(id) {
+    console.log(pathname);
+    return pathname === '/chart.html' &&
+           typeof params !== 'undefined' &&
+           params.id === id;
+  };
+
   var bootstrapPosition = function(id, size) {
+    if (isOnlyChart(id)) {
+      return;
+    }
     if (size.columns) {
       $('#' + id)
       .parent()
@@ -212,7 +222,7 @@ $(document).ready(function () {
 
     Object.keys(charts, function (id, pref) {
 
-      if (pathname !== '/chart.html' || params.id === id) {
+      if (isOnlyChart(id) || pathname !== '/chart.html') {
 
         $('#charts').append('<div class="panel panel-default col-md-12">' +
                             '<div id="' +  id + '" class="panel-body"></div>' +
