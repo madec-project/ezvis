@@ -209,26 +209,31 @@ $(document).ready(function () {
   .end(function(res) {
     self.dashboard = res.body.config.dashboard;
     var charts = self.dashboard.charts;
+
     Object.keys(charts, function (id, pref) {
-      $('#charts').append('<div class="panel panel-default col-md-12">' +
-                          '<div id="' +  id + '" class="panel-body"></div>' +
-                          '</div>');
 
-      if (pref.type && pref.field) {
+      if (pathname !== '/chart.html' || params.id === id) {
 
-        if (pref.type === 'histogram') {
-          generateHistogram(id, pref);
+        $('#charts').append('<div class="panel panel-default col-md-12">' +
+                            '<div id="' +  id + '" class="panel-body"></div>' +
+                            '</div>');
+
+        if (pref.type && pref.field) {
+
+          if (pref.type === 'histogram') {
+            generateHistogram(id, pref);
+          }
+          else if (pref.type === 'horizontalbars') {
+            generateHorizontalBars(id, pref);
+          }
+          else if (pref.type === 'pie') {
+            generatePie(id, pref);
+          }
         }
-        else if (pref.type === 'horizontalbars') {
-          generateHorizontalBars(id, pref);
+        else {
+          console.log('Bad preference for "%s" chart :', id);
+          console.log(pref);
         }
-        else if (pref.type === 'pie') {
-          generatePie(id, pref);
-        }
-      }
-      else {
-        console.log('Bad preference for "%s" chart :', id);
-        console.log(pref);
       }
     });
   });

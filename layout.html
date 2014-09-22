@@ -230,6 +230,7 @@
     primus.on('dropped', function(doc) { console.log('dropped', doc); });
     primus.on('added', function(doc) { console.log('added', doc); });
     });
+    var pathname = "{{url.pathname}}";
     </script>
     {% block scripts %}
     {% endblock %}
