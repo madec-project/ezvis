@@ -6,7 +6,6 @@ $(document).ready(function () {
   var self = this;
 
   var isOnlyChart = function isOnlyChart(id) {
-    console.log(pathname);
     return pathname === '/chart.html' &&
            typeof params !== 'undefined' &&
            params.id === id;
@@ -245,6 +244,12 @@ $(document).ready(function () {
           console.log(pref);
         }
       }
+
+      // add chart ID in the left navbar
+      $('#charts-list')
+      .append('<li>' +
+              '     <a href="chart.html?id=' + id + '">' + pref.title + '</a>' +
+              '</li>');
     });
   });
 
