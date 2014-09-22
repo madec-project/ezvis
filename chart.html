@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div id="charts" class="row">
+
+</div>
+
+<div class="row">
+    Here should be matching documents.
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="assets/js/sugar.min.js"></script>
+<script>
+// Compute params
+var url_query = "{{url.query}}";
+var strings = url_query.split(/&amp;/g);
+var params = strings.reduce(function (obj, str) {
+    var a = str.split('=');
+    var k = a[0];
+    var v = a[1];
+    obj[k] = v;
+    return obj;
+}, {});
+</script>
+<script src="assets/js/d3.v3.min.js" charset="utf-8"></script>
+<script src="assets/js/c3.min.js"></script>
+<script src="assets/js/superagent.js"></script>
+<script src="assets/js/dashboard.js"></script>
+{% endblock %}
