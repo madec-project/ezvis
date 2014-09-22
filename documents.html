@@ -24,10 +24,8 @@
 $(document).ready(function() {
     $('#dataTables-documents').dataTable({
       ordering: true,
-      ajax: {
-        url: "/browse.json",
-        dataSrc: "items"
-      },
+	  serverSide: true,
+      ajax: "/browse.json",
       columns: [
         { data: 'wid' },
         { data: 'object' },
