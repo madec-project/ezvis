@@ -37,9 +37,9 @@ $(document).ready(function () {
     }
 
     request
-    .get('/distinct.json?field=' + pref.field)
+    .get('/compute.json?o=distinct&f=' + pref.field)
     .end(function(res) {
-      self.years = res.body.items;
+      self.years = res.body.data;
 
       // Create a dictionary: year -> occurrence
       var y = {};
@@ -90,9 +90,9 @@ $(document).ready(function () {
     }
 
     request
-    .get('/distinct.json?field=' + pref.field)
+    .get('/compute.json?o=distinct&f=' + pref.field)
     .end(function(res) {
-      self.themes = res.body.items;
+      self.themes = res.body.data;
 
       var columns = [];
       self.themes.each(function(e) {
@@ -168,9 +168,9 @@ $(document).ready(function () {
     }
 
     request
-    .get('/distinct.json?field=' + pref.field)
+    .get('/compute.json?o=distinct&f=' + pref.field)
     .end(function(res) {
-      var keys = res.body.items;
+      var keys = res.body.data;
 
       // Create a dictionary: key -> occurrence
       var k = {};
