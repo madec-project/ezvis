@@ -6,37 +6,40 @@
 		<table class="table table-striped table-bordered table-hover" id="dataTables-documents">
       <thead>
 				<tr>
-					<th>ID</th>
-					<th>Title</th>
-          <th>Publication Year</th>
+{% for field, path in config.userfields %}
+          <th>{{ field | capitalize }}</th>
+{% endfor %}
+          <!-- <th>Publication Year</th>
+          <th>Title</th>
           <th>Authors</th>
-          <th>Themes</th>
+          <th>Themes</th> -->
 				</tr>
 			</thead>
 		</table>
 	</div>
 </div>
 
-		{% endblock %}
+{% endblock %}
 
 
 {% block scripts %}
 <script>
 $(document).ready(function() {
-    $('#dataTables-documents').dataTable({
-      ordering: true,
-      ajax: {
-        url: "/browse.json",
-        dataSrc: "data"
-      },
-      columns: [
-        { data: 'wid' },
-        { data: 'content.json.Ti' },
-        { data: 'content.json.Py'},
-        { data: 'content.json.Af' },
-        { data: 'content.json.DiscESI' },
-    ]
-    });
+  
+  $('#dataTables-documents').dataTable({
+    ordering: true,
+    ajax: {
+      url: "/browse.json",
+      dataSrc: "data"
+    },
+    columns: [
+      { data: 'content.json.Py'},
+      { data: 'content.json.Ti' },
+      { data: 'content.json.Af' },
+      { data: 'content.json.DiscESI' },
+  ]
+  });
+
 });
 </script>
 {% endblock %}
