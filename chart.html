@@ -6,8 +6,18 @@
 
 </div>
 
-<div class="row">
-    Here should be matching documents.
+<div class="row panel-body">
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover" id="dataTables-documents">
+      <thead>
+        <tr>
+{% for field, path in config.userfields %}
+          <th>{{ field | capitalize }}</th>
+{% endfor %}
+        </tr>
+      </thead>
+    </table>
+  </div>
 </div>
 
 {% endblock %}
@@ -30,4 +40,20 @@ var params = strings.reduce(function (obj, str) {
 <script src="assets/js/c3.min.js"></script>
 <script src="assets/js/superagent.js"></script>
 <script src="assets/js/dashboard.js"></script>
+<script>
+$(document).ready(function() {
+
+  $('#dataTables-documents').dataTable({
+    ordering: true,
+    serverSide: true,
+    ajax: "/browse.json",
+    columns: [
+{% for field, path in config.userfields %}
+      { data: '{{ path }}' },
+{% endfor %}
+  ]
+  });
+
+});
+</script>
 {% endblock %}
