@@ -7,9 +7,10 @@
       <thead>
 				<tr>
 					<th>ID</th>
-					<th>Document</th>
-					<th>Date Modified</th>
-					<th>Content Size</th>
+					<th>Title</th>
+          <th>Publication Year</th>
+          <th>Authors</th>
+          <th>Themes</th>
 				</tr>
 			</thead>
 		</table>
@@ -26,13 +27,14 @@ $(document).ready(function() {
       ordering: true,
       ajax: {
         url: "/browse.json",
-        dataSrc: "items"
+        dataSrc: "data"
       },
       columns: [
         { data: 'wid' },
-        { data: 'object' },
-        { data: 'dateModified' },
-        { data: 'contentSize' }
+        { data: 'content.json.Ti' },
+        { data: 'content.json.Py'},
+        { data: 'content.json.Af' },
+        { data: 'content.json.DiscESI' },
     ]
     });
 });
