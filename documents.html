@@ -2,17 +2,17 @@
 
 {% block content %}
 <div class="panel-body">
-	<div class="table-responsive">
-		<table class="table table-striped table-bordered table-hover" id="dataTables-documents">
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover" id="dataTables-documents">
       <thead>
-				<tr>
+        <tr>
 {% for field, path in config.userfields %}
           <th>{{ field | capitalize }}</th>
 {% endfor %}
-				</tr>
-			</thead>
-		</table>
-	</div>
+        </tr>
+      </thead>
+    </table>
+  </div>
 </div>
 
 {% endblock %}
