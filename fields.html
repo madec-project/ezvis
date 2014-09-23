@@ -7,6 +7,7 @@
 			<thead>
 				<tr>
 					<th>Field</th>
+					<th>Count</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -22,9 +23,14 @@
 <script>
 $(document).ready(function() {
     $('#dataTables-fields').dataTable({
-      ordering: true,
       serverSide: true,
-      ajax: '/compute.json?o=catalog&f=*'
+	  ajax: '/compute.json?o=catalog&f=-content',
+	searching: false,
+	  columns: [
+        { data: '_id' },
+        { data: 'value' }
+    ]
+
     });
 });
 </script>

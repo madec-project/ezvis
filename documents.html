@@ -28,10 +28,8 @@ $(document).ready(function() {
   
   $('#dataTables-documents').dataTable({
     ordering: true,
-    ajax: {
-      url: "/browse.json",
-      dataSrc: "data"
-    },
+    serverSide: true,
+    ajax: "/browse.json",
     columns: [
       { data: 'content.json.Py'},
       { data: 'content.json.Ti' },

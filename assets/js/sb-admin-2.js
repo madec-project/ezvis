@@ -12,8 +12,8 @@ $(function() {
     $('#side-menu').metisMenu();
 
     $("div[data-url]").each(function(e) {
-      var self = this;
-      $.getJSON($(self).data('url'), function(obj) {
+      var self = this, now = new Date();
+      $.getJSON($(self).data('url') + '&_=' + now.getTime(), function(obj) {
         var func = new Function("data", "return " + $(self).data('return'));
         $(self).html(func(obj.data));
       })
