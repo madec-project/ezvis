@@ -31,10 +31,9 @@ $(document).ready(function() {
     serverSide: true,
     ajax: "/browse.json",
     columns: [
-      { data: 'content.json.Py'},
-      { data: 'content.json.Ti' },
-      { data: 'content.json.Af' },
-      { data: 'content.json.DiscESI' },
+{% for field, path in config.userfields %}
+      { data: '{{ path }}' },
+{% endfor %}
   ]
   });
 
