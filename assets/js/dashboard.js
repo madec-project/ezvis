@@ -76,6 +76,15 @@ $(document).ready(function () {
         bootstrapPosition(id, pref.size);
       }
 
+      if (isOnlyChart(id)) {
+        options.data.selection = {enabled:true};
+        options.data.onselected = function (d, element) {
+          console.log('onselected', d);
+          console.log('index:', d.index, categories[d.index]);
+          // TODO: change datatables content.
+        }
+      }
+
       var histogram = c3.generate(options);
     });
   };
@@ -153,6 +162,16 @@ $(document).ready(function () {
         });
         options.data.colors = colors;
       }
+
+      if (isOnlyChart(id)) {
+        options.data.selection = {enabled:true};
+        options.data.onselected = function (d, element) {
+          console.log('onselected', d);
+          console.log('id:', d.id);
+          // TODO: change datatables content.
+        }
+      }
+
       // Generate the pie.
       var pie = c3.generate(options);
     });
@@ -206,6 +225,15 @@ $(document).ready(function () {
       if (pref.size) {
         options.size = pref.size;
         bootstrapPosition(id, pref.size);
+      }
+
+      if (isOnlyChart(id)) {
+        options.data.selection = {enabled:true};
+        options.data.onselected = function (d, element) {
+          console.log('onselected', d);
+          console.log('index:', d.index, categories[d.index]);
+          // TODO: change datatables content.
+        }
       }
 
       var histogram = c3.generate(options);
