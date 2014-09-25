@@ -264,6 +264,7 @@ $(document).ready(function () {
             var options = {
               ordering: true,
               serverSide: true,
+              lengthMenu: [5,10,25,50,100],
               ajax: "/browse.json",
             };
             var columns = [{

@@ -26,6 +26,7 @@ $(document).ready(function() {
     ordering: true,
     serverSide: true,
     ajax: "/browse.json",
+    lengthMenu: [5,10,25,50,100],
     columns: [
 {% for field, path in config.userfields %}
       { data: '{{ path }}' },
