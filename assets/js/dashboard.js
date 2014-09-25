@@ -80,9 +80,7 @@ $(document).ready(function () {
       if (isOnlyChart(id)) {
         options.data.selection = {enabled:true};
         options.data.onselected = function (d, element) {
-          console.log('onselected', d);
-          console.log('index:', d.index, categories[d.index]);
-          // TODO: change datatables content.
+          table.columns(0).search(categories[d.index]).draw();
         }
       }
 
@@ -167,9 +165,6 @@ $(document).ready(function () {
       if (isOnlyChart(id)) {
         options.data.selection = {enabled:true};
         options.data.onselected = function (d, element) {
-          console.log('onselected', d);
-          console.log('id:', d.id);
-          window.table = table;
           table.columns(0).search(d.id).draw();
         }
       }
@@ -232,9 +227,7 @@ $(document).ready(function () {
       if (isOnlyChart(id)) {
         options.data.selection = {enabled:true};
         options.data.onselected = function (d, element) {
-          console.log('onselected', d);
-          console.log('index:', d.index, categories[d.index]);
-          // TODO: change datatables content.
+          table.columns(0).search(categories[d.index]).draw();
         }
       }
 
