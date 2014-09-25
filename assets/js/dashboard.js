@@ -2,6 +2,7 @@
 /*global $,c3 */
 $(document).ready(function () {
   'use strict';
+  var table;
   var request = superagent;
   var self = this;
 
@@ -168,7 +169,8 @@ $(document).ready(function () {
         options.data.onselected = function (d, element) {
           console.log('onselected', d);
           console.log('id:', d.id);
-          // TODO: change datatables content.
+          window.table = table;
+          table.columns(0).search(d.id).draw();
         }
       }
 
@@ -244,7 +246,8 @@ $(document).ready(function () {
   request
   .get('/index.json')
   .end(function(res) {
-    self.dashboard = res.body.config.dashboard;
+    var config = res.body.config;
+    self.dashboard = config.dashboard;
     var charts = self.dashboard.charts;
 
     Object.keys(charts, function (id, pref) {
@@ -256,6 +259,24 @@ $(document).ready(function () {
                             '</div>');
 
         if (pref.type && pref.field) {
+
+          if(isOnlyChart(id)) {
+            var options = {
+              ordering: true,
+              serverSide: true,
+              ajax: "/browse.json",
+            };
+            var columns = [{
+              data: pref.field
+            }];
+            for (var userfield in config.userfields) {
+              columns.push({data: config.userfields[userfield]});
+            }
+            options.columns = columns;
+            table = $('#dataTables-documents').DataTable(options);
+            table.column(0).visible(false);
+          }
+
 
           if (pref.type === 'histogram') {
             generateHistogram(id, pref);
@@ -272,7 +293,7 @@ $(document).ready(function () {
               '<a href="chart.html?id='+ id + '" class="pull-left">View Details</a>'+
               '<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>'+
               '<div class="clearfix"></div>'+
-            '</div>');            
+            '</div>');
           }
         }
         else {
