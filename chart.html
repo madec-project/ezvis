@@ -12,8 +12,8 @@
       <thead>
         <tr>
           <th>Searchable</th>
-{% for field, path in config.userfields %}
-          <th>{{ field | capitalize }}</th>
+{% for id, field in config.userfields %}
+          <th>{{ field.label }}</th>
 {% endfor %}
         </tr>
       </thead>

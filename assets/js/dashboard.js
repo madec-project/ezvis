@@ -264,7 +264,7 @@ $(document).ready(function () {
               data: pref.field
             }];
             for (var userfield in config.userfields) {
-              columns.push({data: config.userfields[userfield]});
+              columns.push({data: config.userfields[userfield].path || config.userfields[userfield]});
             }
             options.columns = columns;
             table = $('#dataTables-documents').DataTable(options);

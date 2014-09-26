@@ -6,8 +6,8 @@
     <table class="table table-striped table-bordered table-hover" id="dataTables-documents">
       <thead>
         <tr>
-{% for field, path in config.userfields %}
-          <th>{{ field | capitalize }}</th>
+{% for id, field in config.userfields %}
+          <th>{{ field.label }}</th>
 {% endfor %}
         </tr>
       </thead>
@@ -28,8 +28,8 @@ $(document).ready(function() {
     ajax: "/browse.json",
     lengthMenu: [5,10,25,50,100],
     columns: [
-{% for field, path in config.userfields %}
-      { data: '{{ path }}' },
+{% for id, field in config.userfields %}
+      { data: '{{ field.path }}' },
 {% endfor %}
   ]
   });
