@@ -283,11 +283,14 @@ $(document).ready(function () {
           }
 
           if (!isOnlyChart(id)) {
-            $('#' + id).after('<div class="panel-footer">'+
-              '<a href="chart.html?id='+ id + '" class="pull-left">View Details</a>'+
-              '<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>'+
-              '<div class="clearfix"></div>'+
-            '</div>');
+            $('#' + id).after(
+            '<a href="chart.html?id=' + id + '">' +
+              '<div class="panel-footer">'+
+                '<span class="pull-left">View Details</span>'+
+                '<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>'+
+                '<div class="clearfix"></div>'+
+              '</div>' +
+            '</a>');
           }
         }
         else {
