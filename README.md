@@ -15,14 +15,14 @@ Usage
 -----
 
 ```bash
-$ castor --theme ./castor-theme-sbadmin/ --logFormat dev /path/to/data/repository
+$ castor --theme ./castor-theme-sbadmin/ /path/to/data/repository
 ```
 
 If you don't have a data repository, but already loaded data in mongodb, you
 can use:
 
 ```bash
-$ castor --theme ./castor-theme-sbadmin/ --logFormat dev $PWD/data
+$ castor --theme ./castor-theme-sbadmin/ $PWD/data
 ```
 
 Before that, you have to configure your mongo connection, by creating a
@@ -31,15 +31,14 @@ Before that, you have to configure your mongo connection, by creating a
 ```json
 {
   "port": 3000,
-  "connexionURI" : "mongodb://localhost:27017/test/",
   "collectionName" : "insu"
 }
 ```
 
-Or, if you prefer (assuming you use `test` database and `insu` collection):
+Or, if you prefer (assuming you use `insu` collection):
 
 ```bash
-$ castor --theme ./castor-theme-sbadmin/ --logFormat dev --connexionURI mongodb://localhost:27017/test/ --collectionName insu
+$ castor --theme ./castor-theme-sbadmin/ --collectionName insu
 ```
 
 Configuration
@@ -84,9 +83,11 @@ chart (which key is `perTheme`). There are two types of charts:
 }
 ```
 
-## Chart types
+## Charts
 
-### histogram
+### Chart types
+
+#### histogram
 
 Used to represent evolution of the number of documents along the time (so,
 this field is often a publication year, or anything indicating a point in
@@ -94,23 +95,23 @@ time).
 
 Possible configuration: [`size`](#size).
 
-### pie
+#### pie
 
 Used to fill the pie chart quarters.
 
 There are some configuration possible: [`size`](#size) of the pie, and 
 position of the [`legend`](#legend).
 
-### horizontalbars
+#### horizontalbars
 
 Used to display the number of documents associated to a field value (for 
 example, for keywords: how many documents match a keyword?).
 
 Possible configuration: [`size`](#size).
 
-## Preferences
+### Preferences
 
-### size
+#### size
 
 To specify the size of the pie, add the `size` key to your chart.
 Then, you can follow the [C3's example](http://c3js.org/samples/options_size.html) to fill it.
@@ -163,7 +164,7 @@ preceding offset of 1 column.
 }
 ```
 
-### legend
+#### legend
 
 To specify where you want the legend to be, add the `legend` key to your chart.
 Then, you follow the [C3's example](http://c3js.org/samples/legend_position.html) to fill it.
@@ -183,9 +184,9 @@ Ex:
 ```
 
 
-## Field configuration
+### Field configuration
 
-### Simple configuration
+#### Simple configuration
 
 To indicate which field is used by a chart, you have to specify it inside the can use the JSON configuration field.
 
@@ -211,7 +212,7 @@ Ex:
 ```
 
 
-## Multivalued fields
+### Multivalued fields
 
 Maybe your fields are *multivalued*, for example, if you load `csv` files.
 
@@ -270,6 +271,33 @@ in each row), and a multivalued one, `Keywords` (several keywords):
           "field": "multivaluedFields.Keywords",
           "type": "pie"
       }
+  }
+}
+```
+
+## Documents table
+
+In `/chart.html` pages, you can see a chart, and a table with documents. This table display the fields you chose to put in the `userfields` key.
+
+Here is an example, displaying `Year`, `Title`, `Authors`, and `Keywords`:
+
+```javascript
+"userfields" : {
+  "year"   : {
+    "path" : "content.json.Py",
+    "label": "Publication Year"
+  },
+  "title"  : {
+    "path" : "content.json.Ti",
+    "label": "Title"
+  },
+  "authors": {
+    "path" : "content.json.Af",
+    "label": "Authors"
+  },
+  "keywords" : {
+    "path" : "content.json.DiscESI",
+    "label": "Keywords"
   }
 }
 ```
