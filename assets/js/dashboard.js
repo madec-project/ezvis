@@ -38,7 +38,7 @@ $(document).ready(function () {
     }
 
     request
-    .get('/compute.json?o=distinct&f=' + pref.field)
+    .get('/compute.json?o=distinct&f=' + pref.field + '&itemsPerPage=100')
     .end(function(res) {
       self.years = res.body.data;
 
@@ -98,7 +98,7 @@ $(document).ready(function () {
     }
 
     request
-    .get('/compute.json?o=distinct&f=' + pref.field)
+    .get('/compute.json?o=distinct&f=' + pref.field + '&itemsPerPage=100')
     .end(function(res) {
       self.themes = res.body.data;
 
@@ -184,7 +184,7 @@ $(document).ready(function () {
     }
 
     request
-    .get('/compute.json?o=distinct&f=' + pref.field)
+    .get('/compute.json?o=distinct&f=' + pref.field + '&itemsPerPage=100')
     .end(function(res) {
       var keys = res.body.data;
 
@@ -257,7 +257,7 @@ $(document).ready(function () {
             var options = {
               ordering: true,
               serverSide: true,
-              lengthMenu: [5,10,25,50,100],
+              lengthMenu: [config.itemsPerPage||5,10,25,50,100],
               ajax: "/browse.json",
             };
             var columns = [{
