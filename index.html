@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 
 {% block content %}
+{% set typePath = config.customFields.Type.path if config.customFields.Type else "mimetype" %}
+{% set typeLabel = config.customFields.Type.label if config.customFields.Type else "MIME types" %}
 <div class="row">
 	<div class="col-lg-3 col-md-6">
 		<div class="panel panel-green">
@@ -32,8 +34,8 @@
 						<i class="fa fa-tags fa-5x"></i>
 					</div>
 					<div class="col-xs-9 text-right">
-						<div class="huge" data-url="/compute.json?o=distinct&f=mimetype" data-return="Object.keys(data).length">?</div>
-						<div>MIME types</div>
+						<div class="huge" data-url="/compute.json?o=distinct&f={{typePath}}&l=100" data-return="Object.keys(data).length">?</div>
+						<div>{{typeLabel}}</div>
 					</div>
 				</div>
 			</div>
@@ -88,7 +90,6 @@
 <div id="charts" class="row">
 
 </div>
-
 {% endblock %}
 
 {% block scripts %}
