@@ -263,8 +263,10 @@ $(document).ready(function () {
             var columns = [{
               data: pref.field
             }];
-            for (var userfield in config.userfields) {
-              columns.push({data: config.userfields[userfield].path || config.userfields[userfield]});
+            for (var userfield in config.customFields) {
+              if (config.customFields[userfield].public) {
+                columns.push({data: config.customFields[userfield].path || config.customFields[userfield]});
+              }
             }
             options.columns = columns;
             table = $('#dataTables-documents').DataTable(options);

@@ -12,8 +12,10 @@
       <thead>
         <tr>
           <th>Searchable</th>
-{% for id, field in config.userfields %}
+{% for id, field in config.customFields %}
+  {% if field.public %}
           <th>{{ field.label }}</th>
+  {% endif %}
 {% endfor %}
         </tr>
       </thead>
