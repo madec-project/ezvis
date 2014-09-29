@@ -24,11 +24,12 @@
 <script>
 $(document).ready(function() {
   
+{% set itemsPerPage = config.itemsPerPage if config.itemsPerPage else 0 %}
   $('#dataTables-documents').dataTable({
     ordering: true,
     serverSide: true,
     ajax: "/browse.json",
-    lengthMenu: [5,10,25,50,100],
+    lengthMenu: [{{ itemsPerPage }}||5,10,25,50,100],
     columns: [
 {% for id, field in config.customFields %}
   {% if field.public %}
