@@ -1,0 +1,29 @@
+{
+  "name": "castor-theme-sbadmin",
+  "version": "0.1.0",
+  "description": "A Castor theme to visualize a synthesis on a corpus, using pies and histograms, based on SB Admin v2.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/castorjs/castor-theme-sbadmin.git"
+  },
+  "keywords": [
+    "corpus",
+    "data",
+    "structured",
+    "visualization",
+    "dashboard"
+  ],
+  "contributors": [
+    "François Parmentier",
+    "Nicolas Thouvenin"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/castorjs/castor-theme-sbadmin/issues"
+  },
+  "homepage": "https://github.com/castorjs/castor-theme-sbadmin"
+}
