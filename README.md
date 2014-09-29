@@ -51,8 +51,8 @@ The configuration is done in the JSON file of
 it's a file with the same name as the data directory 
 (besides that directory), appended with `.json`.
 
-The whole dashboard configuration is done inside the `dashboard` key of the
-JSON configuration file.
+The whole dashboard configuration is done inside the `dashboard` key
+of the JSON configuration file.
 
 Each chart has to be described in the `dashboard.charts` key.
 Each chart has a name (its key in the JSON).
@@ -64,10 +64,12 @@ chart (which key is `perTheme`). There are two types of charts:
 ```json
 {
   "theme": "/path/to/castor-theme-sbadmin",
-  "multivaluedFields" : {
-    "Themes" : "content.json.DiscESI"
+  "customFields": {
+    "Themes" : {
+      "path" : "content.json.DiscESI",
+      "separator" : ";"
+    }
   },
-  "multivaluedSeparator" : ";",
   "dashboard" : {
     "charts": {
         "perYear": {
@@ -75,7 +77,7 @@ chart (which key is `perTheme`). There are two types of charts:
             "type": "histogram"
         },
         "perTheme": {
-            "field": "multivaluedFields.Themes",
+            "field": "fields.Themes",
             "type": "pie"
         }
     }
@@ -120,7 +122,7 @@ Ex:
 
 ```javascript
 "perTheme": {
-  "field": "multivaluedFields.Themes",
+  "field": "fields.Themes",
   "type": "pie",
   "size": {
     "height": 400
@@ -135,7 +137,7 @@ Here is  an example where the pie should take half of the page's width:
 
 ```javascript
 "perTheme": {
-  "field": "multivaluedFields.Themes",
+  "field": "fields.Themes",
   "type": "pie",
   "size": {
     "height": 400,
@@ -153,7 +155,7 @@ preceding offset of 1 column.
 
 ```javascript
 "horizontalThemes": {
-    "field": "multivaluedFields.Themes",
+    "field": "fields.Themes",
     "type": "horizontalbars",
     "title": "Thèmes",
     "size": {
@@ -175,7 +177,7 @@ Ex:
 
 ```javascript
 "perTheme": {
-  "field": "multivaluedFields.Themes",
+  "field": "fields.Themes",
   "type": "pie",
   "legend": {
     "position": "bottom"
@@ -192,7 +194,7 @@ To indicate which field is used by a chart, you have to specify it inside the ca
 
 These are used to point inside the mongodb document, using the dot notation.
 
-Often, they are placed in the `content` field, or in `multivaluedFields`.
+Often, they are placed in the `content` field, or in `fields`.
 
 Ex:
 
@@ -216,24 +218,26 @@ Ex:
 
 Maybe your fields are *multivalued*, for example, if you load `csv` files.
 
-For example, in an `Keywords` columns, you have such values:
+For example, in a `Keywords` columns, you have such values:
 
 ```
 Dashboard; Nodejs; Github
 Web; Dashboard; Statistics
 ```
 
-The direct way, is to point to `content.json.authors`, but that will
+The direct way, is to point to `content.json.keywords`, but that will
 distinguish the `Dashboard` from the first row to the one from the second row.
 Moreover, they will be bound to other keywords on the same row.
 
-The solution is to add in the JSON configurationfile a `multivaluedFields` part:
+The solution is to add a *custom field* in the JSON configuration file:
 
 ```javascript
-"multivaluedFields" : {
-  "Keywords" :  "content.json.Keywords",
+"customFields" : {
+  "Keywords" :  {
+    "content.json.Keywords",
+    "separator" : ";"
+  }
 },
-"multivaluedSeparator" : ";",
 ```
 
 Then, you have to add 
@@ -246,21 +250,24 @@ Then, you have to add
           "type": "histogram"
       },
       "perTheme": {
-          "field": "multivaluedFields.Keywords",
+          "field": "fields.Keywords",
           "type": "pie"
       }
   }
 }
 ```
 
-Here is an example with a normal field `Py` (Publication year, which is unique
-in each row), and a multivalued one, `Keywords` (several keywords):
+Here is an example with a normal field `Py` (Publication year, which
+is unique in each row), and a multivalued one, `Keywords` (several 
+keywords):
 
 ```javascript
-"multivaluedFields" : {
-  "Keywords" :  "content.json.Keywords",
+"customFields" : {
+  "Keywords" :  {
+    "content.json.Keywords",
+    "separator" : ";"
+  }
 },
-"multivaluedSeparator" : ";",
 "dashboard" : {
   "charts": {
       "perYear": {
@@ -268,7 +275,7 @@ in each row), and a multivalued one, `Keywords` (several keywords):
           "type": "histogram"
       },
       "perTheme": {
-          "field": "multivaluedFields.Keywords",
+          "field": "fields.Keywords",
           "type": "pie"
       }
   }
@@ -277,27 +284,36 @@ in each row), and a multivalued one, `Keywords` (several keywords):
 
 ## Documents table
 
-In `/chart.html` pages, you can see a chart, and a table with documents. This table display the fields you chose to put in the `userfields` key.
+In `/chart.html` pages, you can see a chart, and a table with documents. This table display the fields you chose to put in the `customFields` key.
 
 Here is an example, displaying `Year`, `Title`, `Authors`, and `Keywords`:
 
 ```javascript
-"userfields" : {
+"customFields" : {
   "year"   : {
     "path" : "content.json.Py",
-    "label": "Publication Year"
+    "label": "Publication Year",
+    "public": true
   },
   "title"  : {
     "path" : "content.json.Ti",
-    "label": "Title"
+    "label": "Title",
+    "public": true
   },
   "authors": {
     "path" : "content.json.Af",
-    "label": "Authors"
+    "label": "Authors",
+    "public": true
   },
   "keywords" : {
     "path" : "content.json.DiscESI",
-    "label": "Keywords"
+    "label": "Keywords",
+    "public": true
   }
 }
 ```
+
+All *custom fields* which `public` key is set to `true` will be
+present in the table.
+
+By default, `public` key value is `false`.
