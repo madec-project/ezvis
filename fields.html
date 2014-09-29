@@ -24,7 +24,7 @@
 $(document).ready(function() {
     $('#dataTables-fields').dataTable({
       serverSide: true,
-	  ajax: '/compute.json?o=catalog&f=-content',
+	  ajax: '/compute.json?o=catalog&f=content',
 	searching: false,
 	  columns: [
         { data: '_id' },
