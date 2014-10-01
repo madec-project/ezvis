@@ -24,6 +24,21 @@
 <script>
 $(document).ready(function() {
   
+  var addLink = function addLink(data, type, row) {
+    return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
+  };
+
+  var fieldNb = 0;
+{% for id, field in config.customFields %}
+  {% if field.public %}
+  fieldNb++;
+  {% endif %}
+{% endfor %}
+  var allFields = [];
+  for (var i=0; i<fieldNb; i++) {
+    allFields.push(i);
+  }
+
 {% set itemsPerPage = config.itemsPerPage if config.itemsPerPage else 0 %}
   $('#dataTables-documents').dataTable({
     ordering: true,
@@ -41,11 +56,8 @@ $(document).ready(function() {
     ],
     "columnDefs": [
       {
-        "render": function (data, type, row) {
-          console.log(row);
-          return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
-        },
-        "targets": 1
+        "render": addLink,
+        "targets": allFields
       }
     ]
   });
