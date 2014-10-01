@@ -11,7 +11,6 @@
           <th>{{ field.label }}</th>
   {% endif %}
 {% endfor %}
-          <th>wid</th>
         </tr>
       </thead>
     </table>
@@ -39,8 +38,16 @@ $(document).ready(function() {
       },
   {% endif %}
 {% endfor %}
-      { data: 'wid'}
-  ]
+    ],
+    "columnDefs": [
+      {
+        "render": function (data, type, row) {
+          console.log(row);
+          return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
+        },
+        "targets": 1
+      }
+    ]
   });
 
 });
