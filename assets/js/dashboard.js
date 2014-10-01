@@ -301,11 +301,6 @@ $(document).ready(function () {
         }
       }
 
-      // add chart ID in the left navbar
-      $('#charts-list')
-      .append('<li>' +
-              '     <a href="chart.html?id=' + id + '">' + pref.title + '</a>' +
-              '</li>');
     });
   });
 

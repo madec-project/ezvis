@@ -54,7 +54,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">{{ site.title }} - {{ page.title }}</a>
+                <a class="navbar-brand" href="/index.html">{{ site.title }} - {{ page.title }}</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -129,7 +129,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="/login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -153,10 +153,10 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="/index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="documents.html"><i class="fa fa-table fa-fw"></i>Documents</a>
+                            <a href="/documents.html"><i class="fa fa-table fa-fw"></i>Documents</a>
                         </li>
 						<li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Charts<span class="fa arrow"></span></a>
@@ -168,10 +168,10 @@
 						<a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Information<span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse in" style="">
 							<li>
-							<a href="fields.html">Fields</a>
+							<a href="/fields.html">Fields</a>
 							</li>
 							<li>
-							<a href="config.html">Configuration</a>
+							<a href="/config.html">Configuration</a>
 							</li>
 						</ul>
 						<!-- /.nav-second-level -->
@@ -225,6 +225,17 @@
     primus.on('added', function(doc) { console.log('added', doc); });
     });
     var pathname = "{{url.pathname}}";
+    </script>
+    <script type="text/javascript">
+    {% if config.dashboard %}
+      // Create links in charts navbar
+    {% for id, chart in config.dashboard.charts %}
+      $('#charts-list')
+      .append('<li>' +
+              '     <a href="chart.html?id={{id}}">{{chart.title}}</a>' +
+              '</li>');
+    {% endfor %}
+    {% endif %}
     </script>
     {% block scripts %}
     {% endblock %}

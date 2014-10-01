@@ -11,6 +11,7 @@
           <th>{{ field.label }}</th>
   {% endif %}
 {% endfor %}
+          <th>wid</th>
         </tr>
       </thead>
     </table>
@@ -33,22 +34,14 @@ $(document).ready(function() {
     columns: [
 {% for id, field in config.customFields %}
   {% if field.public %}
-      { data: '{{ field.path }}' },
+      { data:
+        '{{ field.path }}' 
+      },
   {% endif %}
 {% endfor %}
+      { data: 'wid'}
   ]
   });
-
-{% if config.dashboard %}
-  // Create links in charts navbar
-{% for id, chart in config.dashboard.charts %}
-  $('#charts-list')
-  .append('<li>' +
-          '     <a href="chart.html?id={{id}}">{{chart.title}}</a>' +
-          '</li>');
-
-{% endfor %}
-{% endif %}
 
 });
 </script>
