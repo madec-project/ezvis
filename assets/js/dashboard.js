@@ -268,7 +268,7 @@ $(document).ready(function () {
               data: pref.field
             }];
             var allFields = [];
-            var fieldNb   = 0;
+            var fieldNb   = 1;
             for (var userfield in config.customFields) {
               if (config.customFields[userfield].public) {
                 columns.push({data: config.customFields[userfield].path || config.customFields[userfield]});
