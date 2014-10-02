@@ -225,6 +225,7 @@ $(document).ready(function () {
       }
 
       if (isOnlyChart(id)) {
+        // TODO: maximize height
         options.data.selection = {enabled:true};
         options.data.onselected = function (d, element) {
           table.columns(0).search(categories[d.index]).draw();
@@ -254,6 +255,9 @@ $(document).ready(function () {
         if (pref.type && pref.field) {
 
           if(isOnlyChart(id)) {
+            var addLink = function addLink(data, type, row) {
+              return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
+            };
             var options = {
               ordering: true,
               serverSide: true,
@@ -263,12 +267,20 @@ $(document).ready(function () {
             var columns = [{
               data: pref.field
             }];
+            var allFields = [];
+            var fieldNb   = 0;
             for (var userfield in config.customFields) {
               if (config.customFields[userfield].public) {
                 columns.push({data: config.customFields[userfield].path || config.customFields[userfield]});
+                allFields.push(fieldNb);
+                fieldNb++;
               }
             }
             options.columns = columns;
+            options.columnDefs = [{
+              "render": addLink,
+              "targets": allFields
+            }];
             table = $('#dataTables-documents').DataTable(options);
             table.column(0).visible(false);
           }
