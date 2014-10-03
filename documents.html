@@ -49,7 +49,7 @@ $(document).ready(function() {
 {% for id, field in config.customFields %}
   {% if field.public %}
       { data:
-        '{{ field.path }}' 
+        'fields.{{ id }}'
       },
   {% endif %}
 {% endfor %}
