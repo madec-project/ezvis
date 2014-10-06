@@ -259,6 +259,9 @@ $(document).ready(function () {
               return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
             };
             var options = {
+              search: {
+                regex: true
+              },
               ordering: true,
               serverSide: true,
               lengthMenu: [config.itemsPerPage||5,10,25,50,100],
@@ -270,7 +273,7 @@ $(document).ready(function () {
             var allFields = [];
             var fieldNb   = 1;
             for (var userfield in config.customFields) {
-              if (config.customFields[userfield].public) {
+              if (config.customFields[userfield].visible) {
                 columns.push({data: "fields." + userfield});
                 allFields.push(fieldNb);
                 fieldNb++;

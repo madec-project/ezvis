@@ -7,7 +7,7 @@
       <thead>
         <tr>
 {% for id, field in config.customFields %}
-  {% if field.public %}
+  {% if field.visible %}
           <th>{{ field.label }}</th>
   {% endif %}
 {% endfor %}
@@ -30,7 +30,7 @@ $(document).ready(function() {
 
   var fieldNb = 0;
 {% for id, field in config.customFields %}
-  {% if field.public %}
+  {% if field.visible %}
   fieldNb++;
   {% endif %}
 {% endfor %}
@@ -50,7 +50,7 @@ $(document).ready(function() {
     lengthMenu: [{{ itemsPerPage }}||5,10,25,50,100],
     columns: [
 {% for id, field in config.customFields %}
-  {% if field.public %}
+  {% if field.visible %}
       { data:
         'fields.{{ id }}'
       },

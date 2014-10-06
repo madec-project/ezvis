@@ -13,7 +13,7 @@
         <tr>
           <th>Searchable</th>
 {% for id, field in config.customFields %}
-  {% if field.public %}
+  {% if field.visible %}
           <th>{{ field.label }}</th>
   {% endif %}
 {% endfor %}
