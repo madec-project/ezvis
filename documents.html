@@ -23,7 +23,7 @@
 {% block scripts %}
 <script>
 $(document).ready(function() {
-  
+
   var addLink = function addLink(data, type, row) {
     return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
   };
@@ -41,6 +41,9 @@ $(document).ready(function() {
 
 {% set itemsPerPage = config.itemsPerPage if config.itemsPerPage else 0 %}
   $('#dataTables-documents').dataTable({
+    search: {
+      regex: true
+	},
     ordering: true,
     serverSide: true,
     ajax: "/browse.json",
