@@ -6,9 +6,12 @@ A Castor theme to visualize a synthesis on a corpus using pies and histograms, b
 Installation
 ------------
 
+You have to install [mongodb](http://docs.mongodb.org/manual/installation/)
+first, and [node](http://nodejs.org/) too.
+
 ```bash
 $ npm install castor-cli -g
-$ git clone https://github.com/castorjs/castor-theme-sbadmin.git
+$ npm install castor-theme-sbadmin -g
 ```
 
 Usage
@@ -234,7 +237,7 @@ The solution is to add a *custom field* in the JSON configuration file:
 ```javascript
 "customFields" : {
   "Keywords" :  {
-    "content.json.Keywords",
+    "path" : "content.json.Keywords",
     "separator" : ";"
   }
 },
@@ -293,27 +296,27 @@ Here is an example, displaying `Year`, `Title`, `Authors`, and `Keywords`:
   "year"   : {
     "path" : "content.json.Py",
     "label": "Publication Year",
-    "public": true
+    "visible": true
   },
   "title"  : {
     "path" : "content.json.Ti",
     "label": "Title",
-    "public": true
+    "visible": true
   },
   "authors": {
     "path" : "content.json.Af",
     "label": "Authors",
-    "public": true
+    "visible": true
   },
   "keywords" : {
     "path" : "content.json.DiscESI",
     "label": "Keywords",
-    "public": true
+    "visible": true
   }
 }
 ```
 
-All *custom fields* which `public` key is set to `true` will be
+All *custom fields* which `visible` key is set to `true` will be
 present in the table.
 
-By default, `public` key value is `false`.
+By default, `visible` key value is `false`.
