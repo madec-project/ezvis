@@ -87,6 +87,27 @@ chart (which key is `perTheme`). There are two types of charts:
   }
 }
 ```
+## Dashboard
+### type
+A documents' field which number of distinct values has to be displayed.
+
+For example: a type of paper (for scientific articles).
+
+#### keys
+* path: path to the field, in dotted notation (default value: `mimetype`)
+* label (default value: `MIME Types`)
+
+#### example
+```json
+{
+  "dashboard" : {
+    "type" : {
+      "path": "content.json.Pt",
+      "label": "Document types"
+    }
+  }
+}
+```
 
 ## Charts
 

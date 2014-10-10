@@ -111,13 +111,13 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="/index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="/index.html"><i class="fa fa-dashboard fa-fw"></i> {{config.pages.index.title|d('Dashboard')}}</a>
                         </li>
                         <li>
-                            <a href="/documents.html"><i class="fa fa-table fa-fw"></i>Documents</a>
+                            <a href="/documents.html"><i class="fa fa-table fa-fw"></i> {{config.pages.documents.title|d('Documents')}}</a>
                         </li>
 						<li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Charts<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> {{config.pages.chart.title|d('Charts')}}<span class="fa arrow"></span></a>
                             <ul id="charts-list" class="nav nav-second-level collapse in" style="">
                             </ul>
                             <!-- /.nav-second-level -->
@@ -126,7 +126,7 @@
 						<a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Information<span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse in" style="">
 							<li>
-							<a href="/fields.html">Fields</a>
+							<a href="/fields.html">{{config.pages.fields.title|d('Fields')}}</a>
 							</li>
 <!--							<li>
 							<a href="/config.html">Configuration</a>

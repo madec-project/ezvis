@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 
 {% block content %}
-{% set typePath = config.customFields.Type.path if config.customFields.Type else "mimetype" %}
-{% set typeLabel = config.customFields.Type.label if config.customFields.Type else "MIME types" %}
+{% set typePath = config.dashboard.type.path if config.dashboard.type else "mimetype" %}
+{% set typeLabel = config.dashboard.type.label if config.dashboard.type else "MIME types" %}
 <div class="row">
 	<div class="col-lg-3 col-md-6">
 		<div class="panel panel-green">
@@ -13,7 +13,7 @@
 					</div>
 					<div class="col-xs-9 text-right">
 						<div class="huge" data-url="/compute.json?o=count&f=_id" data-return="data._id">?</div>
-						<div>Documents</div>
+						<div>{{config.pages.documents.title|d('Documents')}}</div>
 					</div>
 				</div>
 			</div>
@@ -72,7 +72,7 @@
 					</div>
 					<div class="col-xs-9 text-right">
 						<div class="huge" data-url="/compute.json?o=catalog&f=content&l=1000" data-return="data.length">?</div>
-						<div>Fields</div>
+						<div>{{config.pages.fields.title|d('Fields')}}</div>
 					</div>
 				</div>
 			</div>
