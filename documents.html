@@ -40,6 +40,7 @@ $(document).ready(function() {
   }
 
 {% set itemsPerPage = config.itemsPerPage if config.itemsPerPage else 0 %}
+if (fieldNb) {
   $('#dataTables-documents').dataTable({
     search: {
       regex: true
@@ -64,7 +65,9 @@ $(document).ready(function() {
       }
     ]
   });
-
+}else {
+	$('#dataTables-documents').parent().append('<div  class="alert alert-danger" role="alert">' + 'No field is marked as visible !' + '</div>');
+}
 });
 </script>
 {% endblock %}

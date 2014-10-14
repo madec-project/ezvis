@@ -1,5 +1,5 @@
 /*jslint node:true */
-/*global $,c3 */
+/*global $,c3,pathname,superagent */
 $(document).ready(function () {
   'use strict';
   var table;
@@ -238,85 +238,91 @@ $(document).ready(function () {
 
   // Get the dashboard preferences
   request
-  .get('/index.json')
+  .get('/config.json')
   .end(function(res) {
-    var config = res.body.config;
-    self.dashboard = config.dashboard;
-    var charts = self.dashboard.charts;
+    var config = res.body;
+    if (config.dashboard && config.dashboard.charts) {
+      self.dashboard = config.dashboard;
 
-    Object.keys(charts, function (id, pref) {
+      Object.keys(self.dashboard.charts, function (id, pref) {
 
-      if (isOnlyChart(id) || pathname !== '/chart.html') {
+        if (isOnlyChart(id) || pathname !== '/chart.html') {
 
-        $('#charts').append('<div class="panel panel-default col-md-12">' +
-                            '<div id="' +  id + '" class="panel-body"></div>' +
-                            '</div>');
+          $('#charts').append('<div class="panel panel-default col-md-12">' +
+            '<div id="' +  id + '" class="panel-body"></div>' +
+            '</div>');
 
-        if (pref.type && pref.field) {
+          if (pref.type && pref.field) {
 
-          if(isOnlyChart(id)) {
-            var addLink = function addLink(data, type, row) {
-              return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
-            };
-            var options = {
-              search: {
-                regex: true
-              },
-              ordering: true,
-              serverSide: true,
-              lengthMenu: [config.itemsPerPage||5,10,25,50,100],
-              ajax: "/browse.json",
-            };
-            var columns = [{
-              data: pref.field
-            }];
-            var allFields = [];
-            var fieldNb   = 1;
-            for (var userfield in config.customFields) {
-              if (config.customFields[userfield].visible) {
-                columns.push({data: "fields." + userfield});
-                allFields.push(fieldNb);
-                fieldNb++;
+            if(isOnlyChart(id)) {
+              var addLink = function addLink(data, type, row) {
+                return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
+              };
+              var options = {
+                search: {
+                  regex: true
+                },
+                ordering: true,
+                serverSide: true,
+                lengthMenu: [config.itemsPerPage||5,10,25,50,100],
+                ajax: "/browse.json",
+              };
+                var columns = [{
+                  data: pref.field
+                }];
+                var allFields = [];
+                var fieldNb   = 1;
+                for (var userfield in config.customFields) {
+                  if (config.customFields[userfield].visible) {
+                    columns.push({data: "fields." + userfield});
+                    allFields.push(fieldNb);
+                    fieldNb++;
+                  }
+                }
+                options.columns = columns;
+                options.columnDefs = [{
+                  "render": addLink,
+                  "targets": allFields
+                }];
+                table = $('#dataTables-documents').DataTable(options);
+                table.column(0).visible(false);
+              }
+
+
+              if (pref.type === 'histogram') {
+                generateHistogram(id, pref);
+              }
+              else if (pref.type === 'horizontalbars') {
+                generateHorizontalBars(id, pref);
+              }
+              else if (pref.type === 'pie') {
+                generatePie(id, pref);
+              }
+
+              if (!isOnlyChart(id)) {
+                $('#' + id).after(
+                  '<a href="chart.html?id=' + id + '">' +
+                  '<div class="panel-footer">'+
+                  '<span class="pull-left">View Details</span>'+
+                  '<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>'+
+                  '<div class="clearfix"></div>'+
+                  '</div>' +
+                  '</a>');
               }
             }
-            options.columns = columns;
-            options.columnDefs = [{
-              "render": addLink,
-              "targets": allFields
-            }];
-            table = $('#dataTables-documents').DataTable(options);
-            table.column(0).visible(false);
+            else {
+              console.log('Bad preference for "%s" chart :', id);
+              console.log(pref);
+            }
           }
 
-
-          if (pref.type === 'histogram') {
-            generateHistogram(id, pref);
-          }
-          else if (pref.type === 'horizontalbars') {
-            generateHorizontalBars(id, pref);
-          }
-          else if (pref.type === 'pie') {
-            generatePie(id, pref);
-          }
-
-          if (!isOnlyChart(id)) {
-            $('#' + id).after(
-            '<a href="chart.html?id=' + id + '">' +
-              '<div class="panel-footer">'+
-                '<span class="pull-left">View Details</span>'+
-                '<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>'+
-                '<div class="clearfix"></div>'+
-              '</div>' +
-            '</a>');
-          }
-        }
-        else {
-          console.log('Bad preference for "%s" chart :', id);
-          console.log(pref);
-        }
+        });
       }
-
-    });
+      else {
+        $('#charts').append('<div  class="alert alert-danger" role="alert">' +
+          'No chart configured !' +
+          '</div>');
+      }
   });
 
 });
