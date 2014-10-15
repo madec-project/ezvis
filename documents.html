@@ -2,73 +2,39 @@
 
 {% block content %}
 <div class="panel-body">
-  <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover" id="dataTables-documents">
-      <thead>
-        <tr>
-{% for id, field in config.customFields %}
-  {% if field.visible %}
-          <th>{{ field.label }}</th>
-  {% endif %}
-{% endfor %}
-        </tr>
-      </thead>
-    </table>
-  </div>
-</div>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover" id="dataTables-documents">
+			<thead>
+				<tr>
+					{% for id, field in config.customFields %}
+					{% if field.visible %}
+					<th>{{ field.label }}</th>
+					{% endif %}
+					{% endfor %}
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<div class="pull-right">
+		<div class="btn-group">
+			<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+				Extra small button <span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="#">Action</a></li>
+				<li><a href="#">Another action</a></li>
+				<li><a href="#">Something else here</a></li>
+				<li class="divider"></li>
+				<li><a href="#">Separated link</a></li>
+			</ul>
+		</div>
+	</div>
 
+</div>
 {% endblock %}
 
 
 {% block scripts %}
-<script>
-$(document).ready(function() {
-
-  var addLink = function addLink(data, type, row) {
-    return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
-  };
-
-  var fieldNb = 0;
-{% for id, field in config.customFields %}
-  {% if field.visible %}
-  fieldNb++;
-  {% endif %}
-{% endfor %}
-  var allFields = [];
-  for (var i=0; i<fieldNb; i++) {
-    allFields.push(i);
-  }
-
-{% set itemsPerPage = config.itemsPerPage if config.itemsPerPage else 0 %}
-if (fieldNb) {
-  $('#dataTables-documents').dataTable({
-    search: {
-      regex: true
-	},
-    ordering: true,
-    serverSide: true,
-    ajax: "/browse.json",
-    lengthMenu: [{{ itemsPerPage }}||5,10,25,50,100],
-    columns: [
-{% for id, field in config.customFields %}
-  {% if field.visible %}
-      { data:
-        'fields.{{ id }}'
-      },
-  {% endif %}
-{% endfor %}
-    ],
-    "columnDefs": [
-      {
-        "render": addLink,
-        "targets": allFields
-      }
-    ]
-  });
-}else {
-	$('#dataTables-documents').parent().append('<div  class="alert alert-danger" role="alert">' + 'No field is marked as visible !' + '</div>');
-}
-});
-</script>
+<script src="/assets/js/documents.js"></script>
 {% endblock %}
 

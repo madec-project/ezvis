@@ -119,6 +119,13 @@
 						<li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> {{config.pages.chart.title|d('Charts')}}<span class="fa arrow"></span></a>
                             <ul id="charts-list" class="nav nav-second-level collapse in" style="">
+								{% if config.dashboard %}
+								{% for id, chart in config.dashboard.charts %}
+								<li>
+								<a href="chart.html?id={{id}}">{{chart.title}}</a>
+								</li>
+								{% endfor %}
+								{% endif %}
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -158,39 +165,27 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- jQuery Version 1.11.0 -->
     <script src="/assets/js/jquery-1.11.0.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
     <script src="/assets/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
     <script src="/assets/js/plugins/metisMenu/metisMenu.min.js"></script>
- 	<!-- DataTables JavaScript -->
-    <script src="/assets/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="/assets/js/plugins/dataTables/jquery.dataTables.min.js"></script>
     <script src="/assets/js/plugins/dataTables/dataTables.bootstrap.js"></script>
-
-
-    <!-- Custom Theme JavaScript -->
     <script src="/assets/js/sb-admin-2.js"></script>
 	<!--    <script src="/bundle.js"></script> -->
     <script src="/primus/primus.js"></script>
 	<script src="/assets/js/moment.min.js"></script>
 	<script src="/assets/js/vue.min.js"></script>
     <script src="/assets/js/alerts.js"></script>
+
     <script type="text/javascript">
-	alerts('ws://{{url.host}}');
+	// <!-- set globals -->
 	var pathname = "{{url.pathname}}";
-    {% if config.dashboard %}
-      // Create links in charts navbar
-    {% for id, chart in config.dashboard.charts %}
-      $('#charts-list')
-      .append('<li>' +
-              '     <a href="chart.html?id={{id}}">{{chart.title}}</a>' +
-              '</li>');
-    {% endfor %}
-    {% endif %}
-    </script>
+	var config = {};
+	function setconfig(c) { config = c; };
+	alerts('ws://{{url.host}}');
+	</script>
+    <script src="/config.json?callback=setconfig"></script>
+
     {% block scripts %}
     {% endblock %}
 
