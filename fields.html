@@ -22,16 +22,18 @@
 {% block scripts %}
 <script>
 $(document).ready(function() {
-    $('#dataTables-fields').dataTable({
-      serverSide: true,
-	  ajax: '/compute.json?o=catalog&f=fields',
-	searching: false,
-	  columns: [
+	var table = $('#dataTables-fields').DataTable({
+      "searching" : false,
+      "ordering" : true,
+      "serverSide" : true,
+      "ajax" : "/compute.json?o=catalog&f=fields",
+      "lengthMenu" : [ config.itemsPerPage || 5,10,25,50,100],
+      "columns" : [
         { data: '_id' },
         { data: 'value' }
-    ]
-
+	  ]
     });
+
 });
 </script>
 {% endblock %}
