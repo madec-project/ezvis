@@ -16,16 +16,23 @@
 		</table>
 	</div>
 	<div class="pull-right">
-		<div class="btn-group">
+		<div id="exports" class="btn-group">
 			<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-				Extra small button <span class="caret"></span>
+				Export <span class="caret"></span>
 			</button>
-			<ul class="dropdown-menu" role="menu">
-				<li><a href="#">Action</a></li>
-				<li><a href="#">Another action</a></li>
-				<li><a href="#">Something else here</a></li>
-				<li class="divider"></li>
-				<li><a href="#">Separated link</a></li>
+			<ul class="dropdown-menu dropdown-menu-right" role="menu">
+				<li>
+				<a v-attr="href: csv"><i class="fa fa-file-excel-o"></i> CSV</a>
+				</li>
+				<li>
+				<a v-attr="href: atom"><i class="fa fa-file-code-o"></i> Atom</a>
+				</li>
+				<li>
+				<a v-attr="href: rss"><i class="fa fa-rss"></i>  RSS</a>
+				</li>
+				<li>
+				<a v-attr="href: json"><i class="fa fa-file-o"></i> JSON</a>
+				</li>
 			</ul>
 		</div>
 	</div>

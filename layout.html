@@ -165,23 +165,29 @@
     </div>
     <!-- /#wrapper -->
 
-    <script src="/assets/js/jquery-1.11.0.js"></script>
+	<script src="/bundle.js"></script>
+	<script type="text/javascript">
+	var $ = jQuery = require('jquery');
+	</script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script src="/assets/js/plugins/metisMenu/metisMenu.min.js"></script>
     <script src="/assets/js/plugins/dataTables/jquery.dataTables.min.js"></script>
     <script src="/assets/js/plugins/dataTables/dataTables.bootstrap.js"></script>
     <script src="/assets/js/sb-admin-2.js"></script>
-	<!--    <script src="/bundle.js"></script> -->
     <script src="/primus/primus.js"></script>
-	<script src="/assets/js/moment.min.js"></script>
-	<script src="/assets/js/vue.min.js"></script>
-    <script src="/assets/js/alerts.js"></script>
-
-    <script type="text/javascript">
-	// <!-- set globals -->
+	<script type="text/javascript">
+	var Vue = require('vue');
+	Vue.config({
+	  debug: false,
+	  delimiters: ['(', ')']
+	});
+    var superagent = require('superagent');
 	var pathname = "{{url.pathname}}";
 	var config = {};
 	function setconfig(c) { config = c; };
+	</script>
+    <script src="/assets/js/alerts.js"></script>
+    <script type="text/javascript">
 	alerts('ws://{{url.host}}');
 	</script>
     <script src="/config.json?callback=setconfig"></script>

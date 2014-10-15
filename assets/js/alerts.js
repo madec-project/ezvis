@@ -1,10 +1,7 @@
-/* global $, document, Vue, Primus, moment */
+/* global $, document, Primus, Vue */
 "use strict";
-Vue.config({
-  debug: true,
-  delimiters: ['(', ')']
-});
-
+var request = require('superagent');
+var moment = require('moment');
 function alerts(ws) {
   var vm = new Vue( {
     el: '#alerts',
