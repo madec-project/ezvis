@@ -341,3 +341,45 @@ All *custom fields* which `visible` key is set to `true` will be
 present in the table.
 
 By default, `visible` key value is `false`.
+
+# Document's page
+## Title
+To indicate the title of a document, use the `customFields` named `title`.
+
+## Fields
+In order to make the `/display/id.html` page work, one filter has
+to be declared in the configuration:
+
+```json
+{
+  "filters": {
+    "objectPath": "objectPath"
+  }
+}
+```
+
+Then, you have to declare all the fields you want in the document's page.
+
+They have to be in `display.fields`, they'll be displayed in the same
+order as their declaration's order.
+
+Use `"path": "label"`
+
+Ex:
+
+```json
+  "display" : {
+    "fields" : {
+      "fields.title": "Titre",
+      "fields.authors": "Auteurs",
+      "fields.year": "Année de publication",
+      "content.json.SourceCorrigee": "Source",
+      "content.json.DiscESI": "Discipline ESI",
+      "content.json.SectionEtude": "Marquage INSU - Section",
+      "content.json.La": "Langue de la publication",
+      "content.json.PaysFRERegroupe": "Pays",
+      "content.json.Di": "DOI",
+      "content.json.Ut": "Identifiant WoS"
+    }
+  },
+```

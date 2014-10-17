@@ -12,24 +12,18 @@
     <table class="table table-striped table-bordered table-hover" id="dataTables-documents">
       <thead>
         <tr>
+          <th>Order</th>
           <th>Field</th>
           <th>Value</th>
         </tr>
       </thead>
 
       <tbody>
-{% for field, value in item.fields %}
-{% if config.customFields[field].public %}
+{% for path, label in config.display.fields %}
         <tr>
-            <td>{{config.customFields[field].label|d(field)}}</td>
-            <td>{{value}}</td>
-        </tr>
-{% endif %}
-{% endfor %}
-{% for field, value in item.content.json %}
-        <tr>
-            <td>{{field}}</td>
-            <td>{{value}}</td>
+          <td>{{loop.index}}</td>
+          <td>{{label}}</td>
+          <td>{{item|objectPath(path)}}</td>
         </tr>
 {% endfor %}
       </tbody>
@@ -42,7 +36,8 @@
 {% block scripts %}
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#dataTables-documents').DataTable();
+  var table = $('#dataTables-documents').DataTable();
+  table.column(0).visible(false);
 });
 </script>
 {% endblock %}
