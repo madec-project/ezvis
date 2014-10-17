@@ -119,24 +119,7 @@ Used to represent evolution of the number of documents along the time (so,
 this field is often a publication year, or anything indicating a point in
 time).
 
-Possible configuration: [`size`](#size), `color`.
-
-You can add a `color` value (hexadecimal color value).
-Example with a red histogram:
-
-```json
-{
-  "dashboard": {
-    "charts" : {
-      "histogram": {
-        "field": "content.json.Year",
-        "type": "histogram",
-        "color": "#ff0000"
-      }
-    }
-  }
-}
-```
+Possible configuration: [`size`](#size), [`legend`](#legend), and [`color`](#color).
 
 #### pie
 
@@ -150,7 +133,7 @@ position of the [`legend`](#legend).
 Used to display the number of documents associated to a field value (for 
 example, for keywords: how many documents match a keyword?).
 
-Possible configuration: [`size`](#size).
+Possible configuration: [`size`](#size), and [`color`](#color).
 
 ### Preferences
 
@@ -226,6 +209,54 @@ Ex:
 }
 ```
 
+You can also hide the legend, using `"show": false`:
+
+```json
+{
+  "perTheme": {
+    "field": "fields.Themes",
+    "type": "pie",
+    "legend": {
+      "show": false
+    }
+  }
+}
+```
+
+#### color
+You can set a `color` value (hexadecimal color value).
+Example with a red histogram:
+
+```json
+{
+  "dashboard": {
+    "charts" : {
+      "histogram": {
+        "field": "content.json.Year",
+        "type": "histogram",
+        "color": "#ff0000"
+      }
+    }
+  }
+}
+```
+
+#### colors
+In a pie, you can parameter a set of colors to be used:
+
+```json
+{
+  "dashboard": {
+    "charts" : {
+      "myPie" : {
+        "field": "content.json.Keywords",
+        "type": "pie",
+        "colors": [ '#BB9FF5', '#ff7a85', '#44b2ba', '#ffa65a', '#34cdb8']
+      }
+    }
+  }
+}
+```
 
 ### Field configuration
 
