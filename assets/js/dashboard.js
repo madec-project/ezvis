@@ -276,6 +276,7 @@ $(document).ready(function () {
                 serverSide: true,
                 lengthMenu: [config.itemsPerPage||5,10,25,50,100],
                 ajax: "/browse.json",
+                dom: "lifrtip"
               };
                 var columns = [{
                   data: pref.field
