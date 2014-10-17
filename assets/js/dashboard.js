@@ -76,6 +76,10 @@ $(document).ready(function () {
         options.size = pref.size;
         bootstrapPosition(id, pref.size);
       }
+      // Color
+      if (pref.color) {
+        options.data.colors = { notices : pref.color };
+      }
 
       if (isOnlyChart(id)) {
         options.data.selection = {enabled:true};

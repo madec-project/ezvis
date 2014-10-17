@@ -119,7 +119,24 @@ Used to represent evolution of the number of documents along the time (so,
 this field is often a publication year, or anything indicating a point in
 time).
 
-Possible configuration: [`size`](#size).
+Possible configuration: [`size`](#size), `color`.
+
+You can add a `color` value (hexadecimal color value).
+Example with a red histogram:
+
+```json
+{
+  "dashboard": {
+    "charts" : {
+      "histogram": {
+        "field": "content.json.Year",
+        "type": "histogram",
+        "color": "#ff0000"
+      }
+    }
+  }
+}
+```
 
 #### pie
 
@@ -368,6 +385,7 @@ Use `"path": "label"`
 Ex:
 
 ```json
+{
   "display" : {
     "fields" : {
       "fields.title": "Titre",
@@ -381,17 +399,20 @@ Ex:
       "content.json.Di": "DOI",
       "content.json.Ut": "Identifiant WoS"
     }
-  },
+  }
+}
 ```
 
 ## Fields' number
-To modify the number of fields displayed per page, change the 
+To modify the number of fields displayed per page, change the
 `display.fieldsPerPage` value in the configuration.
 
 Ex:
 
 ```json
+{
   "display" : {
     "fieldsPerPage": 10
   }
+}
 ```
