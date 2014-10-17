@@ -36,7 +36,10 @@
 {% block scripts %}
 <script type="text/javascript">
 $(document).ready(function() {
-  var table = $('#dataTables-documents').DataTable();
+  var table = $('#dataTables-documents').DataTable({
+    "lengthMenu": [[{{config.display.fieldsPerPage|d(10)}}, -1],
+                   [{{config.display.fieldsPerPage|d(10)}}, "All"]]
+  });
   table.column(0).visible(false);
 });
 </script>

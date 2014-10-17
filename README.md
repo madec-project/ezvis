@@ -383,3 +383,15 @@ Ex:
     }
   },
 ```
+
+## Fields' number
+To modify the number of fields displayed per page, change the 
+`display.fieldsPerPage` value in the configuration.
+
+Ex:
+
+```json
+  "display" : {
+    "fieldsPerPage": 10
+  }
+```
