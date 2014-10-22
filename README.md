@@ -119,7 +119,7 @@ Used to represent evolution of the number of documents along the time (so,
 this field is often a publication year, or anything indicating a point in
 time).
 
-Possible configuration: [`size`](#size).
+Possible configuration: [`size`](#size), [`legend`](#legend), and [`color`](#color).
 
 #### pie
 
@@ -133,7 +133,7 @@ position of the [`legend`](#legend).
 Used to display the number of documents associated to a field value (for 
 example, for keywords: how many documents match a keyword?).
 
-Possible configuration: [`size`](#size).
+Possible configuration: [`size`](#size), and [`color`](#color).
 
 ### Preferences
 
@@ -209,6 +209,54 @@ Ex:
 }
 ```
 
+You can also hide the legend, using `"show": false`:
+
+```json
+{
+  "perTheme": {
+    "field": "fields.Themes",
+    "type": "pie",
+    "legend": {
+      "show": false
+    }
+  }
+}
+```
+
+#### color
+You can set a `color` value (hexadecimal color value).
+Example with a red histogram:
+
+```json
+{
+  "dashboard": {
+    "charts" : {
+      "histogram": {
+        "field": "content.json.Year",
+        "type": "histogram",
+        "color": "#ff0000"
+      }
+    }
+  }
+}
+```
+
+#### colors
+In a pie, you can parameter a set of colors to be used:
+
+```json
+{
+  "dashboard": {
+    "charts" : {
+      "myPie" : {
+        "field": "content.json.Keywords",
+        "type": "pie",
+        "colors": [ '#BB9FF5', '#ff7a85', '#44b2ba', '#ffa65a', '#34cdb8']
+      }
+    }
+  }
+}
+```
 
 ### Field configuration
 
@@ -341,3 +389,61 @@ All *custom fields* which `visible` key is set to `true` will be
 present in the table.
 
 By default, `visible` key value is `false`.
+
+# Document's page
+## Title
+To indicate the title of a document, use the `customFields` named `title`.
+
+## Fields
+In order to make the `/display/id.html` page work, one filter has
+to be declared in the configuration:
+
+```json
+{
+  "filters": {
+    "objectPath": "objectPath"
+  }
+}
+```
+
+Then, you have to declare all the fields you want in the document's page.
+
+They have to be in `display.fields`, they'll be displayed in the same
+order as their declaration's order.
+
+Use `"path": "label"`
+
+Ex:
+
+```json
+{
+  "display" : {
+    "fields" : {
+      "fields.title": "Titre",
+      "fields.authors": "Auteurs",
+      "fields.year": "Année de publication",
+      "content.json.SourceCorrigee": "Source",
+      "content.json.DiscESI": "Discipline ESI",
+      "content.json.SectionEtude": "Marquage INSU - Section",
+      "content.json.La": "Langue de la publication",
+      "content.json.PaysFRERegroupe": "Pays",
+      "content.json.Di": "DOI",
+      "content.json.Ut": "Identifiant WoS"
+    }
+  }
+}
+```
+
+## Fields' number
+To modify the number of fields displayed per page, change the
+`display.fieldsPerPage` value in the configuration.
+
+Ex:
+
+```json
+{
+  "display" : {
+    "fieldsPerPage": 10
+  }
+}
+```

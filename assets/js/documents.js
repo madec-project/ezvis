@@ -51,7 +51,8 @@ $(document).ready(function() {
       "columnDefs" : [ {
         "render" : addLink,
         "targets" : allFields
-      }]
+      }],
+      "dom": '<"dtTop"<"dtLeft"li><"dtRight"f>><rt><"dtBottom"ip><"clear">'
     });
     table.on('xhr', function () {
       var params = '?' + qs.stringify(table.ajax.params());

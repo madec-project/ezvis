@@ -8,3 +8,10 @@
 #charts > .panel {
     padding: 0;
 }
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover, 
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background: none;
+    padding: 0;
+    border: 0;
+}

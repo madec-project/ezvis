@@ -76,6 +76,12 @@ $(document).ready(function () {
         options.size = pref.size;
         bootstrapPosition(id, pref.size);
       }
+      // Color
+      if (pref.color) {
+        options.data.colors = { notices : pref.color };
+      }
+      // Legend
+      options.legend = pref.legend || { show: false }
 
       if (isOnlyChart(id)) {
         options.data.selection = {enabled:true};
@@ -223,6 +229,10 @@ $(document).ready(function () {
         options.size = pref.size;
         bootstrapPosition(id, pref.size);
       }
+      // Color
+      if (pref.color) {
+        options.data.colors = { notices : pref.color };
+      }
 
       if (isOnlyChart(id)) {
         // TODO: maximize height
@@ -266,6 +276,7 @@ $(document).ready(function () {
                 serverSide: true,
                 lengthMenu: [config.itemsPerPage||5,10,25,50,100],
                 ajax: "/browse.json",
+                dom: "lifrtip"
               };
                 var columns = [{
                   data: pref.field
