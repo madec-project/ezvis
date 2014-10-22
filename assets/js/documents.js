@@ -10,16 +10,16 @@ $(document).ready(function() {
     return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
   };
 
-  var fieldNb = Object.keys(config.customFields).reduce(function(p, c) {
-    return config.customFields[c].visible ? p + 1 : p;
+  var fieldNb = Object.keys(config.documentFields).reduce(function(p, c) {
+    return config.documentFields[c].visible ? p + 1 : p;
   }, 0);
 
   var allFields = [];
   for (var i = 0; i < fieldNb; i++) {
     allFields.push(i);
   }
-  var columns = Object.keys(config.customFields).map(function(x) {
-    return config.customFields[x].visible ? { data : 'fields.' + x} :  undefined;
+  var columns = Object.keys(config.documentFields).map(function(x) {
+    return config.documentFields[x].visible ? { data : 'fields.' + x} :  undefined;
   }).filter(function(x) { return (x !== undefined); });
 
   var vexp = new Vue( {

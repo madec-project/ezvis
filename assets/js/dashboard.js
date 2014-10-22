@@ -272,8 +272,8 @@ $(document).ready(function () {
                 }];
                 var allFields = [];
                 var fieldNb   = 1;
-                for (var userfield in config.customFields) {
-                  if (config.customFields[userfield].visible) {
+                for (var userfield in config.documentFields) {
+                  if (config.documentFields[userfield].visible) {
                     columns.push({data: "fields." + userfield});
                     allFields.push(fieldNb);
                     fieldNb++;
