@@ -6,7 +6,7 @@
 		<table class="table table-striped table-bordered table-hover" id="dataTables-documents">
 			<thead>
 				<tr>
-					{% for id, field in config.customFields %}
+					{% for id, field in config.documentFields %}
 					{% if field.visible %}
 					<th>{{ field.label }}</th>
 					{% endif %}

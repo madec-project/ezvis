@@ -50,8 +50,8 @@ Configuration
 To make charts appear on the dashboard, you have to configure them.
 
 The configuration is done in the JSON file of
-[castor](https://github.com/castorjs/castor-core) (e.g.`data.json`), 
-it's a file with the same name as the data directory 
+[castor](https://github.com/castorjs/castor-core) (e.g.`data.json`),
+it's a file with the same name as the data directory
 (besides that directory), appended with `.json`.
 
 The whole dashboard configuration is done inside the `dashboard` key
@@ -67,7 +67,7 @@ chart (which key is `perTheme`). There are two types of charts:
 ```json
 {
   "theme": "/path/to/castor-theme-sbadmin",
-  "customFields": {
+  "documentFields": {
     "Themes" : {
       "path" : "content.json.DiscESI",
       "separator" : ";"
@@ -125,12 +125,12 @@ Possible configuration: [`size`](#size), [`legend`](#legend), and [`color`](#col
 
 Used to fill the pie chart quarters.
 
-There are some configuration possible: [`size`](#size) of the pie, and 
+There are some configuration possible: [`size`](#size) of the pie, and
 position of the [`legend`](#legend).
 
 #### horizontalbars
 
-Used to display the number of documents associated to a field value (for 
+Used to display the number of documents associated to a field value (for
 example, for keywords: how many documents match a keyword?).
 
 Possible configuration: [`size`](#size), and [`color`](#color).
@@ -171,7 +171,7 @@ Here is  an example where the pie should take half of the page's width:
 ```
 
 If you need to separate two charts, you can add an offset before a chart, using
-`offset` property. It is a number which represent the "width" of `offset` 
+`offset` property. It is a number which represent the "width" of `offset`
 columns.
 
 Below is an example where the horizontal bars should take 5 columns, with a
@@ -304,7 +304,7 @@ Moreover, they will be bound to other keywords on the same row.
 The solution is to add a *custom field* in the JSON configuration file:
 
 ```javascript
-"customFields" : {
+"documentFields" : {
   "Keywords" :  {
     "path" : "content.json.Keywords",
     "separator" : ";"
@@ -312,7 +312,7 @@ The solution is to add a *custom field* in the JSON configuration file:
 },
 ```
 
-Then, you have to add 
+Then, you have to add
 
 ```javascript
 "dashboard" : {
@@ -330,11 +330,11 @@ Then, you have to add
 ```
 
 Here is an example with a normal field `Py` (Publication year, which
-is unique in each row), and a multivalued one, `Keywords` (several 
+is unique in each row), and a multivalued one, `Keywords` (several
 keywords):
 
 ```javascript
-"customFields" : {
+"documentFields" : {
   "Keywords" :  {
     "content.json.Keywords",
     "separator" : ";"
@@ -356,12 +356,12 @@ keywords):
 
 ## Documents table
 
-In `/chart.html` pages, you can see a chart, and a table with documents. This table display the fields you chose to put in the `customFields` key.
+In `/chart.html` pages, you can see a chart, and a table with documents. This table display the fields you chose to put in the `documentFields` key.
 
 Here is an example, displaying `Year`, `Title`, `Authors`, and `Keywords`:
 
 ```javascript
-"customFields" : {
+"documentFields" : {
   "year"   : {
     "path" : "content.json.Py",
     "label": "Publication Year",
@@ -392,7 +392,7 @@ By default, `visible` key value is `false`.
 
 # Document's page
 ## Title
-To indicate the title of a document, use the `customFields` named `title`.
+To indicate the title of a document, use the `documentFields` named `title`.
 
 ## Fields
 In order to make the `/display/id.html` page work, one filter has

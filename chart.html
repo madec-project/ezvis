@@ -12,7 +12,7 @@
       <thead>
         <tr>
           <th>Searchable</th>
-{% for id, field in config.customFields %}
+{% for id, field in config.documentFields %}
   {% if field.visible %}
           <th>{{ field.label }}</th>
   {% endif %}
