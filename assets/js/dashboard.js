@@ -87,6 +87,7 @@ $(document).ready(function () {
         options.data.selection = {enabled:true};
         options.data.onselected = function (d, element) {
           table.columns(0).search(categories[d.index]).draw();
+          $('#filter').text(categories[d.index]);
         }
       }
 
@@ -172,6 +173,7 @@ $(document).ready(function () {
         options.data.selection = {enabled:true};
         options.data.onselected = function (d, element) {
           table.columns(0).search(d.id).draw();
+          $('#filter').text(d.id);
         }
       }
 
@@ -239,6 +241,7 @@ $(document).ready(function () {
         options.data.selection = {enabled:true};
         options.data.onselected = function (d, element) {
           table.columns(0).search(categories[d.index]).draw();
+          $('#filter').text(categories[d.index]);
         }
       }
 
