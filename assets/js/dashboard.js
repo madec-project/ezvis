@@ -81,14 +81,14 @@ $(document).ready(function () {
         options.data.colors = { notices : pref.color };
       }
       // Legend
-      options.legend = pref.legend || { show: false }
+      options.legend = pref.legend || { show: false };
 
       if (isOnlyChart(id)) {
         options.data.selection = {enabled:true};
         options.data.onselected = function (d, element) {
           table.columns(0).search(categories[d.index]).draw();
           $('#filter').text(categories[d.index]);
-        }
+        };
       }
 
       var histogram = c3.generate(options);
@@ -174,7 +174,7 @@ $(document).ready(function () {
         options.data.onselected = function (d, element) {
           table.columns(0).search(d.id).draw();
           $('#filter').text(d.id);
-        }
+        };
       }
 
       // Generate the pie.
@@ -242,7 +242,7 @@ $(document).ready(function () {
         options.data.onselected = function (d, element) {
           table.columns(0).search(categories[d.index]).draw();
           $('#filter').text(categories[d.index]);
-        }
+        };
       }
 
       var histogram = c3.generate(options);
@@ -267,7 +267,7 @@ $(document).ready(function () {
 
           if (pref.type && pref.field) {
 
-            if(isOnlyChart(id)) {
+            if (isOnlyChart(id)) {
               var addLink = function addLink(data, type, row) {
                 return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
               };
@@ -281,62 +281,70 @@ $(document).ready(function () {
                 ajax: "/browse.json",
                 dom: "lifrtip"
               };
-                var columns = [{
-                  data: pref.field
-                }];
-                var allFields = [];
-                var fieldNb   = 1;
-                for (var userfield in config.documentFields) {
-                  if (config.documentFields[userfield].visible) {
-                    columns.push({data: "fields." + userfield});
-                    allFields.push(fieldNb);
-                    fieldNb++;
-                  }
+              var columns = [{
+                data: pref.field
+              }];
+              var allFields = [];
+              var fieldNb   = 1;
+              for (var userfield in config.documentFields) {
+                if (config.documentFields[userfield].visible) {
+                  columns.push({data: "fields." + userfield});
+                  allFields.push(fieldNb);
+                  fieldNb++;
                 }
-                options.columns = columns;
-                options.columnDefs = [{
-                  "render": addLink,
-                  "targets": allFields
-                }];
-                table = $('#dataTables-documents').DataTable(options);
-                table.column(0).visible(false);
               }
+              options.columns = columns;
+              options.columnDefs = [{
+                "render": addLink,
+                "targets": allFields
+              }];
+              table = $('#dataTables-documents').DataTable(options);
+              table.column(0).visible(false);
 
-
-              if (pref.type === 'histogram') {
-                generateHistogram(id, pref);
-              }
-              else if (pref.type === 'horizontalbars') {
-                generateHorizontalBars(id, pref);
-              }
-              else if (pref.type === 'pie') {
-                generatePie(id, pref);
-              }
-
-              if (!isOnlyChart(id)) {
-                $('#' + id).after(
-                  '<a href="chart.html?id=' + id + '">' +
-                  '<div class="panel-footer">'+
-                  '<span class="pull-left">View Details</span>'+
-                  '<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>'+
-                  '<div class="clearfix"></div>'+
-                  '</div>' +
-                  '</a>');
-              }
+              // facets
+              console.log(pref.facets);
+              Object.keys(pref.facets, function (id, facet) {
+                var table = $('#dtFacets-' + id).DataTable({
+                  ajax: '/compute.json?o=distinct&f=' + facet.path
+                });
+              });
             }
-            else {
-              console.log('Bad preference for "%s" chart :', id);
-              console.log(pref);
+
+
+            if (pref.type === 'histogram') {
+              generateHistogram(id, pref);
+            }
+            else if (pref.type === 'horizontalbars') {
+              generateHorizontalBars(id, pref);
+            }
+            else if (pref.type === 'pie') {
+              generatePie(id, pref);
+            }
+
+            if (!isOnlyChart(id)) {
+              $('#' + id).after(
+                '<a href="chart.html?id=' + id + '">' +
+                '<div class="panel-footer">'+
+                '<span class="pull-left">View Details</span>'+
+                '<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>'+
+                '<div class="clearfix"></div>'+
+                '</div>' +
+                '</a>');
             }
           }
+          else {
+            console.log('Bad preference for "%s" chart :', id);
+            console.log(pref);
+          }
+        }
 
-        });
-      }
-      else {
-        $('#charts').append('<div  class="alert alert-danger" role="alert">' +
-          'No chart configured !' +
-          '</div>');
-      }
+      });
+    }
+    else {
+      $('#charts').append('<div  class="alert alert-danger" role="alert">' +
+        'No chart configured !' +
+        '</div>');
+    }
   });
 
 });
