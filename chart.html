@@ -4,10 +4,36 @@
 
 <div class="row">
 
-<div id="charts" class="col-md-9">
-</div>
+  <div id="charts" class="col-md-9">
+  </div>
 
-<div class="col-md-3">kh</div>
+  <div class="col-md-3">
+    <ul class="nav nav-tabs" role="tablist">
+{% for id, facet in config.dashboard.charts.perSection.facets %}
+{% if loop.first %}
+{% set tabClass = ' class=active' %}
+{% else %}
+{% set tabClass = '' %}
+{% endif %}
+      <li id="facet-{{id}}" role="presentation"{{tabClass}}>
+        <a href="#facet-{{id}}">{{facet.label}}</a>
+      </li>
+{% endfor %}
+    </ul>
+{% for id, facet in config.dashboard.charts.perSection.facets %}
+{% if not loop.first %}
+{% set tableVisibility = ' hidden' %}
+{% endif %}
+    <table class="table table-striped table-bordered table-hover{{tableVisibility}}" id="dtFacets-{{id}}">
+      <thead>
+        <tr>
+          <th>{{facet.label}}</th>
+          <th>Occ</th>
+        </tr>
+      </thead>
+    </table>
+{% endfor %}
+  </div>
 
 </div>
 
