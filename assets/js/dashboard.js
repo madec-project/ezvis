@@ -250,6 +250,11 @@ $(document).ready(function () {
   };
 
   var createFacets = function createFacets(id, facets) {
+    if (!facets) {
+      $('#charts').removeClass('col-md-9').addClass('col-md-12');
+      $('#facetsTabs').removeClass('col-md-3').addClass('hidden');
+      return;
+    }
     var facetNb = 0;
     Object.keys(facets, function (facetId, facet) {
 
