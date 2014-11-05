@@ -390,6 +390,36 @@ present in the table.
 
 By default, `visible` key value is `false`.
 
+## Facets
+
+In a chart page, you can add facets: others fielsd's values.
+
+Thus, you can have facets in each chart. Example:
+
+```javascript
+    "charts": {
+        "perSection": {
+            "field": "fields.Section",
+            "type": "pie",
+            "title": "Sections",
+            "facets": {
+              "year": {
+                "path": "content.json.Py",
+                "label": "Year"
+              },
+              "theme": {
+                "path": "fields.Themes",
+                "label": "Theme"
+              }
+            }
+        },
+```
+
+Here, you have a pie displaying sections, and two facets:
+
+1. `year` which label is `Year`, and pointing to `content.json.Py`  in the document
+2. `theme` which label is `Theme`, and pointing to `fields.Theme`  in the document
+
 # Document's page
 ## Title
 To indicate the title of a document, use the `documentFields` named `title`.
