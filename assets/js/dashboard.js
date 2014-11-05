@@ -249,6 +249,59 @@ $(document).ready(function () {
     });
   };
 
+  var createFacets = function createFacets(id, facets) {
+    var facetNb = 0;
+    Object.keys(facets, function (facetId, facet) {
+
+      // Tabs
+      $('#facets')
+      .append(
+        '<li id="facet-' + facetId + '" class="facetLi" role="presentation">' +
+        ' <a href="#tabFacet-' + facetId +'">' + facet.label + '</a>' +
+        '</li>');
+
+      // Tables
+      $('#facets')
+      .after(
+        '<table ' +
+        '  class="table table-striped table-bordered table-hover"' +
+        '  id="dtFacets-' + facetId + '">' +
+        '  <thead>' +
+        '  <tr>' +
+        '    <th>' + facet.label + '</th>' +
+        '    <th>Occ</th>' +
+        '  </tr>' +
+        '  </thead>' +
+        '</table>');
+
+      var table = $('#dtFacets-' + facetId).DataTable({
+        ajax: '/compute.json?o=distinct&f=' + facet.path,
+        serverSide: true,
+        dom: "rtip",
+        pagingType: "simple"
+      });
+      if (facetNb) {
+        $('#dtFacets-' + facetId + '_wrapper').hide();
+      }
+
+      // make tab-nav work
+      $('#facet-' + facetId + '>a')
+      .click(function (e) {
+        e.preventDefault();
+        $('#facetsTabs>.dataTables_wrapper').hide();
+        $('#dtFacets-'+facetId).parent().show();
+        // make the new tab active, and the old one not.
+        $('.facetLi').removeClass('active');
+        $('#facet-' + facetId).addClass('active');
+      });
+      if (!facetNb) {
+        $('#facet-' + facetId).addClass('active');
+      }
+
+      facetNb ++;
+    });
+  };
+
   // Get the dashboard preferences
   request
   .get('/config.json')
@@ -302,12 +355,8 @@ $(document).ready(function () {
               table.column(0).visible(false);
 
               // facets
-              console.log(pref.facets);
-              Object.keys(pref.facets, function (id, facet) {
-                var table = $('#dtFacets-' + id).DataTable({
-                  ajax: '/compute.json?o=distinct&f=' + facet.path
-                });
-              });
+              var facetNb = 0;
+              createFacets(id, pref.facets);
             }
 
 
