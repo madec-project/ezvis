@@ -278,7 +278,11 @@ $(document).ready(function () {
         ajax: '/compute.json?o=distinct&f=' + facet.path,
         serverSide: true,
         dom: "rtip",
-        pagingType: "simple"
+        pagingType: "simple",
+        columns: [
+          { "data": "_id" },
+          { "data": "value" }
+        ]
       });
       if (facetNb) {
         $('#dtFacets-' + facetId + '_wrapper').hide();
