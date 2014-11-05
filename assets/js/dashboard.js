@@ -287,7 +287,8 @@ $(document).ready(function () {
         columns: [
           { "data": "_id" },
           { "data": "value" }
-        ]
+        ],
+        "order": [[1, "desc"]]
       });
       if (facetNb) {
         $('#dtFacets-' + facetId + '_wrapper').hide();
