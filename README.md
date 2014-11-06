@@ -251,7 +251,7 @@ In a pie, you can parameter a set of colors to be used:
       "myPie" : {
         "field": "content.json.Keywords",
         "type": "pie",
-        "colors": [ '#BB9FF5', '#ff7a85', '#44b2ba', '#ffa65a', '#34cdb8']
+        "colors": [ "#BB9FF5", "#ff7a85", "#44b2ba", "#ffa65a", "#34cdb8"]
       }
     }
   }
