@@ -31,6 +31,10 @@ $(document).ready(function () {
     }
   };
 
+  var displayFilter = function displayFilter(filterValue) {
+    $('#filter').text(filterValue);
+  }
+
   var generateHistogram = function(id, pref) {
     if (pref.title) {
       $('#' + id).before('<div class="panel-heading">' +
@@ -88,8 +92,19 @@ $(document).ready(function () {
       if (isOnlyChart(id)) {
         options.data.selection = {enabled:true};
         options.data.onselected = function (d, element) {
-          table.columns(0).search(categories[d.index]).draw();
-          $('#filter').text(categories[d.index]);
+          var filterValue = categories[d.index];
+          // Update documents
+          table.columns(0).search(filterValue).draw();
+          // Update facets
+          if (pref.facets) {
+            Object.keys(pref.facets, function updateFacet(facetId, facet) {
+              var url = '/compute.json?o=distinct&f=' + facet.path +
+                        '&columns[2][data]='          + pref.field +
+                        '&columns[2][search][value]=' + filterValue;
+              dtFacets[facetId].ajax.url(url).reload();
+            });
+          }
+          displayFilter(filterValue);
         };
       }
 
@@ -174,8 +189,18 @@ $(document).ready(function () {
       if (isOnlyChart(id)) {
         options.data.selection = {enabled:true};
         options.data.onselected = function (d, element) {
-          table.columns(0).search(d.id).draw();
-          $('#filter').text(d.id);
+          var filterValue = d.id;
+          table.columns(0).search(filterValue).draw();
+          // Update facets
+          if (pref.facets) {
+            Object.keys(pref.facets, function updateFacet(facetId, facet) {
+              var url = '/compute.json?o=distinct&f=' + facet.path +
+                        '&columns[2][data]='          + pref.field +
+                        '&columns[2][search][value]=' + filterValue;
+              dtFacets[facetId].ajax.url(url).reload();
+            });
+          }
+          displayFilter(filterValue);
         };
       }
 
@@ -242,8 +267,9 @@ $(document).ready(function () {
         // TODO: maximize height
         options.data.selection = {enabled:true};
         options.data.onselected = function (d, element) {
-          table.columns(0).search(categories[d.index]).draw();
-          $('#filter').text(categories[d.index]);
+          var filterValue = categories[d.index];
+          table.columns(0).search(filterValue).draw();
+          displayFilter(filterValue);
         };
       }
 
@@ -317,7 +343,7 @@ $(document).ready(function () {
         console.log(selection.length + ' row(s) selected');
         console.log(selection);
         console.log(selection[0], facet.path, facetNb);
-        // TODO: add this to the filter
+        // TODO: add this to the filter (and display it), and filter docs
       })
       facetNb ++;
     });
