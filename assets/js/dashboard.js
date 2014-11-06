@@ -3,6 +3,7 @@
 $(document).ready(function () {
   'use strict';
   var table;
+  var dtFacets;
   var request = superagent;
   var self = this;
 
@@ -252,7 +253,7 @@ $(document).ready(function () {
   var createFacets = function createFacets(id, facets) {
     if (!facets) {
       $('#charts').removeClass('col-md-9').addClass('col-md-12');
-      $('#facetsTabs').removeClass('col-md-3').addClass('hidden');
+      $('#facetsTabs').addClass('hidden');
       return;
     }
     var facetNb = 0;
