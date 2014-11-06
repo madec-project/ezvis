@@ -90,7 +90,8 @@ $(document).ready(function () {
       options.legend = pref.legend || { show: false };
 
       if (isOnlyChart(id)) {
-        options.data.selection = {enabled:true};
+        options.data.selection = { enabled : true };
+        options.data.selection.multiple = false;
         options.data.onselected = function (d, element) {
           var filterValue = categories[d.index];
           // Update documents
@@ -101,7 +102,8 @@ $(document).ready(function () {
               var url = '/compute.json?o=distinct&f=' + facet.path +
                         '&columns[2][data]='          + pref.field +
                         '&columns[2][search][value]=' + filterValue;
-              dtFacets[facetId].ajax.url(url).reload();
+              dtFacets[facetId].ajax.url(url);
+              dtFacets[facetId].ajax.reload();
             });
           }
           displayFilter(filterValue);
@@ -187,7 +189,8 @@ $(document).ready(function () {
       }
 
       if (isOnlyChart(id)) {
-        options.data.selection = {enabled:true};
+        options.data.selection          = {enabled:true};
+        options.data.selection.multiple = false;
         options.data.onselected = function (d, element) {
           var filterValue = d.id;
           table.columns(0).search(filterValue).draw();
@@ -197,7 +200,8 @@ $(document).ready(function () {
               var url = '/compute.json?o=distinct&f=' + facet.path +
                         '&columns[2][data]='          + pref.field +
                         '&columns[2][search][value]=' + filterValue;
-              dtFacets[facetId].ajax.url(url).reload();
+              dtFacets[facetId].ajax.url(url);
+              dtFacets[facetId].ajax.reload();
             });
           }
           displayFilter(filterValue);
@@ -266,9 +270,20 @@ $(document).ready(function () {
       if (isOnlyChart(id)) {
         // TODO: maximize height
         options.data.selection = {enabled:true};
+        options.data.selection.multiple = false;
         options.data.onselected = function (d, element) {
           var filterValue = categories[d.index];
           table.columns(0).search(filterValue).draw();
+          // Update facets
+          if (pref.facets) {
+            Object.keys(pref.facets, function updateFacet(facetId, facet) {
+              var url = '/compute.json?o=distinct&f=' + facet.path +
+                        '&columns[2][data]='          + pref.field +
+                        '&columns[2][search][value]=' + filterValue;
+              dtFacets[facetId].ajax.url(url);
+              dtFacets[facetId].ajax.reload();
+            });
+          }
           displayFilter(filterValue);
         };
       }
