@@ -4,6 +4,7 @@ $(document).ready(function () {
   'use strict';
   var table;
   var dtFacets = {};
+  var fieldNb;
   var request = superagent;
   var self = this;
 
@@ -310,6 +311,14 @@ $(document).ready(function () {
         $('#facet-' + facetId).addClass('active');
       }
 
+      $('#dtFacets-' + facetId + ' tbody').on('click','tr', function selectFacet() {
+        $(this).toggleClass('selected');
+        var selection = table.rows('.selected').data();
+        console.log(selection.length + ' row(s) selected');
+        console.log(selection);
+        console.log(selection[0], facet.path, facetNb);
+        // TODO: add this to the filter
+      })
       facetNb ++;
     });
   };
@@ -349,14 +358,23 @@ $(document).ready(function () {
               var columns = [{
                 data: pref.field
               }];
+              var facetsNb  = 0;
               var allFields = [];
-              var fieldNb   = 1;
+              fieldNb       = 1;
               for (var userfield in config.documentFields) {
                 if (config.documentFields[userfield].visible) {
                   columns.push({data: "fields." + userfield});
                   allFields.push(fieldNb);
                   fieldNb++;
                 }
+              }
+              if (pref.facets) {
+                facetsNb = Object.keys(pref.facets).length;
+                Object.keys(pref.facets, function (facetId, facet) {
+                  columns.push({data: facet.path});
+                  $('#dataTables-documents tr')
+                  .append('<th>' + facet.label + '</th>');
+                });
               }
               options.columns = columns;
               options.columnDefs = [{
@@ -365,9 +383,10 @@ $(document).ready(function () {
               }];
               table = $('#dataTables-documents').DataTable(options);
               table.column(0).visible(false);
-
               // facets
-              var facetNb = 0;
+              for (var i = 0; i < facetsNb; i++) {
+                table.column(fieldNb + i).visible(false);
+              }
               createFacets(id, pref.facets);
             }
 
