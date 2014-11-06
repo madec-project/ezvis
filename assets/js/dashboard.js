@@ -3,7 +3,7 @@
 $(document).ready(function () {
   'use strict';
   var table;
-  var dtFacets;
+  var dtFacets = {};
   var request = superagent;
   var self = this;
 
@@ -291,6 +291,7 @@ $(document).ready(function () {
         ],
         "order": [[1, "desc"]]
       });
+      dtFacets[facetId] = table; // for later reference
       if (facetNb) {
         $('#dtFacets-' + facetId + '_wrapper').hide();
       }
