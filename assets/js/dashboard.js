@@ -5,6 +5,7 @@ $(document).ready(function () {
   var table;
   var dtFacets = {};
   var fieldNb;
+  var filter= {};
   var request = superagent;
   var self = this;
 
@@ -31,8 +32,14 @@ $(document).ready(function () {
     }
   };
 
-  var displayFilter = function displayFilter(filterValue) {
-    $('#filter').text(filterValue);
+  var displayFilter = function displayFilter() {
+    var filterVerbalized = filter.main;
+    $('#filter').text(filterVerbalized);
+    Object.keys(filter, function (label, value) {
+      if (label === 'main') { return; }
+      filterVerbalized = filterVerbalized + ' ' + label + '=' + value;
+      $('#filter').text(filterVerbalized);
+    })
   }
 
   var generateHistogram = function(id, pref) {
@@ -106,6 +113,7 @@ $(document).ready(function () {
               dtFacets[facetId].ajax.reload();
             });
           }
+          filter.main = filterValue;
           displayFilter(filterValue);
         };
       }
@@ -204,6 +212,7 @@ $(document).ready(function () {
               dtFacets[facetId].ajax.reload();
             });
           }
+          filter.main = filterValue;
           displayFilter(filterValue);
         };
       }
@@ -284,6 +293,7 @@ $(document).ready(function () {
               dtFacets[facetId].ajax.reload();
             });
           }
+          filter.main = filterValue;
           displayFilter(filterValue);
         };
       }
@@ -322,7 +332,7 @@ $(document).ready(function () {
         '  </thead>' +
         '</table>');
 
-      var table = $('#dtFacets-' + facetId).DataTable({
+      var dtFacet = $('#dtFacets-' + facetId).DataTable({
         ajax: '/compute.json?o=distinct&f=' + facet.path,
         serverSide: true,
         dom: "rtip",
@@ -333,7 +343,7 @@ $(document).ready(function () {
         ],
         "order": [[1, "desc"]]
       });
-      dtFacets[facetId] = table; // for later reference
+      dtFacets[facetId] = dtFacet; // for later reference
       if (facetNb) {
         $('#dtFacets-' + facetId + '_wrapper').hide();
       }
@@ -353,11 +363,26 @@ $(document).ready(function () {
       }
 
       $('#dtFacets-' + facetId + ' tbody').on('click','tr', function selectFacet() {
-        $(this).toggleClass('selected');
-        var selection = table.rows('.selected').data();
-        console.log(selection.length + ' row(s) selected');
-        console.log(selection);
-        console.log(selection[0], facet.path, facetNb);
+        // Select only one row
+        if ($(this).hasClass('selected')) {
+          $(this).removeClass('selected');
+        }
+        else {
+          dtFacet.$('tr.selected').removeClass('selected');
+          $(this).addClass('selected');
+        }
+        var selection = dtFacet.rows('.selected').data();
+        var facetIndex = Object.keys(facets).indexOf(facetId);
+        if(selection.length) {
+          var facetValue = selection[0]._id;
+          table.columns(fieldNb + facetIndex).search(facetValue).draw();
+          filter[facet.label] = facetValue;
+        }
+        else {
+          table.columns(fieldNb + facetIndex).search('').draw();
+          delete filter[facet.label];
+        }
+        displayFilter();
         // TODO: add this to the filter (and display it), and filter docs
       })
       facetNb ++;
