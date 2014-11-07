@@ -33,8 +33,12 @@ $(document).ready(function () {
   };
 
   var displayFilter = function displayFilter() {
-    var filterVerbalized = '<strong>' + filter.main + '</strong>';
-    $('#filter').html(filterVerbalized);
+    var filterVerbalized = '';
+    console.log('filter.main', filter.main);
+    if (filter.main) {
+      filterVerbalized = '<strong>' + filter.main + '</strong>';
+      $('#filter').html(filterVerbalized);
+    }
     Object.keys(filter, function (label, value) {
       if (label === 'main') { return; }
       filterVerbalized = filterVerbalized + ' ' + label + '=' +
