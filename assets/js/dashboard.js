@@ -33,12 +33,13 @@ $(document).ready(function () {
   };
 
   var displayFilter = function displayFilter() {
-    var filterVerbalized = filter.main;
-    $('#filter').text(filterVerbalized);
+    var filterVerbalized = '<strong>' + filter.main + '</strong>';
+    $('#filter').html(filterVerbalized);
     Object.keys(filter, function (label, value) {
       if (label === 'main') { return; }
-      filterVerbalized = filterVerbalized + ' ' + label + '=' + value;
-      $('#filter').text(filterVerbalized);
+      filterVerbalized = filterVerbalized + ' ' + label + '=' +
+                         '<strong>' + value + '</strong>';
+      $('#filter').html(filterVerbalized);
     })
   }
 
