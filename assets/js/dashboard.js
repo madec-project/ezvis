@@ -182,7 +182,17 @@ $(document).ready(function () {
       }
       // Colors
       if (pref.colors) {
-        options.data.colors = pref.colors;
+        var colors = {};
+        var i = 0;
+        // Reorder by values
+        var orderedValues = {};
+        columns.each(function (e) {
+          orderedValues[e[1]] = e[0];
+        });
+        Object.keys(orderedValues, function (value, key) {
+          colors[key] = pref.colors[i++ % pref.colors.length];
+        });
+        options.data.colors = colors;
       }
       else if (!options.data.colors) {
         // Default colors pattern
