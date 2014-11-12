@@ -63,17 +63,17 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
-					<ul class="dropdown-menu dropdown-alerts">
-						<li v-repeat="alerts">
-						<a href="#">
-							<div>
-								<i class="fa fa-((logo)) fa-fw"></i> ((message))
-								<span class="pull-right text-muted small">((horodateur|humanize))</span>
-							</div>
-						</a>
-						</li>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li v-repeat="alerts">
+                        <a href="#">
+                            <div>
+                                <i class="fa fa-((logo)) fa-fw"></i> ((message))
+                                <span class="pull-right text-muted small">((horodateur|humanize))</span>
+                            </div>
+                        </a>
+                        </li>
                         <li class="divider"></li>
-					</ul>
+                    </ul>
                     <!-- /.dropdown-alerts -->
                 </li>
                 <!-- /.dropdown -->
@@ -110,38 +110,26 @@
                             </div>
                             <!-- /input-group -->
                         </li>
-                        <li>
+                        <li id="nav-index">
                             <a href="/index.html"><i class="fa fa-dashboard fa-fw"></i> {{config.pages.index.title|d('Dashboard')}}</a>
                         </li>
+                        {% if config.dashboard %}
+                        {% for id, chart in config.dashboard.charts %}
+                        <li>
+                        <a href="chart.html?id={{id}}">
+                            <i class="fa fa-bar-chart-o fa-fw"></i>
+                            {{chart.title}}
+                        </a>
+                        </li>
+                        {% endfor %}
+                        {% endif %}
                         <li>
                             <a href="/documents.html"><i class="fa fa-table fa-fw"></i> {{config.pages.documents.title|d('Documents')}}</a>
                         </li>
-						<li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> {{config.pages.chart.title|d('Charts')}}<span class="fa arrow"></span></a>
-                            <ul id="charts-list" class="nav nav-second-level collapse in" style="">
-								{% if config.dashboard %}
-								{% for id, chart in config.dashboard.charts %}
-								<li>
-								<a href="chart.html?id={{id}}">{{chart.title}}</a>
-								</li>
-								{% endfor %}
-								{% endif %}
-                            </ul>
-                            <!-- /.nav-second-level -->
+                        <li>
+                        <li>
+                            <a href="/fields.html"><i class="fa fa-table fa-fw"></i> {{config.pages.fields.title|d('Fields')}}</a>
                         </li>
-						<li>
-						<a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>Information<span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level collapse in" style="">
-							<li>
-							<a href="/fields.html">{{config.pages.fields.title|d('Fields')}}</a>
-							</li>
-<!--							<li>
-							<a href="/config.html">Configuration</a>
-							</li>
-							-->
-						</ul>
-						<!-- /.nav-second-level -->
-						</li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
@@ -165,31 +153,31 @@
     </div>
     <!-- /#wrapper -->
 
-	<script src="/bundle.js"></script>
-	<script type="text/javascript">
-	var $ = jQuery = require('jquery');
-	</script>
+    <script src="/bundle.js"></script>
+    <script type="text/javascript">
+    var $ = jQuery = require('jquery');
+    </script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script src="/assets/js/plugins/metisMenu/metisMenu.min.js"></script>
     <script src="/assets/js/plugins/dataTables/jquery.dataTables.min.js"></script>
     <script src="/assets/js/plugins/dataTables/dataTables.bootstrap.js"></script>
     <script src="/assets/js/sb-admin-2.js"></script>
     <script src="/primus/primus.js"></script>
-	<script type="text/javascript">
-	var Vue = require('vue');
-	Vue.config({
-	  debug: false,
-	  delimiters: ['(', ')']
-	});
+    <script type="text/javascript">
+    var Vue = require('vue');
+    Vue.config({
+      debug: false,
+      delimiters: ['(', ')']
+    });
     var superagent = require('superagent');
-	var pathname = "{{url.pathname}}";
-	var config = {};
-	function setconfig(c) { config = c; };
-	</script>
+    var pathname = "{{url.pathname}}";
+    var config = {};
+    function setconfig(c) { config = c; };
+    </script>
     <script src="/assets/js/alerts.js"></script>
     <script type="text/javascript">
-	alerts('ws://{{url.host}}');
-	</script>
+    alerts('ws://{{url.host}}');
+    </script>
     <script src="/config.json?callback=setconfig"></script>
 
     {% block scripts %}
