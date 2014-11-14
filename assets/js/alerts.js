@@ -1,4 +1,4 @@
-/* global $, document, Primus, Vue */
+/* global $, document, Primus, Vue, Config */
 "use strict";
 var request = require('superagent');
 var moment = require('moment');

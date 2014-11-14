@@ -3,27 +3,20 @@
 {% block content %}
 {% set typePath = config.dashboard.type.path if config.dashboard.type else "mimetype" %}
 {% set typeLabel = config.dashboard.type.label if config.dashboard.type else "MIME types" %}
-<div class="row">
+<div id="keydata" class="row">
 	<div class="col-lg-3 col-md-6">
 		<div class="panel panel-green">
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-xs-3">
-						<i class="fa fa-file-o fa-5x"></i>
+						<i class="fa fa-((keydata[0].icon)) fa-5x"></i>
 					</div>
 					<div class="col-xs-9 text-right">
-						<div class="huge" data-url="/compute.json?o=count&f=_id" data-return="data._id">?</div>
-						<div>{{config.pages.documents.title|d('Documents')}}</div>
+						<div class="huge">((keydata[0].value))</div>
+						<div>((keydata[0].label))</div>
 					</div>
 				</div>
 			</div>
-			<a href="documents.html">
-				<div class="panel-footer">
-					<span class="pull-left">View Details</span>
-					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-					<div class="clearfix"></div>
-				</div>
-			</a>
 		</div>
 	</div>
 	<div class="col-lg-3 col-md-6">
@@ -31,21 +24,14 @@
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-xs-3">
-						<i class="fa fa-tags fa-5x"></i>
+						<i class="fa fa-((keydata[0].icon)) fa-5x"></i>
 					</div>
 					<div class="col-xs-9 text-right">
-						<div class="huge" data-url="/compute.json?o=distinct&f={{typePath}}&l=100" data-return="Object.keys(data).length">?</div>
-						<div>{{typeLabel}}</div>
+						<div class="huge">((keydata[1].value))</div>
+						<div>((keydata[1].label))</div>
 					</div>
 				</div>
 			</div>
-			<a href="#">
-				<div class="panel-footer">
-					<span class="pull-left">View Details</span>
-					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-					<div class="clearfix"></div>
-				</div>
-			</a>
 		</div>
 	</div>
 	<div class="col-lg-3 col-md-6">
@@ -53,11 +39,11 @@
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-xs-3">
-						<i class="fa fa-dollar fa-5x"></i>
+						<i class="fa fa-((keydata[0].icon)) fa-5x"></i>
 					</div>
 					<div class="col-xs-9 text-right">
-						<div class="huge" data-url="/compute.json?o=total&f=filesize" data-return="bytesToSize(data.filesize || 0)">?</div>
-						<div>Total size</div>
+						<div class="huge">((keydata[2].value))</div>
+						<div>((keydata[2].label))</div>
 					</div>
 				</div>
 			</div>
@@ -68,21 +54,14 @@
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-xs-3">
-						<i class="fa fa-support fa-5x"></i>
+						<i class="fa fa-((keydata[0].icon)) fa-5x"></i>
 					</div>
 					<div class="col-xs-9 text-right">
-						<div class="huge" data-url="/compute.json?o=catalog&f=content&l=1000" data-return="data.length">?</div>
-						<div>{{config.pages.fields.title|d('Fields')}}</div>
+						<div class="huge">((keydata[3].value))</div>
+						<div>((keydata[3].label))</div>
 					</div>
 				</div>
 			</div>
-			<a href="fields.html">
-				<div class="panel-footer">
-					<span class="pull-left">View Details</span>
-					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-					<div class="clearfix"></div>
-				</div>
-			</a>
 		</div>
 	</div>
 </div>
