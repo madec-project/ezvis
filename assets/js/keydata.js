@@ -35,7 +35,6 @@ $(document).ready(function () {
       superagent
       .get('/corpus.json?l=1')
       .end(function(res) {
-        console.log('res', res.body.data);
         var fields = Object.keys(res.body.data[0]), i = 0;
         Object.keys(Config.corpusFields).forEach(function(item) {
           if (fields.indexOf(item) && Config.corpusFields[item].visible) {
