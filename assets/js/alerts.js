@@ -19,7 +19,6 @@ function alerts(ws) {
   });
   var primus = Primus.connect(ws);
   primus.on('open', function () {
-    console.log('open');
     primus.on('changed', function(doc) {
       vm.$data.alerts.push({
         message: doc.basename + ' changed',

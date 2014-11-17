@@ -111,10 +111,10 @@
                             <!-- /input-group -->
                         </li>
                         <li id="nav-index">
-                            <a href="/index.html"><i class="fa fa-dashboard fa-fw"></i> {{Config.pages.index.title|d('Dashboard')}}</a>
+                            <a href="/index.html"><i class="fa fa-dashboard fa-fw"></i> {{config.pages.index.title|d('Dashboard')}}</a>
                         </li>
-                        {% if Config.dashboard %}
-                        {% for id, chart in Config.dashboard.charts %}
+                        {% if config.dashboard %}
+                        {% for id, chart in config.dashboard.charts %}
                         <li>
                         <a href="chart.html?id={{id}}">
                             <i class="fa fa-bar-chart-o fa-fw"></i>
@@ -124,11 +124,11 @@
                         {% endfor %}
                         {% endif %}
                         <li>
-                            <a href="/documents.html"><i class="fa fa-table fa-fw"></i> {{Config.pages.documents.title|d('Documents')}}</a>
+                            <a href="/documents.html"><i class="fa fa-table fa-fw"></i> {{config.pages.documents.title|d('Documents')}}</a>
                         </li>
                         <li>
                         <li>
-                            <a href="/fields.html"><i class="fa fa-table fa-fw"></i> {{Config.pages.fields.title|d('Fields')}}</a>
+                            <a href="/fields.html"><i class="fa fa-table fa-fw"></i> {{config.pages.fields.title|d('Fields')}}</a>
                         </li>
                     </ul>
                 </div>
@@ -175,7 +175,6 @@
     function setconfig(c) { Config = c; };
     </script>
     <script src="/assets/js/alerts.js"></script>
-    <script src="/assets/js/keydata.js"></script>
     <script type="text/javascript">
     alerts('ws://{{url.host}}');
     </script>
