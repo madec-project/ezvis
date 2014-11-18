@@ -27,7 +27,7 @@ $(document).ready(function() {
       "ordering" : true,
       "serverSide" : true,
       "ajax" : "/compute.json?o=catalog&f=fields",
-      "lengthMenu" : [ config.itemsPerPage || 5,10,25,50,100],
+      "lengthMenu" : [ Config.itemsPerPage || 5,10,25,50,100],
       "columns" : [
         { data: '_id' },
         { data: 'value' }
