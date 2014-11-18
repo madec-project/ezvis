@@ -43,8 +43,8 @@ $(document).ready(function () {
       if (label === 'main') { return; }
       filterVerbalized = filterVerbalized + ' ' + label + '=' +
                          '<strong>' + value + '</strong>';
-      $('#filter').html(filterVerbalized);
     })
+    $('#filter').html(filterVerbalized);
   }
 
   var generateHistogram = function(id, pref) {
