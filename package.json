@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/castorjs/castor-theme-sbadmin",
   "dependencies": {
-    "castor-core": "^0.4.1",
+    "castor-core": "^0.5.2",
     "qs": "^2.2.4",
     "vue": "^0.10.6",
     "jquery": "^2.1.1",
