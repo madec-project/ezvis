@@ -290,6 +290,9 @@ $(document).ready(function () {
       if (pref.color) {
         options.data.colors = { notices : pref.color };
       }
+      if (pref.legend) {
+        options.legend = pref.legend;
+      }
 
       if (isOnlyChart(id)) {
         // TODO: maximize height
