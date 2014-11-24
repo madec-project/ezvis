@@ -88,7 +88,7 @@ charts: [`histogram`](#histogram) and [`pie`](#pie).
 ## Dashboard
 ### type
 A documents' field which number of distinct values has to be displayed. 
-**Deprecated** (see [corpusFields](https://github.com/castorjs/castor-compute)).
+**Replaced** (see [corpusFields](https://github.com/castorjs/castor-compute)).
 
 For example: a type of paper (for scientific articles).
 
