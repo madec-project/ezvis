@@ -329,7 +329,6 @@ $(document).ready(function () {
       return;
     }
     var facetNb = 0;
-    // Object.keys(facets, function (facetId, facet) {
     facets.forEach(function (facet, facetId) {
       // Tabs
       $('#facets')
@@ -417,7 +416,8 @@ $(document).ready(function () {
     if (config.dashboard && config.dashboard.charts) {
       self.dashboard = config.dashboard;
 
-      Object.keys(self.dashboard.charts, function (id, pref) {
+      self.dashboard.charts.forEach(function (pref, chartNb) {
+        var id = "chart" + chartNb;
 
         if (isOnlyChart(id) || pathname !== '/chart.html') {
 

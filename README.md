@@ -58,11 +58,9 @@ The whole dashboard configuration is done inside the `dashboard` key
 of the JSON configuration file.
 
 Each chart has to be described in the `dashboard.charts` key.
-Each chart has a name (its key in the JSON).
 
-Below is an example with an histogram (which key is `perYear`), and a pie
-chart (which key is `perTheme`). There are two types of charts:
-[`histogram`](#histogram) and [`pie`](#pie).
+Below is an example with an histogram, and a pie chart. There are two types of
+charts: [`histogram`](#histogram) and [`pie`](#pie).
 
 ```json
 {
@@ -74,22 +72,23 @@ chart (which key is `perTheme`). There are two types of charts:
     }
   },
   "dashboard" : {
-    "charts": {
-        "perYear": {
+    "charts": [
+        {
             "field": "content.json.Py",
             "type": "histogram"
         },
-        "perTheme": {
+        {
             "field": "fields.Themes",
             "type": "pie"
         }
-    }
+    ]
   }
 }
 ```
 ## Dashboard
 ### type
-A documents' field which number of distinct values has to be displayed.
+A documents' field which number of distinct values has to be displayed. 
+**Deprecated** (see [corpusFields](https://github.com/castorjs/castor-compute)).
 
 For example: a type of paper (for scientific articles).
 
@@ -145,7 +144,7 @@ Then, you can follow the [C3's example](http://c3js.org/samples/options_size.htm
 Ex:
 
 ```javascript
-"perTheme": {
+{
   "field": "fields.Themes",
   "type": "pie",
   "size": {
@@ -154,13 +153,13 @@ Ex:
 }
 ```
 
-You can add a `columns` property too, knowing that the display has a "width" of 12
-columns (Twitter bootstrap).
+You can add a `columns` property too, knowing that the display has a "width"
+of 12 columns (Twitter bootstrap).
 
 Here is  an example where the pie should take half of the page's width:
 
 ```javascript
-"perTheme": {
+{
   "field": "fields.Themes",
   "type": "pie",
   "size": {
@@ -178,7 +177,7 @@ Below is an example where the horizontal bars should take 5 columns, with a
 preceding offset of 1 column.
 
 ```javascript
-"horizontalThemes": {
+{
     "field": "fields.Themes",
     "type": "horizontalbars",
     "title": "Thèmes",
@@ -213,7 +212,7 @@ You can also hide the legend, using `"show": false`:
 
 ```json
 {
-  "perTheme": {
+  {
     "field": "fields.Themes",
     "type": "pie",
     "legend": {
@@ -230,13 +229,13 @@ Example with a red histogram:
 ```json
 {
   "dashboard": {
-    "charts" : {
-      "histogram": {
+    "charts" : [
+      {
         "field": "content.json.Year",
         "type": "histogram",
         "color": "#ff0000"
       }
-    }
+    ]
   }
 }
 ```
@@ -247,13 +246,13 @@ In a pie, you can parameter a set of colors to be used:
 ```json
 {
   "dashboard": {
-    "charts" : {
-      "myPie" : {
+    "charts" : [
+      {
         "field": "content.json.Keywords",
         "type": "pie",
         "colors": [ "#BB9FF5", "#ff7a85", "#44b2ba", "#ffa65a", "#34cdb8"]
       }
-    }
+    ]
   }
 }
 ```
@@ -272,16 +271,16 @@ Ex:
 
 ```javascript
 "dashboard" : {
-  "charts": {
-      "perYear": {
+  "charts": [
+      {
           "field": "content.json.Py",
           "type": "histogram"
       },
-      "perTheme": {
+      {
           "field": "content.json.DiscESI",
           "type": "pie"
       }
-  }
+  ]
 }
 ```
 
@@ -316,16 +315,16 @@ Then, you have to add
 
 ```javascript
 "dashboard" : {
-  "charts": {
-      "perYear": {
+  "charts": [
+      {
           "field": "content.json.Py",
           "type": "histogram"
       },
-      "perTheme": {
+      {
           "field": "fields.Keywords",
           "type": "pie"
       }
-  }
+  ]
 }
 ```
 
@@ -341,16 +340,16 @@ keywords):
   }
 },
 "dashboard" : {
-  "charts": {
-      "perYear": {
+  "charts": [
+      {
           "field": "content.json.Py",
           "type": "histogram"
       },
-      "perTheme": {
+      {
           "field": "fields.Keywords",
           "type": "pie"
       }
-  }
+  ]
 }
 ```
 
@@ -397,28 +396,28 @@ In a chart page, you can add facets: others fields' values.
 Thus, you can have facets in each chart. Example:
 
 ```javascript
-    "charts": {
-        "perSection": {
-            "field": "fields.Section",
-            "type": "pie",
-            "title": "Sections",
-            "facets": [
-              {
-                "path": "content.json.Py",
-                "label": "Year"
-              },
-              {
-                "path": "fields.Themes",
-                "label": "Theme"
-              }
-            ]
+  "charts": [
+    {
+      "field": "fields.Section",
+      "type": "pie",
+      "title": "Sections",
+      "facets": [
+        {
+          "path": "content.json.Py",
+          "label": "Year"
         },
+        {
+          "path": "fields.Themes",
+          "label": "Theme"
+        }
+      ]
+    },
 ```
 
 Here, you have a pie displaying sections, and two facets:
 
-1. which label is `Year`, and pointing to `content.json.Py`  in the document
-2. which label is `Theme`, and pointing to `fields.Theme`  in the document
+1. pointing to `content.json.Py`  in the document
+2. pointing to `fields.Theme`  in the document
 
 # Document's page
 ## Title

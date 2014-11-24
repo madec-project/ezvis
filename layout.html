@@ -114,9 +114,9 @@
                             <a href="/index.html"><i class="fa fa-dashboard fa-fw"></i> {{config.pages.index.title|d('Dashboard')}}</a>
                         </li>
                         {% if config.dashboard %}
-                        {% for id, chart in config.dashboard.charts %}
+                        {% for chart in config.dashboard.charts %}
                         <li>
-                        <a href="chart.html?id={{id}}">
+                        <a href="chart.html?id=chart{{loop.index0}}">
                             <i class="fa fa-bar-chart-o fa-fw"></i>
                             {{chart.title}}
                         </a>
