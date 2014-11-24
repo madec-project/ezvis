@@ -1,6 +1,6 @@
 {
   "name": "castor-theme-sbadmin",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A Castor theme to visualize a synthesis on a corpus, using pies and histograms, based on SB Admin v2.0",
   "main": "index.js",
   "bin": {
