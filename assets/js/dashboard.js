@@ -243,8 +243,11 @@ $(document).ready(function () {
         '</h2></div>');
     }
 
+    var maxItems = pref.maxItems ? pref.maxItems : 100;
+
     request
-    .get('/compute.json?o=distinct&f=' + pref.field + '&itemsPerPage=100' +
+    .get('/compute.json?o=distinct&f=' + pref.field +
+         '&itemsPerPage=' + maxItems +
          '&columns[0][data]=value&columns[0][orderable]=true' +
          '&order[0][column]=0&order[0][dir]=desc')
     .end(function(res) {
