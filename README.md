@@ -392,7 +392,7 @@ By default, `visible` key value is `false`.
 
 ## Facets
 
-In a chart page, you can add facets: others fielsd's values.
+In a chart page, you can add facets: others fields' values.
 
 Thus, you can have facets in each chart. Example:
 
@@ -402,23 +402,23 @@ Thus, you can have facets in each chart. Example:
             "field": "fields.Section",
             "type": "pie",
             "title": "Sections",
-            "facets": {
-              "year": {
+            "facets": [
+              {
                 "path": "content.json.Py",
                 "label": "Year"
               },
-              "theme": {
+              {
                 "path": "fields.Themes",
                 "label": "Theme"
               }
-            }
+            ]
         },
 ```
 
 Here, you have a pie displaying sections, and two facets:
 
-1. `year` which label is `Year`, and pointing to `content.json.Py`  in the document
-2. `theme` which label is `Theme`, and pointing to `fields.Theme`  in the document
+1. which label is `Year`, and pointing to `content.json.Py`  in the document
+2. which label is `Theme`, and pointing to `fields.Theme`  in the document
 
 # Document's page
 ## Title

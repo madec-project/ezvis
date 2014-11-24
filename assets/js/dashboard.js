@@ -43,9 +43,9 @@ $(document).ready(function () {
       if (label === 'main') { return; }
       filterVerbalized = filterVerbalized + ' ' + label + '=' +
                          '<strong>' + value + '</strong>';
-    })
+    });
     $('#filter').html(filterVerbalized);
-  }
+  };
 
   var generateHistogram = function(id, pref) {
     if (pref.title) {
@@ -180,12 +180,12 @@ $(document).ready(function () {
         options.size = pref.size;
         bootstrapPosition(id, pref.size);
       }
+      var colors        = {};
+      var i             = 0;
+      var orderedValues = {};
       // Colors
       if (pref.colors) {
-        var colors = {};
-        var i = 0;
         // Reorder by values
-        var orderedValues = {};
         columns.each(function (e) {
           orderedValues[e[1]] = e[0];
         });
@@ -196,12 +196,9 @@ $(document).ready(function () {
       }
       else if (!options.data.colors) {
         // Default colors pattern
-        var colors = {};
         var defaultColors =
           [ '#BB9FF5', '#ff7a85', '#44b2ba', '#ffa65a', '#34cdb8'];
-        var i = 0;
         // Reorder by values
-        var orderedValues = {};
         columns.each(function (e) {
           orderedValues[e[1]] = e[0];
         });
@@ -320,6 +317,11 @@ $(document).ready(function () {
     });
   };
 
+  /**
+   * Create the facets of the graph id
+   * @param  {String} id     Identifier of the graph
+   * @param  {Array}  facets Facets to draw for the graph
+   */
   var createFacets = function createFacets(id, facets) {
     if (!facets) {
       $('#charts').removeClass('col-md-9').addClass('col-md-12');
@@ -327,8 +329,8 @@ $(document).ready(function () {
       return;
     }
     var facetNb = 0;
-    Object.keys(facets, function (facetId, facet) {
-
+    // Object.keys(facets, function (facetId, facet) {
+    facets.forEach(function (facet, facetId) {
       // Tabs
       $('#facets')
       .append(
@@ -402,7 +404,7 @@ $(document).ready(function () {
         }
         displayFilter();
         // TODO: add this to the filter (and display it), and filter docs
-      })
+      });
       facetNb ++;
     });
   };
@@ -453,8 +455,10 @@ $(document).ready(function () {
                 }
               }
               if (pref.facets) {
-                facetsNb = Object.keys(pref.facets).length;
-                Object.keys(pref.facets, function (facetId, facet) {
+                facetsNb = pref.facets.length;
+                // Object.keys(pref.facets, function (facetId, facet) {
+                pref.facets.forEach(function (facet, facetNb) {
+                  var facetId = "facet" + facetNb;
                   columns.push({data: facet.path});
                   $('#dataTables-documents tr')
                   .append('<th>' + facet.label + '</th>');
