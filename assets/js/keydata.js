@@ -33,7 +33,7 @@ $(document).ready(function () {
     ready: function() {
       var self = this;
       superagent
-      .get('/corpus.json?l=1')
+      .get('/corpus.json?l=1&columns[0][data]=computedDate&columns[0][orderable]=true&order[0][column]=0&order[0][dir]=desc')
       .end(function(res) {
         var fields = Object.keys(res.body.data[0]), i = 0;
         Object.keys(Config.corpusFields).forEach(function(item) {
