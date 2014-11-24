@@ -131,8 +131,11 @@ position of the [`legend`](#legend).
 
 Used to display the number of documents associated to a field value (for
 example, for keywords: how many documents match a keyword?).
+Bars are sorted by descending number of documents.
 
-Possible configuration: [`size`](#size), and [`color`](#color).
+Possible configuration: [`size`](#size), [`color`](#color), [`legend`](#legend), and `maxItems`.
+
+`maxItems` limit the number of bars to its value (default value: `100`).
 
 ### Preferences
 
@@ -178,14 +181,14 @@ preceding offset of 1 column.
 
 ```javascript
 {
-    "field": "fields.Themes",
-    "type": "horizontalbars",
-    "title": "Thèmes",
-    "size": {
-        "height": 420,
-        "columns": 5,
-        "offset": 1
-    }
+  "field": "fields.Themes",
+  "type": "horizontalbars",
+  "title": "Thèmes",
+  "size": {
+    "height": 420,
+    "columns": 5,
+    "offset": 1
+  }
 }
 ```
 
@@ -199,7 +202,7 @@ There are currently only two positions: `bottom` and `right`.
 Ex:
 
 ```javascript
-"perTheme": {
+{
   "field": "fields.Themes",
   "type": "pie",
   "legend": {
@@ -208,16 +211,14 @@ Ex:
 }
 ```
 
-You can also hide the legend, using `"show": false`:
+You can also hide/show the legend, using `"show": false` or `"show": true`:
 
 ```json
 {
-  {
-    "field": "fields.Themes",
-    "type": "pie",
-    "legend": {
-      "show": false
-    }
+  "field": "fields.Themes",
+  "type": "pie",
+  "legend": {
+    "show": false
   }
 }
 ```
