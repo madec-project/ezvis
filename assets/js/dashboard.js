@@ -244,7 +244,9 @@ $(document).ready(function () {
     }
 
     request
-    .get('/compute.json?o=distinct&f=' + pref.field + '&itemsPerPage=100')
+    .get('/compute.json?o=distinct&f=' + pref.field + '&itemsPerPage=100' +
+         '&columns[0][data]=value&columns[0][orderable]=true' +
+         '&order[0][column]=0&order[0][dir]=desc')
     .end(function(res) {
       var keys = res.body.data;
 
