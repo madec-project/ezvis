@@ -170,7 +170,7 @@
       delimiters: ['(', ')']
     });
     var superagent = require('superagent');
-    var pathname = "{{url.pathname}}";
+    var pathname = window.location.pathname;
     var Config = {};
     function setconfig(c) { Config = c; };
     </script>
