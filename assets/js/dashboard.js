@@ -281,6 +281,9 @@ $(document).ready(function () {
         },
         size: {
           height: 'auto'
+        },
+        legend: {
+          show: false
         }
       };
       // Override options with configuration values
