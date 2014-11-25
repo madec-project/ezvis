@@ -399,7 +399,7 @@ $(document).ready(function () {
           $(this).addClass('selected');
         }
         var selection = dtFacet.rows('.selected').data();
-        var facetIndex = Object.keys(facets).indexOf(facetId);
+        var facetIndex = facetId;
         if(selection.length) {
           var facetValue = selection[0]._id;
           table.columns(fieldNb + facetIndex).search(facetValue).draw();
