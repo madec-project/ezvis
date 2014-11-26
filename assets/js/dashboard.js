@@ -3,17 +3,105 @@
 $(document).ready(function () {
   'use strict';
   var table;
+  var currentField;
   var dtFacets = {};
+  var facets   = [];
+  var facetsPrefs;
   var fieldNb;
-  var filter= {};
-  var request = superagent;
-  var self = this;
+  var filter   = {};
+  var graphOptions;
+  var i;
+  var request  = superagent;
+  var self     = this;
 
   var isOnlyChart = function isOnlyChart(id) {
     return pathname === '/chart.html' &&
            typeof params !== 'undefined' &&
            params.id === id;
   };
+
+  var verbalize = function verbalize (filter) {
+    var verbalized = '';
+    Object.keys(filter, function (label, value) {
+      verbalized += (label === 'main' ? '' :' ' + label + '=') +
+                    '<strong>' + value + '</strong>';
+    });
+    return verbalized;
+  };
+
+  var displayFilter = function displayFilter() {
+    $('#filter').html(verbalize(filter));
+  };
+
+  var updateDocumentsTable = function updateDocumentsTable() {
+    // Reset the search
+    table.columns(0).search('');
+    for(i = 0; i < facets.length; i++) {
+      table.columns(fieldNb + i).search('');
+    }
+    // Apply filter to the search
+    Object.keys(filter, function (key, value) {
+      if (key === 'main') {
+        table.columns(0).search(value);
+      }
+      else {
+        var facetIndex = facets.indexOf(key);
+        table.columns(fieldNb + facetIndex).search(value);
+      }
+    });
+    table.draw();
+  };
+
+  var updateFacets = function updateFacets() {
+    facets.forEach(function (facetLabel, facetId) {
+      var facet = facetsPrefs[facetId];
+      var url = '/compute.json?o=distinct&f=' + facet.path;
+      if (filter.main) {
+        url +=  '&columns[2][data]='          + currentField +
+                '&columns[2][search][value]=' + filter.main;
+      }
+      dtFacets[facetId].ajax.url(url);
+      dtFacets[facetId].ajax.reload();
+    });
+  };
+
+  var updateGraph = function updateGraph() {
+    if (graphOptions && graphOptions.data && graphOptions.type) {
+      if (graphOptions.type === 'pie') {
+
+      }
+    }
+  };
+
+  var updateAll = function updateAll() {
+    updateDocumentsTable();
+    updateFacets();
+    updateGraph();
+  };
+
+  if (pathname === "/chart.html") {
+    var vm = new Vue({
+      el: '#filters',
+      data: {
+        filter: filter
+      },
+      methods: {
+        removeFilter: function (filterItem) {
+          console.log('removeFilter',filterItem); // TODO remove this line
+          filter.$delete(filterItem.$key);
+          updateAll();
+        },
+        removeAllFilters: function () {
+          console.log('removeAllFilters'); // TODO remove this line
+          updateDocumentsTable();
+          Object.keys(filter, function (key) {
+            filter.$delete(key);
+          });
+          updateAll();
+        }
+      }
+    });
+  }
 
   var bootstrapPosition = function(id, size) {
     if (isOnlyChart(id)) {
@@ -30,21 +118,6 @@ $(document).ready(function () {
       .parent()
       .addClass("col-md-offset-" + size.offset);
     }
-  };
-
-  var displayFilter = function displayFilter() {
-    var filterVerbalized = '';
-    console.log('filter.main', filter.main);
-    if (filter.main) {
-      filterVerbalized = '<strong>' + filter.main + '</strong>';
-      $('#filter').html(filterVerbalized);
-    }
-    Object.keys(filter, function (label, value) {
-      if (label === 'main') { return; }
-      filterVerbalized = filterVerbalized + ' ' + label + '=' +
-                         '<strong>' + value + '</strong>';
-    });
-    $('#filter').html(filterVerbalized);
   };
 
   var generateHistogram = function(id, pref) {
@@ -106,23 +179,15 @@ $(document).ready(function () {
         options.data.selection.multiple = false;
         options.data.onselected = function (d, element) {
           var filterValue = categories[d.index];
-          // Update documents
-          table.columns(0).search(filterValue).draw();
-          // Update facets
-          if (pref.facets) {
-            Object.keys(pref.facets, function updateFacet(facetId, facet) {
-              var url = '/compute.json?o=distinct&f=' + facet.path +
-                        '&columns[2][data]='          + pref.field +
-                        '&columns[2][search][value]=' + filterValue;
-              dtFacets[facetId].ajax.url(url);
-              dtFacets[facetId].ajax.reload();
-            });
-          }
-          filter.main = filterValue;
-          displayFilter(filterValue);
+          filter.$delete('main');
+          filter.$add('main', filterValue);
+          updateDocumentsTable();
+          updateFacets();
+          displayFilter(filterValue); // TODO remove this line
         };
       }
 
+      graphOptions = options;
       var histogram = c3.generate(options);
     });
   };
@@ -183,27 +248,21 @@ $(document).ready(function () {
       var colors        = {};
       var i             = 0;
       var orderedValues = {};
+      // Reorder by values
+      columns.each(function (e) {
+        orderedValues[e[1]] = e[0];
+      });
       // Colors
+      var palette;
       if (pref.colors) {
-        // Reorder by values
-        columns.each(function (e) {
-          orderedValues[e[1]] = e[0];
-        });
-        Object.keys(orderedValues, function (value, key) {
-          colors[key] = pref.colors[i++ % pref.colors.length];
-        });
-        options.data.colors = colors;
+        palette = pref.colors;
       }
       else if (!options.data.colors) {
-        // Default colors pattern
-        var defaultColors =
-          [ '#BB9FF5', '#ff7a85', '#44b2ba', '#ffa65a', '#34cdb8'];
-        // Reorder by values
-        columns.each(function (e) {
-          orderedValues[e[1]] = e[0];
-        });
+        palette = [ '#BB9FF5', '#ff7a85', '#44b2ba', '#ffa65a', '#34cdb8'];
+      }
+      if (pref.colors || !options.data.colors) {
         Object.keys(orderedValues, function (value, key) {
-          colors[key] = defaultColors[i++ % defaultColors.length];
+          colors[key] = palette[i++ % palette.length];
         });
         options.data.colors = colors;
       }
@@ -213,22 +272,15 @@ $(document).ready(function () {
         options.data.selection.multiple = false;
         options.data.onselected = function (d, element) {
           var filterValue = d.id;
-          table.columns(0).search(filterValue).draw();
-          // Update facets
-          if (pref.facets) {
-            Object.keys(pref.facets, function updateFacet(facetId, facet) {
-              var url = '/compute.json?o=distinct&f=' + facet.path +
-                        '&columns[2][data]='          + pref.field +
-                        '&columns[2][search][value]=' + filterValue;
-              dtFacets[facetId].ajax.url(url);
-              dtFacets[facetId].ajax.reload();
-            });
-          }
-          filter.main = filterValue;
-          displayFilter(filterValue);
+          filter.$delete('main');
+          filter.$add('main', filterValue);
+          updateDocumentsTable();
+          updateFacets();
+          displayFilter(filterValue); // TODO remove this line
         };
       }
 
+      graphOptions = options;
       // Generate the pie.
       var pie = c3.generate(options);
     });
@@ -305,22 +357,15 @@ $(document).ready(function () {
         options.data.selection.multiple = false;
         options.data.onselected = function (d, element) {
           var filterValue = categories[d.index];
-          table.columns(0).search(filterValue).draw();
-          // Update facets
-          if (pref.facets) {
-            Object.keys(pref.facets, function updateFacet(facetId, facet) {
-              var url = '/compute.json?o=distinct&f=' + facet.path +
-                        '&columns[2][data]='          + pref.field +
-                        '&columns[2][search][value]=' + filterValue;
-              dtFacets[facetId].ajax.url(url);
-              dtFacets[facetId].ajax.reload();
-            });
-          }
-          filter.main = filterValue;
-          displayFilter(filterValue);
+          filter.$delete('main');
+          filter.$add('main', filterValue);
+          updateDocumentsTable();
+          updateFacets();
+          displayFilter(filterValue); // TODO remove this line
         };
       }
 
+      graphOptions = options;
       var histogram = c3.generate(options);
     });
   };
@@ -403,11 +448,13 @@ $(document).ready(function () {
         if(selection.length) {
           var facetValue = selection[0]._id;
           table.columns(fieldNb + facetIndex).search(facetValue).draw();
-          filter[facet.label] = facetValue;
+          // $delete and $add are Vuejs methods
+          filter.$delete(facet.label);
+          filter.$add(facet.label, facetValue);
         }
         else {
           table.columns(fieldNb + facetIndex).search('').draw();
-          delete filter[facet.label];
+          filter.$delete(facet.label);
         }
         displayFilter();
         // TODO: add this to the filter (and display it), and filter docs
@@ -428,6 +475,8 @@ $(document).ready(function () {
         var id = "chart" + chartNb;
 
         if (isOnlyChart(id) || pathname !== '/chart.html') {
+          currentField = pref.field;
+          console.log('currentField',currentField);
 
           $('#charts').append('<div class="panel panel-default col-md-12">' +
             '<div id="' +  id + '" class="panel-body"></div>' +
@@ -463,9 +512,11 @@ $(document).ready(function () {
                 }
               }
               if (pref.facets) {
+                facetsPrefs = pref.facets;
                 facetsNb = pref.facets.length;
                 // Object.keys(pref.facets, function (facetId, facet) {
                 pref.facets.forEach(function (facet, facetNb) {
+                  facets.push(facet.label);
                   var facetId = "facet" + facetNb;
                   columns.push({data: facet.path});
                   $('#dataTables-documents tr')
