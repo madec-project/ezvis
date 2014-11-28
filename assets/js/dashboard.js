@@ -10,6 +10,8 @@ $(document).ready(function () {
   var fieldNb;
   var filter   = {};
   var graphOptions;
+  var graphId;
+  var graphPref;
   var i;
   var request  = superagent;
   var self     = this;
@@ -70,11 +72,14 @@ $(document).ready(function () {
     if (!graphOptions.data) return;
     if (!graphOptions.data.type) return;
 
-    if (graphOptions.type === 'pie') {
-
+    if (graphOptions.data.type === 'pie') {
+      generatePie(graphId, graphPref);
     }
-    else {
-
+    else if (graphOptions.data.type === 'horizontalbars') {
+      generateHorizontalBars(graphId, graphPref);
+    }
+    else if (graphOptions.data.type === 'histogram') {
+      generateHistogram(graphId, graphPref);
     }
   };
 
@@ -124,7 +129,7 @@ $(document).ready(function () {
   };
 
   var generateHistogram = function(id, pref) {
-    if (pref.title) {
+    if (pref.title && !$('#' + id).prev().length) {
       $('#' + id).before('<div class="panel-heading">' +
                          '<h2 class="panel-title">' +
                          pref.title +
@@ -187,15 +192,17 @@ $(document).ready(function () {
           updateDocumentsTable();
           updateFacets();
         };
+        graphOptions = options;
+        graphId      = id;
+        graphPref    = pref;
       }
 
-      graphOptions = options;
       var histogram = c3.generate(options);
     });
   };
 
   var generatePie = function(id, pref) {
-    if (pref.title) {
+    if (pref.title && !$('#' + id).prev().length) {
       $('#' + id)
       .before('<div class="panel-heading">' +
               '<h2 class="panel-title">' +
@@ -283,16 +290,18 @@ $(document).ready(function () {
           updateDocumentsTable();
           updateFacets();
         };
+        graphOptions = options;
+        graphId      = id;
+        graphPref    = pref;
       }
 
-      graphOptions = options;
       // Generate the pie.
       var pie = c3.generate(options);
     });
   };
 
   var generateHorizontalBars = function(id, pref) {
-    if (pref.title) {
+    if (pref.title && !$('#' + id).prev().length) {
       $('#' + id)
       .before('<div class="panel-heading">' +
         '<h2 class="panel-title">' +
@@ -366,9 +375,11 @@ $(document).ready(function () {
           updateDocumentsTable();
           updateFacets();
         };
+        graphOptions = options;
+        graphId      = id;
+        graphPref    = pref;
       }
 
-      graphOptions = options;
       var histogram = c3.generate(options);
     });
   };
@@ -478,7 +489,6 @@ $(document).ready(function () {
 
         if (isOnlyChart(id) || pathname !== '/chart.html') {
           currentField = pref.field;
-          console.log('currentField',currentField);
 
           $('#charts').append('<div class="panel panel-default col-md-12">' +
             '<div id="' +  id + '" class="panel-body"></div>' +
