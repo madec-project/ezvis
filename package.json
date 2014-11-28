@@ -4,7 +4,7 @@
   "description": "A Castor theme to visualize a synthesis on a corpus, using pies and histograms, based on SB Admin v2.0",
   "main": "index.js",
   "bin": {
-    "ezviz": "./ezviz"
+    "ezviz": "./cli"
   },
   "scripts": {
     "start": "node ./server.js",
