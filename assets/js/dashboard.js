@@ -66,10 +66,15 @@ $(document).ready(function () {
   };
 
   var updateGraph = function updateGraph() {
-    if (graphOptions && graphOptions.data && graphOptions.type) {
-      if (graphOptions.type === 'pie') {
+    if (!graphOptions) return;
+    if (!graphOptions.data) return;
+    if (!graphOptions.data.type) return;
 
-      }
+    if (graphOptions.type === 'pie') {
+
+    }
+    else {
+
     }
   };
 
@@ -201,8 +206,12 @@ $(document).ready(function () {
               '</h2></div>');
     }
 
+    var maxItems = pref.maxItems ? pref.maxItems : 100;
+
     request
-    .get('/compute.json?o=distinct&f=' + pref.field + '&itemsPerPage=100')
+    .get('/compute.json?o=distinct&f=' + pref.field + '&itemsPerPage=100' +
+         '&columns[0][data]=value&columns[0][orderable]=true' +
+         '&order[0][column]=0&order[0][dir]=desc')
     .end(function(res) {
       self.themes = res.body.data;
 
@@ -252,6 +261,9 @@ $(document).ready(function () {
       columns.each(function (e) {
         orderedValues[e[1]] = e[0];
       });
+      console.log('orderedValues',orderedValues);
+      console.log('columns',columns);
+      orderedValues = columns;
       // Colors
       var palette;
       if (pref.colors) {
