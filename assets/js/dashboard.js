@@ -261,9 +261,6 @@ $(document).ready(function () {
       columns.each(function (e) {
         orderedValues[e[1]] = e[0];
       });
-      console.log('orderedValues',orderedValues);
-      console.log('columns',columns);
-      orderedValues = columns;
       // Colors
       var palette;
       if (pref.colors) {
