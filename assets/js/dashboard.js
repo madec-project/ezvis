@@ -92,12 +92,10 @@ $(document).ready(function () {
       },
       methods: {
         removeFilter: function (filterItem) {
-          console.log('removeFilter',filterItem); // TODO remove this line
           filter.$delete(filterItem.$key);
           updateAll();
         },
         removeAllFilters: function () {
-          console.log('removeAllFilters'); // TODO remove this line
           updateDocumentsTable();
           Object.keys(filter, function (key) {
             filter.$delete(key);
@@ -188,7 +186,6 @@ $(document).ready(function () {
           filter.$add('main', filterValue);
           updateDocumentsTable();
           updateFacets();
-          displayFilter(filterValue); // TODO remove this line
         };
       }
 
@@ -285,7 +282,6 @@ $(document).ready(function () {
           filter.$add('main', filterValue);
           updateDocumentsTable();
           updateFacets();
-          displayFilter(filterValue); // TODO remove this line
         };
       }
 
@@ -361,7 +357,6 @@ $(document).ready(function () {
       }
 
       if (isOnlyChart(id)) {
-        // TODO: maximize height
         options.data.selection = {enabled:true};
         options.data.selection.multiple = false;
         options.data.onselected = function (d, element) {
@@ -370,7 +365,6 @@ $(document).ready(function () {
           filter.$add('main', filterValue);
           updateDocumentsTable();
           updateFacets();
-          displayFilter(filterValue); // TODO remove this line
         };
       }
 
@@ -465,7 +459,6 @@ $(document).ready(function () {
           table.columns(fieldNb + facetIndex).search('').draw();
           filter.$delete(facet.label);
         }
-        displayFilter();
         // TODO: add this to the filter (and display it), and filter docs
       });
       facetNb ++;
