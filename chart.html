@@ -46,7 +46,7 @@
 <script src="assets/js/sugar.min.js"></script>
 <script>
 // Compute params
-var url_query = "{{url.query}}";
+var url_query = window.location.search.slice(1);
 var strings = url_query.split(/&amp;/g);
 var params = strings.reduce(function (obj, str) {
     var a = str.split('=');
