@@ -1,3 +1,3 @@
 module.exports = {
-  "browserifyModules" : [ 'jquery', 'vue', 'superagent', 'moment', 'qs' ]
+  "browserifyModules" : [ 'jquery', 'vue', 'moment', 'qs' ]
 };
