@@ -72,14 +72,18 @@ $(document).ready(function () {
     if (!graphOptions.data) return;
     if (!graphOptions.data.type) return;
 
-    if (graphOptions.data.type === 'pie') {
-      generatePie(graphId, graphPref);
-    }
-    else if (graphOptions.data.type === 'horizontalbars') {
-      generateHorizontalBars(graphId, graphPref);
-    }
-    else if (graphOptions.data.type === 'histogram') {
-      generateHistogram(graphId, graphPref);
+    switch(graphOptions.data.type) {
+      case 'pie':
+        generatePie(graphId, graphPref);
+        break;
+      case 'horizontalbars':
+        generateHorizontalBars(graphId, graphPref);
+        break;
+      case 'histogram':
+        generateHistogram(graphId, graphPref);
+        break;
+      default:
+        console.warn('Unknown chart type ' + graphOptions.data.type + '!');
     }
   };
 
