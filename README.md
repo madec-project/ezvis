@@ -21,6 +21,12 @@ Usage
 $ castor --theme ./castor-theme-sbadmin/ /path/to/data/repository
 ```
 
+Alternatively, you can use `ezviz`, which does not need the `theme` parameter:
+
+```
+$ ezviz /path/to/data/repository
+```
+
 If you don't have a data repository, but already loaded data in mongodb, you
 can use:
 
