@@ -134,6 +134,8 @@ $(document).ready(function () {
                          '<h2 class="panel-title">' +
                          pref.title +
                          '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
     }
 
     request
@@ -208,6 +210,8 @@ $(document).ready(function () {
               '<h2 class="panel-title">' +
               pref.title +
               '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
     }
 
     var maxItems = pref.maxItems ? pref.maxItems : 100;
@@ -307,6 +311,8 @@ $(document).ready(function () {
         '<h2 class="panel-title">' +
         pref.title +
         '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
     }
 
     var maxItems = pref.maxItems ? pref.maxItems : 100;
