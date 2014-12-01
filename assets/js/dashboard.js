@@ -9,6 +9,7 @@ $(document).ready(function () {
   var facetsPrefs;
   var fieldNb;
   var filter   = {};
+  var graphChart;
   var graphOptions;
   var graphId;
   var graphPref;
@@ -72,19 +73,44 @@ $(document).ready(function () {
     if (!graphOptions.data) return;
     if (!graphOptions.data.type) return;
 
-    switch(graphOptions.data.type) {
-      case 'pie':
-        generatePie(graphId, graphPref);
-        break;
-      case 'horizontalbars':
-        generateHorizontalBars(graphId, graphPref);
-        break;
-      case 'histogram':
-        generateHistogram(graphId, graphPref);
-        break;
-      default:
-        console.warn('Unknown chart type ' + graphOptions.data.type + '!');
-    }
+    var maxItems = graphPref.maxItems ? graphPref.maxItems : 100;
+    // TODO add filter to the URL
+    var url = '/compute.json?o=distinct&f=' + graphPref.field +
+         '&itemsPerPage=' + maxItems +
+         '&columns[0][data]=value&columns[0][orderable]=true' +
+         '&order[0][column]=0&order[0][dir]=desc';
+    request
+    .get(url)
+    .end(function(res) {
+      switch(graphOptions.data.type) {
+        case 'pie':
+          var columns = [];
+          res.body.data.each(function(e) {
+            columns.push([e._id, e.value]);
+          });
+          graphChart.load({
+            columns: columns
+          })
+          break;
+        case 'horizontalbars':
+        case 'histogram':
+          // Create a dictionary: key -> occurrence
+          var k = {};
+          res.body.data.each(function(e) {
+            k[e._id] = e.value;
+          });
+
+          var categories = Object.res.body.data(k);
+          var columns = Object.values(k);
+          columns.unshift('notices'); // TODO make it configurable?
+          graphChart.load({
+            columns: columns
+          })
+          break;
+        default:
+          console.warn('Unknown chart type ' + graphOptions.data.type + '!');
+      }
+    });
   };
 
   var updateAll = function updateAll() {
@@ -204,6 +230,7 @@ $(document).ready(function () {
       }
 
       var histogram = c3.generate(options);
+      graphChart = histogram;
     });
   };
 
@@ -305,6 +332,7 @@ $(document).ready(function () {
 
       // Generate the pie.
       var pie = c3.generate(options);
+      graphChart = pie;
     });
   };
 
@@ -390,7 +418,8 @@ $(document).ready(function () {
         graphPref    = pref;
       }
 
-      var histogram = c3.generate(options);
+      var horizontalbars = c3.generate(options);
+      graphChart = horizontalbars;
     });
   };
 
