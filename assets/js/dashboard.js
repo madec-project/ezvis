@@ -517,7 +517,7 @@ $(document).ready(function () {
 
   // Get the dashboard preferences
 
-  if (Config.dashboard && Config.dashboard.charts && !Array.isArray(Config.dashboard.charts)) {
+  if (Config.dashboard && Config.dashboard.charts && Array.isArray(Config.dashboard.charts)) {
 
     Config.dashboard.charts.forEach(function (pref, chartNb) {
       var id = "chart" + chartNb;
