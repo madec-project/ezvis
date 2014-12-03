@@ -505,3 +505,27 @@ For example, you may customize the `/index.html` page using:
 ```
 
 Notice that the path for `index` settings is `pages.index`.
+
+# Loaders
+
+By default, this castor theme is able to load CSV files (each line being a document).
+
+Here is the default settings:
+
+```javascript
+  "loaders": [
+    {
+      "script": "castor-load-csv",
+      "pattern": "**/*.csv"
+    }
+  ]
+```
+
+These settings mean that all `.csv` files within the data directory (and all
+its descendants, thanks to `**/`) will be loaded by 
+[`castor-load-csv`](https://github.com/castorjs/castor-load-csv).
+
+You can add any castor loader you find in 
+[castorjs repositories](https://github.com/castorjs?query=castor-load) 
+(except [castor-load]https://github.com/castorjs/castor-load), which manages
+(all loaders).
