@@ -16,10 +16,14 @@
     border: 0;
 }
 
-table.dataTable tbody tr.selected td {
+.dataTable tbody tr.selected td {
     background-color: #b0bed9;
 }
 
 .filter {
     margin: 3px 5px;
+}
+
+#facetsTabs tbody tr td {
+    cursor: pointer;
 }
