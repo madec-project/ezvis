@@ -527,7 +527,7 @@ its descendants, thanks to `**/`) will be loaded by
 
 You can add any castor loader you find in 
 [castorjs repositories](https://github.com/castorjs?query=castor-load) 
-(except [castor-load]https://github.com/castorjs/castor-load), which manages
+(except [castor-load](https://github.com/castorjs/castor-load), which manages
 (all loaders).
 
 For example, to enable castor to load XML files, each containing several documents (in `/RDF/Topic`), use:
