@@ -1,6 +1,11 @@
 {% extends "layout.html" %}
 
 {% block content %}
+{% if config.pages.documents.help %}
+<div class="row lead">
+	{{ config.pages.documents.help }}
+</div>
+{% endif %}
 <div class="panel-body">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover" id="dataTables-documents">

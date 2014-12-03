@@ -1,6 +1,11 @@
 {% extends "layout.html" %}
 
 {% block content %}
+{% if config.pages.chart.help %}
+<div class="row lead">
+  {{ config.pages.chart.help }}
+</div>
+{% endif %}
 
 <div class="row">
   <div id="charts" class="col-md-9">

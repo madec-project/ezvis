@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="title">
+{% if config.pages.display.help %}
+<div class="row lead">
+    {{ config.pages.display.help }}
+</div>
+{% endif %}<div class="title">
     <h2 itemprop="name">
         {{ item.fields.title|d('no title') }}
     </h2>

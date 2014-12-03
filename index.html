@@ -1,6 +1,11 @@
 {% extends "layout.html" %}
 
 {% block content %}
+{% if config.pages.index.help %}
+<div class="row lead">
+	{{ config.pages.index.help }}
+</div>
+{% endif %}
 <div id="keydata" class="row">
 	<div class="col-lg-3 col-md-6">
 		<div class="panel panel-green">

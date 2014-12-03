@@ -1,6 +1,11 @@
 {% extends "layout.html" %}
 
 {% block content %}
+{% if config.pages.fields.help %}
+<div class="row lead">
+    {{ config.pages.fields.help }}
+</div>
+{% endif %}
 <div class="panel-body">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover" id="dataTables-fields">
@@ -15,8 +20,7 @@
 		</table>
 	</div>
 </div>
-
-		{% endblock %}
+{% endblock %}
 
 
 {% block scripts %}
