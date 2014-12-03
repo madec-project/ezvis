@@ -1,5 +1,5 @@
 /*jslint node:true */
-/*global $,c3,pathname,superagent */
+/*global $,c3,pathname,superagent,Config */
 $(document).ready(function () {
   'use strict';
   var table;
@@ -534,113 +534,109 @@ $(document).ready(function () {
   };
 
   // Get the dashboard preferences
-  request
-  .get('/config.json')
-  .end(function(res) {
-    var config = res.body;
-    if (config.dashboard && config.dashboard.charts) {
-      self.dashboard = config.dashboard;
 
-      self.dashboard.charts.forEach(function (pref, chartNb) {
-        var id = "chart" + chartNb;
+  if (Config.dashboard && Config.dashboard.charts && Array.isArray(Config.dashboard.charts)) {
 
-        if (isOnlyChart(id) || pathname !== '/chart.html') {
-          currentField = pref.field;
+    Config.dashboard.charts.forEach(function (pref, chartNb) {
+      var id = "chart" + chartNb;
 
-          $('#charts').append('<div class="panel panel-default col-md-12">' +
-            '<div id="' +  id + '" class="panel-body"></div>' +
-            '</div>');
+      if (isOnlyChart(id) || pathname !== '/chart.html') {
+        currentField = pref.field;
 
-          if (pref.type && pref.field) {
+        $('#charts').append('<div class="panel panel-default col-md-12">' +
+          '<div id="' +  id + '" class="panel-body"></div>' +
+          '</div>');
 
-            if (isOnlyChart(id)) {
-              var addLink = function addLink(data, type, row) {
-                return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
-              };
-              var options = {
-                search: {
-                  regex: true
-                },
-                ordering: true,
-                serverSide: true,
-                lengthMenu: [config.itemsPerPage||5,10,25,50,100],
-                ajax: "/browse.json",
-                dom: "lifrtip"
-              };
-              var columns = [{
-                data: pref.field
-              }];
-              var facetsNb  = 0;
-              var allFields = [];
-              fieldNb       = 1;
-              for (var userfield in config.documentFields) {
-                if (config.documentFields[userfield].visible) {
-                  columns.push({data: "fields." + userfield});
-                  allFields.push(fieldNb);
-                  fieldNb++;
-                }
+        if (pref.type && pref.field) {
+
+          if (isOnlyChart(id)) {
+            var addLink = function addLink(data, type, row) {
+              return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
+            };
+            var options = {
+              search: {
+                regex: true
+              },
+              ordering: true,
+              serverSide: true,
+              lengthMenu: [Config.itemsPerPage||5,10,25,50,100],
+              ajax: "/browse.json",
+              dom: "lifrtip"
+            };
+            var columns = [{
+              data: pref.field
+            }];
+            var facetsNb  = 0;
+            var allFields = [];
+            fieldNb       = 1;
+            for (var userfield in Config.documentFields) {
+              if (Config.documentFields[userfield].visible) {
+                columns.push({data: "fields." + userfield});
+                allFields.push(fieldNb);
+                fieldNb++;
               }
-              if (pref.facets) {
-                facetsPrefs = pref.facets;
-                facetsNb = pref.facets.length;
-                // Object.keys(pref.facets, function (facetId, facet) {
-                pref.facets.forEach(function (facet, facetNb) {
-                  facets.push(facet.label);
-                  var facetId = "facet" + facetNb;
-                  columns.push({data: facet.path});
-                  $('#dataTables-documents tr')
-                  .append('<th>' + facet.label + '</th>');
-                });
-              }
-              options.columns = columns;
-              options.columnDefs = [{
-                "render": addLink,
-                "targets": allFields
-              }];
-              table = $('#dataTables-documents').DataTable(options);
-              table.column(0).visible(false);
-              // facets
-              for (var i = 0; i < facetsNb; i++) {
-                table.column(fieldNb + i).visible(false);
-              }
-              createFacets(id, pref.facets);
             }
-
-
-            if (pref.type === 'histogram') {
-              generateHistogram(id, pref);
+            if (pref.facets) {
+              facetsPrefs = pref.facets;
+              facetsNb = pref.facets.length;
+              // Object.keys(pref.facets, function (facetId, facet) {
+              pref.facets.forEach(function (facet, facetNb) {
+                facets.push(facet.label);
+                var facetId = "facet" + facetNb;
+                columns.push({data: facet.path});
+                $('#dataTables-documents tr')
+                .append('<th>' + facet.label + '</th>');
+              });
             }
-            else if (pref.type === 'horizontalbars') {
-              generateHorizontalBars(id, pref);
+            options.columns = columns;
+            options.columnDefs = [{
+              "render": addLink,
+              "targets": allFields
+            }];
+            table = $('#dataTables-documents').DataTable(options);
+            table.column(0).visible(false);
+            // facets
+            for (var i = 0; i < facetsNb; i++) {
+              table.column(fieldNb + i).visible(false);
             }
-            else if (pref.type === 'pie') {
-              generatePie(id, pref);
-            }
-
-            if (!isOnlyChart(id)) {
-              $('#' + id).after(
-                '<a href="chart.html?id=' + id + '">' +
-                '<div class="panel-footer">'+
-                '<span class="pull-left">View Details</span>'+
-                '<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>'+
-                '<div class="clearfix"></div>'+
-                '</div>' +
-                '</a>');
-            }
+            createFacets(id, pref.facets);
           }
-          else {
-            console.log('Bad preference for "%s" chart :', id);
-            console.log(pref);
+
+
+          if (pref.type === 'histogram') {
+            generateHistogram(id, pref);
+          }
+          else if (pref.type === 'horizontalbars') {
+            generateHorizontalBars(id, pref);
+          }
+          else if (pref.type === 'pie') {
+            generatePie(id, pref);
+          }
+
+          if (!isOnlyChart(id)) {
+            $('#' + id).after(
+              '<a href="chart.html?id=' + id + '">' +
+              '<div class="panel-footer">'+
+              '<span class="pull-left">View Details</span>'+
+              '<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>'+
+              '<div class="clearfix"></div>'+
+              '</div>' +
+              '</a>');
           }
         }
+        else {
+          console.log('Bad preference for "%s" chart :', id, '(`field` and `type` are not define)');
+          console.log(pref);
+        }
+      }
 
-      });
-    }
+    });
+  }
     else {
       $('#charts').append('<div  class="alert alert-danger" role="alert">' +
         'No chart configured !' +
         '</div>');
     }
-  });
+
 
 });
