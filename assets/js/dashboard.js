@@ -71,7 +71,7 @@ $(document).ready(function () {
       var facet = facetsPrefs[facetId];
       var url = '/compute.json?o=distinct&f=' + facet.path;
       if (filter.main) {
-        url += '&sel={"' + currentField + '":"'+filter.main+'"}'
+        url += '&sel={"' + currentField + '":"'+filter.main+'"}';
       }
       dtFacets[facetId].ajax.url(url);
       dtFacets[facetId].ajax.reload();
@@ -81,7 +81,7 @@ $(document).ready(function () {
   var updateGraph = function updateGraph() {
     if (!graphOptions) return;
     if (!graphOptions.data) return;
-    if (!graphOptions.data.type) return;
+    if (!graphOptions.data.type && !graphOptions.data.types) return;
 
     var maxItems = graphPref.maxItems ? graphPref.maxItems : 100;
     // add filter to the URL
@@ -97,7 +97,8 @@ $(document).ready(function () {
     request
     .get(url)
     .end(function(res) {
-      switch(graphOptions.data.type) {
+      var type = graphOptions.data.type || graphOptions.data.types.notices;
+      switch(type) {
         case 'pie':
           var columns = [];
           res.body.data.each(function(e) {
@@ -107,20 +108,18 @@ $(document).ready(function () {
             columns: columns
           });
           break;
-        case 'horizontalbars':
-        case 'histogram':
+        case 'bar': // Both horizontalbars and histogram
           // Create a dictionary: key -> occurrence
           var k = {};
           res.body.data.each(function(e) {
             k[e._id] = e.value;
           });
 
-          var categories = Object.res.body.data(k);
+          var categories = Object.keys(k);
           columns = Object.values(k);
-          console.log('columns',columns);
           columns.unshift('notices'); // TODO make it configurable?
           graphChart.load({
-            columns: columns
+            columns: [ columns ]
           });
           break;
         default:
