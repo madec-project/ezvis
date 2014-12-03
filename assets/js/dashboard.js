@@ -36,6 +36,17 @@ $(document).ready(function () {
     $('#filter').html(verbalize(filter));
   };
 
+  var filter2Selector = function filter2Selector() {
+    var sel = {};
+    Object.keys(filter, function (key, value) {
+      if (key !== 'main') {
+        var facetId = facets.indexOf(key);
+        sel[facetsPrefs[facetId].path] = value;
+      }
+    });
+    return JSON.stringify(sel);
+  };
+
   var updateDocumentsTable = function updateDocumentsTable() {
     // Reset the search
     table.columns(0).search('');
@@ -60,8 +71,7 @@ $(document).ready(function () {
       var facet = facetsPrefs[facetId];
       var url = '/compute.json?o=distinct&f=' + facet.path;
       if (filter.main) {
-        url +=  '&columns[2][data]='          + currentField +
-                '&columns[2][search][value]=' + filter.main;
+        url += '&sel={"' + currentField + '":"'+filter.main+'"}'
       }
       dtFacets[facetId].ajax.url(url);
       dtFacets[facetId].ajax.reload();
@@ -74,11 +84,16 @@ $(document).ready(function () {
     if (!graphOptions.data.type) return;
 
     var maxItems = graphPref.maxItems ? graphPref.maxItems : 100;
-    // TODO add filter to the URL
+    // add filter to the URL
+    var sel = filter2Selector();
     var url = '/compute.json?o=distinct&f=' + graphPref.field +
          '&itemsPerPage=' + maxItems +
          '&columns[0][data]=value&columns[0][orderable]=true' +
          '&order[0][column]=0&order[0][dir]=desc';
+    if (sel.length && sel !== '{}') {
+      url += '&sel=' + sel;
+    }
+
     request
     .get(url)
     .end(function(res) {
@@ -90,7 +105,7 @@ $(document).ready(function () {
           });
           graphChart.load({
             columns: columns
-          })
+          });
           break;
         case 'horizontalbars':
         case 'histogram':
@@ -101,11 +116,12 @@ $(document).ready(function () {
           });
 
           var categories = Object.res.body.data(k);
-          var columns = Object.values(k);
+          columns = Object.values(k);
+          console.log('columns',columns);
           columns.unshift('notices'); // TODO make it configurable?
           graphChart.load({
             columns: columns
-          })
+          });
           break;
         default:
           console.warn('Unknown chart type ' + graphOptions.data.type + '!');
@@ -504,10 +520,12 @@ $(document).ready(function () {
           // $delete and $add are Vuejs methods
           filter.$delete(facet.label);
           filter.$add(facet.label, facetValue);
+          updateGraph();
         }
         else {
           table.columns(fieldNb + facetIndex).search('').draw();
           filter.$delete(facet.label);
+          updateGraph();
         }
         // TODO: add this to the filter (and display it), and filter docs
       });
