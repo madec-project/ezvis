@@ -37,7 +37,7 @@ $(document).ready(function () {
       .end(function(res) {
         var fields = Object.keys(res.body.data[0]), i = 0;
         Object.keys(Config.corpusFields).forEach(function(item) {
-          if (fields.indexOf(item) && Config.corpusFields[item].visible) {
+          if (fields.indexOf(item) !== -1 && Config.corpusFields[item].visible) {
             self.keydata[i].label = Config.corpusFields[item].label;
             self.keydata[i].value = res.body.data[0][item];
             self.keydata[i].icon = Config.corpusFields[item].icon || 'dollar';
