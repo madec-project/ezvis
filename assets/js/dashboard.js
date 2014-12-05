@@ -41,7 +41,7 @@ $(document).ready(function () {
     Object.keys(filter, function (key, value) {
       if (key !== 'main') {
         var facetId = facets.indexOf(key);
-        sel[facetsPrefs[facetId].path] = value;
+        sel[facetsPrefs[facetId].path] = encodeURIComponent(value);
       }
     });
     return JSON.stringify(sel);
