@@ -3,7 +3,7 @@
 {% block content %}
 {% if config.pages.index.help %}
 <div class="row lead">
-	{{ config.pages.index.help }}
+	{{ config.pages.index.help | markdown }}
 </div>
 {% endif %}
 <div id="keydata" class="row">

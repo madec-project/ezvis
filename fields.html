@@ -3,7 +3,7 @@
 {% block content %}
 {% if config.pages.fields.help %}
 <div class="row lead">
-    {{ config.pages.fields.help }}
+    {{ config.pages.fields.help | markdown }}
 </div>
 {% endif %}
 <div class="panel-body">

@@ -3,7 +3,7 @@
 {% block content %}
 {% if config.pages.chart.help %}
 <div class="row lead">
-  {{ config.pages.chart.help }}
+  {{ config.pages.chart.help | markdown }}
 </div>
 {% endif %}
 
