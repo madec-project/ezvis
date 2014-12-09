@@ -104,6 +104,7 @@ $(document).ready(function () {
           res.body.data.each(function(e) {
             columns.push([e._id, e.value]);
           });
+          graphChart.unload();
           graphChart.load({
             columns: columns
           });
@@ -118,6 +119,7 @@ $(document).ready(function () {
           var categories = Object.keys(k);
           columns = Object.values(k);
           columns.unshift('notices'); // TODO make it configurable?
+          graphChart.unload();
           graphChart.load({
             columns: [ columns ]
           });
