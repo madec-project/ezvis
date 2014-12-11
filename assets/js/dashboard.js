@@ -87,9 +87,12 @@ $(document).ready(function () {
     // add filter to the URL
     var sel = filter2Selector();
     var url = '/compute.json?o=distinct&f=' + graphPref.field +
-         '&itemsPerPage=' + maxItems +
+         '&itemsPerPage=' + maxItems;
+    if (graphPref.type !== 'histogram') {
+      url +=
          '&columns[0][data]=value&columns[0][orderable]=true' +
          '&order[0][column]=0&order[0][dir]=desc';
+    }
     if (sel.length && sel !== '{}') {
       url += '&sel=' + sel;
     }
