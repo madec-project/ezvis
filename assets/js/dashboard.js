@@ -122,11 +122,10 @@ $(document).ready(function () {
           var categories = Object.keys(k);
           columns = Object.values(k);
           columns.unshift('notices'); // TODO make it configurable?
-          graphChart.unload();
-          graphChart.load({
-            columns: [ columns ],
-            categories: categories
-          });
+          graphOptions.data.columns = [columns];
+          // Maybe more proper using graphChart.load, but some bugs...
+          graphOptions.axis.x.categories = categories;
+          c3.generate(graphOptions);
           break;
         default:
           console.warn('Unknown chart type ' + graphOptions.data.type + '!');
@@ -438,7 +437,6 @@ $(document).ready(function () {
         graphId      = id;
         graphPref    = pref;
       }
-
       var horizontalbars = c3.generate(options);
       graphChart = horizontalbars;
     });
