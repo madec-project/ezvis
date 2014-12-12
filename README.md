@@ -1,4 +1,4 @@
-castor-theme-sbadmin
+visir
 ======================
 
 A Castor theme to visualize a synthesis on a corpus using pies and histograms, based on [SB Admin v2.0](http://startbootstrap.com/templates/sb-admin-2/).
@@ -10,28 +10,21 @@ You have to install [mongodb](http://docs.mongodb.org/manual/installation/)
 first, and [node](http://nodejs.org/) too.
 
 ```bash
-$ npm install castor-cli -g
-$ npm install castor-theme-sbadmin -g
+$ npm install visir -g
 ```
 
 Usage
 -----
 
 ```bash
-$ castor --theme ./castor-theme-sbadmin/ /path/to/data/repository
-```
-
-Alternatively, you can use `ezviz`, which does not need the `theme` parameter:
-
-```
-$ ezviz /path/to/data/repository
+$ visir /path/to/data/repository
 ```
 
 If you don't have a data repository, but already loaded data in mongodb, you
 can use:
 
 ```bash
-$ castor --theme ./castor-theme-sbadmin/ $PWD/data
+$ visir $PWD/data
 ```
 
 Before that, you have to configure your mongo connection, by creating a
@@ -42,12 +35,6 @@ Before that, you have to configure your mongo connection, by creating a
   "port": 3000,
   "collectionName" : "insu"
 }
-```
-
-Or, if you prefer (assuming you use `insu` collection):
-
-```bash
-$ castor --theme ./castor-theme-sbadmin/ --collectionName insu
 ```
 
 Configuration
@@ -70,7 +57,7 @@ charts: [`histogram`](#histogram) and [`pie`](#pie).
 
 ```json
 {
-  "theme": "/path/to/castor-theme-sbadmin",
+  "theme": "/path/to/visir",
   "documentFields": {
     "Themes" : {
       "path" : "content.json.DiscESI",
