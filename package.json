@@ -1,6 +1,6 @@
 {
   "name": "visir",
-  "version": "3.2.1",
+  "version": "4.0.0",
   "description": "A Castor theme to visualize a synthesis on a corpus, using pies and histograms, based on SB Admin v2.0",
   "main": "index.js",
   "bin": {
