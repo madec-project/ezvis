@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/castorjs/castor-theme-sbadmin.git"
+    "url": "https://github.com/castorjs/visir.git"
   },
   "keywords": [
     "corpus",
@@ -27,9 +27,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/castorjs/castor-theme-sbadmin/issues"
+    "url": "https://github.com/castorjs/visir/issues"
   },
-  "homepage": "https://github.com/castorjs/castor-theme-sbadmin",
+  "homepage": "https://github.com/castorjs/visir",
   "dependencies": {
     "castor-core": "^0.7.2",
     "jquery": "^2.1.1",
