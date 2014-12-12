@@ -37,6 +37,8 @@ Before that, you have to configure your mongo connection, by creating a
 }
 ```
 
+Then, point your browser to http://localhost:3000/
+
 Configuration
 -------------
 
