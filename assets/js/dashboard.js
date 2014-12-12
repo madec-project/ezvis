@@ -124,7 +124,8 @@ $(document).ready(function () {
           columns.unshift('notices'); // TODO make it configurable?
           graphChart.unload();
           graphChart.load({
-            columns: [ columns ]
+            columns: [ columns ],
+            categories: categories
           });
           break;
         default:
