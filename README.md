@@ -400,7 +400,8 @@ Thus, you can have facets in each chart. Example:
       "facets": [
         {
           "path": "content.json.Py",
-          "label": "Year"
+          "label": "Year",
+          "help": "Production per year"
         },
         {
           "path": "fields.Themes",
@@ -414,6 +415,8 @@ Here, you have a pie displaying sections, and two facets:
 
 1. pointing to `content.json.Py`  in the document
 2. pointing to `fields.Theme`  in the document
+
+The first facet has a `help` field, which will appear as a tooltip.
 
 # Document's page
 ## Title
