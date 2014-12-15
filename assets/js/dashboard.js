@@ -459,17 +459,17 @@ $(document).ready(function () {
       // Dropdowns
       var dropLi =
         '<li id="facet-' + facetId + '" class="facetLi" role="presentation">' +
-        ' <a href="#tabFacet-' + facetId +'" role="menuitem" tabindex="-1">' + facet.label + '</a>';
+        ' <a href="#tabFacet-' + facetId +'" role="menuitem" tabindex="-1">' + facet.label;
       if (facet.help) {
         // dropLi += '<i class="fa fa-question-circle"' +
         //          ' data-toggle="popover" title="Help"' +
         //          ' data-content="' + marked(facet.help) +  '"></i>';
-        dropLi += '<i class="fa fa-question-circle"' +
+        dropLi += ' <i class="fa fa-question-circle"' +
                  ' data-toggle="tooltip"' +
                  ' data-placement="bottom"' +
                  ' title="' + facet.help.escapeHTML() +  '"></i>';
       }
-      dropLi += '</li>';
+      dropLi +=  '</a>' + '</li>';
       $('#facets')
       .append(dropLi);
 
