@@ -640,11 +640,11 @@ $(document).ready(function () {
 
     });
   }
-    else {
-      $('#charts').append('<div  class="alert alert-danger" role="alert">' +
-        'No chart configured !' +
-        '</div>');
-    }
+  else {
+    $('#charts').append('<div  class="alert alert-danger" role="alert">' +
+      'No chart configured !' +
+      '</div>');
+  }
 
 
 });
