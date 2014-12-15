@@ -81,27 +81,10 @@ charts: [`histogram`](#histogram) and [`pie`](#pie).
 }
 ```
 ## Dashboard
-### type
-A documents' field which number of distinct values has to be displayed. 
-**Replaced** (see [corpusFields](https://github.com/castorjs/castor-compute)).
 
-For example: a type of paper (for scientific articles).
+All dashboard settings are inside a `dashboard` key.
 
-#### keys
-* path: path to the field, in dotted notation (default value: `mimetype`)
-* label (default value: `MIME Types`)
-
-#### example
-```json
-{
-  "dashboard" : {
-    "type" : {
-      "path": "content.json.Pt",
-      "label": "Document types"
-    }
-  }
-}
-```
+At the moment, there is only the [`charts`](#charts) setting.
 
 ## Charts
 
@@ -252,6 +235,27 @@ In a pie, you can parameter a set of colors to be used:
   }
 }
 ```
+
+#### help
+You can add a helping text for a particular chart, in the `help` key:
+
+```json
+{
+  "dashboard": {
+    "charts": [
+      {
+        "field": "fields.Themes",
+        "type": "pie",
+        "help": "Each document may be labelled with several themes"
+      }
+    ]
+  }
+}
+```
+
+This help text is a markdown text, and will appear after the title of the page
+`pages.chart.title`, and possibly after the charts' help text
+`pages.chart.help`, which appear on all charts' pages.
 
 ### Field configuration
 
