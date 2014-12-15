@@ -16,6 +16,7 @@ $(document).ready(function () {
   var i;
   var request  = superagent;
   var self     = this;
+  var marked   = require('marked');
 
   var isOnlyChart = function isOnlyChart(id) {
     return pathname === '/chart.html' &&
@@ -626,6 +627,10 @@ $(document).ready(function () {
               '</div>' +
               '</a>');
           }
+          else if (pref.help) {
+            $('.specificHelp').append(marked(pref.help));
+          }
+
         }
         else {
           console.log('Bad preference for "%s" chart :', id, '(`field` and `type` are not define)');

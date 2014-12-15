@@ -33,6 +33,7 @@
   "dependencies": {
     "castor-core": "^0.7.2",
     "jquery": "^2.1.1",
+    "marked": "^0.3.2",
     "moment": "^2.8.3",
     "qs": "^2.2.4",
     "vue": "^0.10.6"
