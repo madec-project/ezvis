@@ -11,11 +11,21 @@
 </div>
 
 <div class="row">
+
   <div id="charts" class="col-md-9">
   </div>
 
-  <div id="facetsTabs" class="col-md-3">
-    <ul id="facets" class="nav nav-tabs" role="tablist"></ul>
+
+  <div id ="facetsTabs" class="col-md-3">
+    <div id="facetsDrop" class="dropdown">
+      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownFacets"
+              data-toggle="dropdown" aria-expanded="true">
+        Facets
+        <span class="caret"></span>
+      </button>
+      <ul id="facets" class="dropdown-menu" role="menu" aria-labelledby="dropdownFacets">
+      </ul>
+    </div>
   </div>
 
 </div>

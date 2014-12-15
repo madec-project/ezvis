@@ -456,15 +456,24 @@ $(document).ready(function () {
     }
     var facetNb = 0;
     facets.forEach(function (facet, facetId) {
-      // Tabs
-      $('#facets')
-      .append(
+      // Dropdowns
+      var dropLi =
         '<li id="facet-' + facetId + '" class="facetLi" role="presentation">' +
-        ' <a href="#tabFacet-' + facetId +'">' + facet.label + '</a>' +
-        '</li>');
+        ' <a href="#tabFacet-' + facetId +'" role="menuitem" tabindex="-1">' + facet.label + '</a>';
+      // if (facet.help) {
+      //   // dropLi += '<i class="fa fa-question-circle"' +
+      //   //          ' data-toggle="popover" title="Help"' +
+      //   //          ' data-content="' + marked(facet.help) +  '"></i>';
+      //   dropLi += '<i class="fa fa-question-circle"' +
+      //            ' data-toggle="tooltip"' +
+      //            ' title="' + facet.help.escapeHTML() +  '"></i>';
+      // }
+      dropLi += '</li>';
+      $('#facets')
+      .append(dropLi);
 
       // Tables
-      $('#facets')
+      $('#facetsDrop')
       .after(
         '<table ' +
         '  class="table table-striped table-bordered table-hover"' +
@@ -531,7 +540,6 @@ $(document).ready(function () {
           filter.$delete(facet.label);
           updateGraph();
         }
-        // TODO: add this to the filter (and display it), and filter docs
       });
       facetNb ++;
     });
