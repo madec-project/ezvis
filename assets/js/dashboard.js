@@ -460,14 +460,15 @@ $(document).ready(function () {
       var dropLi =
         '<li id="facet-' + facetId + '" class="facetLi" role="presentation">' +
         ' <a href="#tabFacet-' + facetId +'" role="menuitem" tabindex="-1">' + facet.label + '</a>';
-      // if (facet.help) {
-      //   // dropLi += '<i class="fa fa-question-circle"' +
-      //   //          ' data-toggle="popover" title="Help"' +
-      //   //          ' data-content="' + marked(facet.help) +  '"></i>';
-      //   dropLi += '<i class="fa fa-question-circle"' +
-      //            ' data-toggle="tooltip"' +
-      //            ' title="' + facet.help.escapeHTML() +  '"></i>';
-      // }
+      if (facet.help) {
+        // dropLi += '<i class="fa fa-question-circle"' +
+        //          ' data-toggle="popover" title="Help"' +
+        //          ' data-content="' + marked(facet.help) +  '"></i>';
+        dropLi += '<i class="fa fa-question-circle"' +
+                 ' data-toggle="tooltip"' +
+                 ' data-placement="bottom"' +
+                 ' title="' + facet.help.escapeHTML() +  '"></i>';
+      }
       dropLi += '</li>';
       $('#facets')
       .append(dropLi);
@@ -511,9 +512,11 @@ $(document).ready(function () {
         // make the new tab active, and the old one not.
         $('.facetLi').removeClass('active');
         $('#facet-' + facetId).addClass('active');
+        $('#facetLabel').text(facet.label);
       });
       if (!facetNb) {
         $('#facet-' + facetId).addClass('active');
+        $('#facetLabel').text(facet.label);
       }
 
       $('#dtFacets-' + facetId + ' tbody').on('click','tr', function selectFacet() {
@@ -625,7 +628,13 @@ $(document).ready(function () {
             generatePie(id, pref);
           }
 
-          if (!isOnlyChart(id)) {
+          if (isOnlyChart(id)) {
+            $('[data-toggle="tooltip"]').tooltip();
+            if (pref.help) {
+              $('.specificHelp').append(marked(pref.help));
+            }
+          }
+          else {
             $('#' + id).after(
               '<a href="chart.html?id=' + id + '">' +
               '<div class="panel-footer">'+
@@ -634,9 +643,6 @@ $(document).ready(function () {
               '<div class="clearfix"></div>'+
               '</div>' +
               '</a>');
-          }
-          else if (pref.help) {
-            $('.specificHelp').append(marked(pref.help));
           }
 
         }
