@@ -118,18 +118,20 @@ module.exports.map = function() {
  */
 module.exports.reduce = function (value2, values1) {
   var result = {};
+  var previousResult;
+  var mergePreviousInCurrent = function (key) {
+    if (!result[key]) {
+      result[key] = previousResult[key];
+    }
+    else {
+      result[key] += previousResult[key];
+    }
+  };
 
   while (typeof values1[0] === 'object') {
-    var previousResult = values1.shift();
+    previousResult = values1.shift();
     // Merge result and previousResult
-    Object.keys(previousResult).forEach(function (key) {
-      if (!result[key]) {
-        result[key] = previousResult[key];
-      }
-      else {
-        result[key] += previousResult[key];
-      }
-    }); // TODO define the function outside the while
+    Object.keys(previousResult).forEach(mergePreviousInCurrent);
   }
 
   values1.forEach(function (value1) {
