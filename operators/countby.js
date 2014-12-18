@@ -173,4 +173,25 @@ module.exports.reduce = function (value2, values1) {
 };
 
 
-// TODO: finalize to sort the values2 according to their occurrences
+// sort the values2 according to their occurrences
+module.exports.finalize = function(items) {
+  var result = [];
+  items.forEach(function(e) {
+    var element = { _id: e._id, unsorted: {}, value: {} };
+    var values = [];
+    Object.keys(e.value).forEach(function (key) {
+      values[e.value[key]] = key;
+    });
+    values.forEach(function (key, value) {
+      element.unsorted[key] = value;
+    });
+    // sort according to values (most occurring first)
+    var revertedKeys = Object.keys(element.unsorted).reverse();
+    revertedKeys.forEach(function (key) {
+      element.value[key] = element.unsorted[key];
+    });
+    delete element.unsorted;
+    result.push(element);
+  });
+  return result;
+};
