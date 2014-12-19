@@ -187,7 +187,6 @@ $(document).ready(function () {
       url += '&f=' + field;
     });
     url += '&itemsPerPage=';
-    console.log('url',url);
 
     if (pref.title && !$('#' + id).prev().length) {
       $('#' + id).before('<div class="panel-heading">' +
@@ -265,6 +264,17 @@ $(document).ready(function () {
   };
 
   var generatePie = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "distinct";
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=';
+    console.log('url',url);
+
     if (pref.title && !$('#' + id).prev().length) {
       $('#' + id)
       .before('<div class="panel-heading">' +
@@ -278,9 +288,7 @@ $(document).ready(function () {
     var maxItems = pref.maxItems ? pref.maxItems : 100;
 
     request
-    .get('/compute.json?o=distinct&f=' + pref.field + '&itemsPerPage=100' +
-         '&columns[0][data]=value&columns[0][orderable]=true' +
-         '&order[0][column]=0&order[0][dir]=desc')
+    .get(url)
     .end(function(res) {
       self.themes = res.body.data;
 
