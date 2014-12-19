@@ -84,11 +84,20 @@ $(document).ready(function () {
     if (!graphOptions.data) return;
     if (!graphOptions.data.type && !graphOptions.data.types) return;
 
-    var maxItems = graphPref.maxItems ? graphPref.maxItems : 100;
+    var operator = graphPref.operator ? graphPref.operator : "distinct";
+    var maxItems = graphPref.maxItems ? graphPref.maxItems : 0;
+    var fields   = graphPref.fields ? graphPref.fields : [graphPref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&itemsPerPage=' + maxItems;
+
+
     // add filter to the URL
     var sel = filter2Selector();
-    var url = '/compute.json?o=distinct&f=' + graphPref.field +
-         '&itemsPerPage=' + maxItems;
+    // var url = '/compute.json?o=distinct&f=' + graphPref.field  +
+    //      '&itemsPerPage=' + maxItems;
     if (graphPref.type !== 'histogram') {
       url +=
          '&columns[0][data]=value&columns[0][orderable]=true' +
