@@ -357,6 +357,33 @@ keywords):
 }
 ```
 
+### Operators
+
+By default, the charts operator is `distinct`, which count the distinct values
+of one field.
+
+There are other operators, and some of them take more than one field.
+
+For these cases, use `operator` and `fields` keys (`fields` replaces `field`,
+or you can set only one field in this table).
+
+Example: to display, in an `histogram`, the total of citations (by year):
+
+```json
+{
+  "fields": [
+    "content.json.Tc",
+    "content.json.Py"
+  ],
+  "type": "histogram",
+  "operator": "sum_field1_by_field2",
+  "title": "Citations",
+  "help": "Total number of citations per year"
+}
+```
+
+See [operators](OPERATORS.md).
+
 ## Documents table
 
 In `/chart.html` pages, you can see a chart, and a table with documents. This table display the fields you chose to put in the `documentFields` key.
