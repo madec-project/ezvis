@@ -7,6 +7,7 @@ module.exports = {
     }
   ],
   "operators": {
-    "count_field1_by_field2": "countby.js"
+    "count_field1_by_field2": "countby.js",
+    "sum_field1_by_field2"  : "sumby.js"
   }
 };
