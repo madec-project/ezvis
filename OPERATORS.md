@@ -5,8 +5,20 @@ Operators allow different treatments on the data.
 They can be used explicitly in apps' configuration (such as in the charts of
 [VISIR](https://github.com/castorjs/visir)), or under the hood.
 
-They can be used in URL such as: http://localhost:3000/compute.json?o=operator
-and their parameters are fields (`f`).
+They can be used in URL such as:
+`http://localhost:3000/compute.json?o=operator` and their parameters are
+fields (`f`).
+
+List:
+
+- [sum_field1_by_field2](#sum_field1_by_field2)
+- [count_field1_by_field2](#count_field1_by_field2)
+- [catalog](#catalog)
+- [count](#count)
+- [distinct](#distinct)
+- [graph](#graph)
+- [total](#total)
+- [ventilate](#ventilate)
 
 ## sum_field1_by_field2
 
@@ -46,7 +58,61 @@ data: [
 (`itemsPerPage` limits the number of year returned, and `0` means all)
 
 ## count_field1_by_field2
-TODO
+`count_field1_by_field2` counts the different values of a field `field1` when they co-occur with the values of another field `field2`.
+
+As its name suggests, this operator needs two fields as parameters, and their
+order is significant.
+
+Ex: to count different sections by year:
+
+`http://localhost:3000/compute.json?o=count_field1_by_field2&f=fields.Section&f=content.json.year&itemsPerPage=`
+
+will return a JSON containing data similar to:
+
+```javascript
+data: [
+  {
+    _id: "2011",
+    value: {
+      SIC: 570,
+      OSU: 523,
+      TS: 105,
+      OA: 85,
+      AA: 3
+    }
+  },
+  {
+    _id: "2012",
+    value: {
+      SIC: 672,
+      OSU: 624,
+      TS: 99,
+      OA: 92,
+      AA: 3
+    }
+  },
+  {
+    _id: "2009",
+    value: {
+      SIC: 614,
+      OSU: 564,
+      TS: 84,
+      OA: 66,
+      AA: 3
+    }
+  },
+  {
+    _id: "2010",
+    value: {
+      SIC: 676,
+      OSU: 615,
+      TS: 109,
+      OA: 71,
+      AA: 1
+    }
+  }
+]
+```
 
 ## catalog
 TODO
@@ -55,7 +121,34 @@ TODO
 TODO
 
 ## distinct
-TODO
+`distinct` count the distinct values of a field.
+
+Ex: count the number of documents by year.
+
+`http://lcoalhost:3000/compute.json?o=distinct&f=content.json.year&itemsPerPage=`
+
+return JSON data similar to:
+
+```javascript
+[
+  {
+    _id: "2009",
+    value: 614
+  },
+  {
+    _id: "2010",
+    value: 676
+  },
+  {
+    _id: "2011",
+    value: 570
+  },
+  {
+    _id: "2012",
+    value: 672
+  }
+]
+```
 
 ## graph
 TODO
@@ -65,4 +158,3 @@ TODO
 
 ## ventilate
 TODO
-    
