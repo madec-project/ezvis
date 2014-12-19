@@ -273,7 +273,6 @@ $(document).ready(function () {
     url += '&columns[0][data]=value&columns[0][orderable]=true';
     url += '&order[0][column]=0&order[0][dir]=desc';
     url += '&itemsPerPage=';
-    console.log('url',url);
 
     if (pref.title && !$('#' + id).prev().length) {
       $('#' + id)
@@ -375,6 +374,17 @@ $(document).ready(function () {
   };
 
   var generateHorizontalBars = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "distinct";
+    var maxItems = pref.maxItems ? pref.maxItems : 0;
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=' + maxItems;
+
     if (pref.title && !$('#' + id).prev().length) {
       $('#' + id)
       .before('<div class="panel-heading">' +
@@ -385,13 +395,8 @@ $(document).ready(function () {
       .append('<i class="fa fa-refresh fa-spin"></i>');
     }
 
-    var maxItems = pref.maxItems ? pref.maxItems : 100;
-
     request
-    .get('/compute.json?o=distinct&f=' + pref.field +
-         '&itemsPerPage=' + maxItems +
-         '&columns[0][data]=value&columns[0][orderable]=true' +
-         '&order[0][column]=0&order[0][dir]=desc')
+    .get(url)
     .end(function(res) {
       var keys = res.body.data;
 
