@@ -180,6 +180,15 @@ $(document).ready(function () {
   };
 
   var generateHistogram = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "distinct";
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&itemsPerPage=';
+    console.log('url',url);
+
     if (pref.title && !$('#' + id).prev().length) {
       $('#' + id).before('<div class="panel-heading">' +
                          '<h2 class="panel-title">' +
@@ -190,7 +199,7 @@ $(document).ready(function () {
     }
 
     request
-    .get('/compute.json?o=distinct&f=' + pref.field + '&itemsPerPage=100')
+    .get(url)
     .end(function(res) {
       self.years = res.body.data;
 
@@ -562,7 +571,7 @@ $(document).ready(function () {
           '<div id="' +  id + '" class="panel-body"></div>' +
           '</div>');
 
-        if (pref.type && pref.field) {
+        if (pref.type && (pref.field || pref.fields) ) {
 
           if (isOnlyChart(id)) {
             var addLink = function addLink(data, type, row) {
@@ -579,7 +588,7 @@ $(document).ready(function () {
               dom: "lifrtip"
             };
             var columns = [{
-              data: pref.field
+              data: pref.field || pref.fields[1]
             }];
             var facetsNb  = 0;
             var allFields = [];
