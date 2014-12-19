@@ -49,8 +49,12 @@ The configuration is done in the JSON file of
 it's a file with the same name as the data directory
 (besides that directory), appended with `.json`.
 
-The whole dashboard configuration is done inside the `dashboard` key
-of the JSON configuration file.
+The whole dashboard configuration is done inside the `dashboard` key of the
+JSON configuration file. Except, the `documentFields` configuration is documented in [castor-load-custom](https://github.com/castorjs/castor-load-custom)'s
+[README](https://github.com/castorjs/castor-load-custom/blob/master/README.md),
+and `corpusFields` configuration is documented in
+[castor](https://github.com/castorjs/castor-core)'s
+[README](https://github.com/castorjs/castor-core#corpusfields)
 
 Each chart has to be described in the `dashboard.charts` key.
 
