@@ -30,7 +30,7 @@ order is significant.
 
 Ex: to sum the citation field of all documents, grouped year field:
 
-http://localhost:3000/compute.json?o=sum_field1_by_field2&f=content.json.citation&f=content.json.year&itemsPerPage=
+`http://localhost:3000/compute.json?o=sum_field1_by_field2&f=content.json.citation&f=content.json.year&itemsPerPage=`
 
 will return a JSON containing data similar to:
 
