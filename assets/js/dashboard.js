@@ -557,18 +557,39 @@ $(document).ready(function () {
         style: cytoscape.stylesheet()
           .selector('node')
             .css({
-              'content': 'data(id)'
+              'content': 'data(id)',
+              'text-valign': 'center',
+              'color': 'white',
+              'text-outline-width': 2,
+              'text-outline-color': '#888'
             })
           .selector('edge')
             .css({
               'width': 4,
               'line-color': '#ddd',
               // 'content': 'data(weight)'
+            })
+          .selector(':selected')
+            .css({
+              'background-color': 'black',
+              'line-color': 'black'
+            })
+          .selector('.faded')
+            .css({
+              'opacity': 0.5,
+              'text-opacity': 0.25
             }),
 
         layout: {
           name: 'cose',
           directed: false
+        },
+
+        ready: function () {
+        //   window.cy = this;
+
+        //   // cy.elements.unselectify();
+        //   cy.
         }
       });
       $('#' + id + ' i').remove();
