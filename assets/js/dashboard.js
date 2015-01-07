@@ -472,6 +472,88 @@ $(document).ready(function () {
     });
   };
 
+  var generateNetwork = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "graph";
+    var maxItems = pref.maxItems ? pref.maxItems : 10;
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    // url += '&columns[0][data]=weight&columns[0][orderable]=true';
+    // url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=' + maxItems;
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+        '<h2 class="panel-title">' +
+        pref.title +
+        '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      var edges   = res.body.data;
+      var nodeIds = {};
+      var nodes   = [];
+
+      edges.forEach(function (e, id) {
+        // add id to edges
+        e.id = id;
+        // memorize nodeIds
+        nodeIds[e.source] = true;
+        nodeIds[e.target] = true;
+      });
+
+      // fill nodes table
+      Object.keys(nodeIds).forEach(function (nodeId, i, a) {
+        nodes.push({
+          id: nodeId,
+          label: nodeId,
+          x: Math.cos(Math.PI * 2 * i / a.length),
+          y: Math.sin(Math.PI * 2 * i / a.length)
+        });
+      });
+
+      // Override options with configuration values
+      if (pref.size) {
+        options.size = pref.size;
+        bootstrapPosition(id, pref.size);
+      }
+
+      // if (isOnlyChart(id)) {
+      //   options.data.selection = {enabled:true};
+      //   options.data.selection.multiple = false;
+      //   options.data.onselected = function (d, element) {
+      //     var filterValue = categories[d.index];
+      //     filter.$delete('main');
+      //     filter.$add('main', filterValue);
+      //     updateDocumentsTable();
+      //     updateFacets();
+      //   };
+      //   graphOptions = options;
+      //   graphId      = id;
+      //   graphPref    = pref;
+      // }
+      $('#' + id)
+      .addClass('network');
+      var network = new sigma({
+        graph: {
+          edges: edges,
+          nodes: nodes
+        },
+        container: id
+      });
+      network.refresh();
+      // network.startForceAtlas2();
+    });
+  };
+
+
   /**
    * Create the facets of the graph id
    * @param  {String} id     Identifier of the graph
@@ -655,6 +737,9 @@ $(document).ready(function () {
           }
           else if (pref.type === 'pie') {
             generatePie(id, pref);
+          }
+          else if (pref.type === 'network') {
+            generateNetwork(id, pref);
           }
 
           if (isOnlyChart(id)) {
