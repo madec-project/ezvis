@@ -497,13 +497,19 @@ $(document).ready(function () {
     request
     .get(url)
     .end(function(res) {
-      var edges   = res.body.data;
+      var edges   = [];
       var nodeIds = {};
       var nodes   = [];
 
-      edges.forEach(function (e, id) {
-        // add id to edges
-        e.id = id;
+      res.body.data.forEach(function (e, id) {
+        edges.push({
+          data: {
+            id: '#' + id,
+            weight: e.weight,
+            source: e.source,
+            target: e.target
+          }
+        });
         // memorize nodeIds
         nodeIds[e.source] = true;
         nodeIds[e.target] = true;
@@ -512,10 +518,9 @@ $(document).ready(function () {
       // fill nodes table
       Object.keys(nodeIds).forEach(function (nodeId, i, a) {
         nodes.push({
-          id: nodeId,
-          label: nodeId,
-          x: Math.cos(Math.PI * 2 * i / a.length),
-          y: Math.sin(Math.PI * 2 * i / a.length)
+          data: {
+            id: nodeId,
+          }
         });
       });
 
@@ -541,15 +546,32 @@ $(document).ready(function () {
       // }
       $('#' + id)
       .addClass('network');
-      var network = new sigma({
-        graph: {
+      var network = new cytoscape({
+        container: document.getElementById(id),
+
+        elements: {
           edges: edges,
           nodes: nodes
         },
-        container: id
+
+        style: cytoscape.stylesheet()
+          .selector('node')
+            .css({
+              'content': 'data(id)'
+            })
+          .selector('edge')
+            .css({
+              'width': 4,
+              'line-color': '#ddd',
+              // 'content': 'data(weight)'
+            }),
+
+        layout: {
+          name: 'cose',
+          directed: false
+        }
       });
-      network.refresh();
-      // network.startForceAtlas2();
+      $('#' + id + ' i').remove();
     });
   };
 
