@@ -574,10 +574,6 @@ $(document).ready(function () {
               'background-color': 'black',
               'line-color': 'black'
             })
-          .selector('.highlighted')
-            .css({
-              'line-color': '#61bffc',
-            })
           .selector('.faded')
             .css({
               'opacity': 0.5,
@@ -585,14 +581,17 @@ $(document).ready(function () {
             }),
 
         layout: {
-          name: 'concentric',
-          directed: false
+          name: 'cola',
+          directed: false,
+          padding: 10,
+          avoidOverlap: true,
+          minNodeSpacing: 20,
+          nodeSpacing: function (node) { return 20; },
+          // animate: false
         },
 
         ready: function () {
           window.cy = this;
-
-          cy.elements().unselectify();
 
           cy.on('tap', 'node', function (e) {
             var node = e.cyTarget;
@@ -602,7 +601,6 @@ $(document).ready(function () {
             neighborhood.removeClass('faded');
 
             if (isOnlyChart(id)) {
-              node.addClass('highlighted');
               filter.$delete('main');
               filter.$add('main', node.element(0).data().id);
               updateDocumentsTable();
@@ -614,7 +612,6 @@ $(document).ready(function () {
           cy.on('tap', function (e) {
             if (e.cyTarget === cy) {
               cy.elements().removeClass('faded');
-              cy.elements().removeClass('highlighted');
               filter.$delete('main');
               updateDocumentsTable();
               updateFacets();
@@ -622,6 +619,7 @@ $(document).ready(function () {
           });
         }
       });
+      // Remove the spinning icon
       $('#' + id + ' i').remove();
     });
   };
