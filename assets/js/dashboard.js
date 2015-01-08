@@ -574,6 +574,10 @@ $(document).ready(function () {
               'background-color': 'black',
               'line-color': 'black'
             })
+          .selector('.highlighted')
+            .css({
+              'line-color': '#61bffc',
+            })
           .selector('.faded')
             .css({
               'opacity': 0.5,
@@ -581,7 +585,7 @@ $(document).ready(function () {
             }),
 
         layout: {
-          name: 'grid',
+          name: 'concentric',
           directed: false
         },
 
@@ -596,11 +600,24 @@ $(document).ready(function () {
 
             cy.elements().addClass('faded');
             neighborhood.removeClass('faded');
+
+            if (isOnlyChart(id)) {
+              node.addClass('highlighted');
+              filter.$delete('main');
+              filter.$add('main', node.element(0).data().id);
+              updateDocumentsTable();
+              updateFacets();
+            }
+
           });
 
           cy.on('tap', function (e) {
             if (e.cyTarget === cy) {
               cy.elements().removeClass('faded');
+              cy.elements().removeClass('highlighted');
+              filter.$delete('main');
+              updateDocumentsTable();
+              updateFacets();
             }
           });
         }
