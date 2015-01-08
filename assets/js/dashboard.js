@@ -474,7 +474,7 @@ $(document).ready(function () {
 
   var generateNetwork = function(id, pref) {
     var operator = pref.operator ? pref.operator : "graph";
-    var maxItems = pref.maxItems ? pref.maxItems : 10;
+    var maxItems = pref.maxItems ? pref.maxItems : 100;
     var fields   = pref.fields ? pref.fields : [pref.field];
     var url      = '/compute.json?o=' + operator;
     fields.forEach(function (field) {
@@ -581,15 +581,28 @@ $(document).ready(function () {
             }),
 
         layout: {
-          name: 'cose',
+          name: 'grid',
           directed: false
         },
 
         ready: function () {
-        //   window.cy = this;
+          window.cy = this;
 
-        //   // cy.elements.unselectify();
-        //   cy.
+          cy.elements().unselectify();
+
+          cy.on('tap', 'node', function (e) {
+            var node = e.cyTarget;
+            var neighborhood = node.neighborhood().add(node);
+
+            cy.elements().addClass('faded');
+            neighborhood.removeClass('faded');
+          });
+
+          cy.on('tap', function (e) {
+            if (e.cyTarget === cy) {
+              cy.elements().removeClass('faded');
+            }
+          });
         }
       });
       $('#' + id + ' i').remove();
