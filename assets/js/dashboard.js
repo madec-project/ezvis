@@ -747,7 +747,7 @@ $(document).ready(function () {
               dom: "lifrtip"
             };
             var columns = [{
-              data: pref.field || pref.fields[1]
+              data: pref.field || pref.fields[1] || pref.fields[0]
             }];
             var facetsNb  = 0;
             var allFields = [];
