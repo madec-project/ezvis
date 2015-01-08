@@ -723,7 +723,8 @@ $(document).ready(function () {
       var id = "chart" + chartNb;
 
       if (isOnlyChart(id) || pathname !== '/chart.html') {
-        currentField = pref.field;
+        var fields = pref.fields ? pref.fields : [pref.field];
+        currentField = fields[0];
 
         $('#charts').append('<div class="panel panel-default col-md-12">' +
           '<div id="' +  id + '" class="panel-body"></div>' +
