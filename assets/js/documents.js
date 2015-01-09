@@ -52,7 +52,8 @@ $(document).ready(function() {
         "render" : addLink,
         "targets" : allFields
       }],
-      "dom": '<"dtTop"<"dtLeft"li><"dtRight"f>><rt><"dtBottom"ip><"clear">'
+      "dom": '<"dtTop"<"dtLeft"li><"dtRight"f>><rt><"dtBottom"ip><"clear">',
+      "stateSave": true
     });
     table.on('xhr', function () {
       var params = '?' + qs.stringify(table.ajax.params());

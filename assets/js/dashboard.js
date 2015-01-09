@@ -519,7 +519,7 @@ $(document).ready(function () {
       Object.keys(nodeIds).forEach(function (nodeId, i, a) {
         nodes.push({
           data: {
-            id: nodeId,
+            id: nodeId
           }
         });
       });
