@@ -19,6 +19,8 @@ $ npm install visir -g
 Usage
 -----
 
+Make sure mongodb is running, and then.
+
 ```bash
 $ visir /path/to/data/repository
 ```
