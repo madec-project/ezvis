@@ -154,7 +154,59 @@ return JSON data similar to:
 TODO
 
 ## total
-TODO
+`graph` lists the weighted links between all values of one or several fields (it's a non-directed, weighted link). The weight is the number of times two fields' value appear in the same document.
+
+Ex: graph of themes co-occurrences
+
+`http://localhost:3000/compute.json?o=graph&f=fields.Themes&itemsPerPage=`
+
+return JSON data similar to:
+
+```javascript
+[
+  {
+    source: "Agricultural Sciences",
+    target: "Chemistry",
+    weight: 6
+  },
+  {
+    source: "Agricultural Sciences",
+    target: "Clinical Medicine",
+    weight: 1
+  },
+  {
+    source: "Agricultural Sciences",
+    target: "Computer Science",
+    weight: 1
+  },
+  ...
+  {
+    source: "Pharmacology & Toxicology",
+    target: "Plant & Animal Science",
+    weight: 10
+  },
+  {
+    source: "Pharmacology & Toxicology",
+    target: "Social Sciences",
+    weight: 1
+  },
+  {
+    source: "Physics",
+    target: "Space Science",
+    weight: 1
+  },
+  {
+    source: "Plant & Animal Science",
+    target: "Psychiatry/Psychology",
+    weight: 1
+  },
+  {
+    source: "Plant & Animal Science",
+    target: "Social Sciences",
+    weight: 2
+  }
+]
+```
 
 ## ventilate
 TODO
