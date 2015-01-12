@@ -1,7 +1,10 @@
-visir
-======================
+VISIR
+=====
 
-A Castor theme to visualize a synthesis on a corpus using pies and histograms, based on [SB Admin v2.0](http://startbootstrap.com/templates/sb-admin-2/).
+A Castor app to visualize a synthesis on a corpus using pies and histograms,
+based on [SB Admin v2.0](http://startbootstrap.com/templates/sb-admin-2/).
+
+VISIR stands for **vis**ualiztion of **i**nformation in (web) **r**eport.
 
 Installation
 ------------
@@ -19,6 +22,10 @@ Usage
 ```bash
 $ visir /path/to/data/repository
 ```
+
+Then, point your browser to http://localhost:3000/
+
+### hint
 
 If you don't have a data repository, but already loaded data in mongodb, you
 can use:
