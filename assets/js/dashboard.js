@@ -472,6 +472,159 @@ $(document).ready(function () {
     });
   };
 
+  var generateNetwork = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "graph";
+    var maxItems = pref.maxItems ? pref.maxItems : 100;
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    // url += '&columns[0][data]=weight&columns[0][orderable]=true';
+    // url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=' + maxItems;
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+        '<h2 class="panel-title">' +
+        pref.title +
+        '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      var edges   = [];
+      var nodeIds = {};
+      var nodes   = [];
+
+      res.body.data.forEach(function (e, id) {
+        edges.push({
+          data: {
+            id: '#' + id,
+            weight: e.weight,
+            source: e.source,
+            target: e.target
+          }
+        });
+        // memorize nodeIds
+        nodeIds[e.source] = true;
+        nodeIds[e.target] = true;
+      });
+
+      // fill nodes table
+      Object.keys(nodeIds).forEach(function (nodeId, i, a) {
+        nodes.push({
+          data: {
+            id: nodeId
+          }
+        });
+      });
+
+      // Override options with configuration values
+      if (pref.size) {
+        options.size = pref.size;
+        bootstrapPosition(id, pref.size);
+      }
+
+      // if (isOnlyChart(id)) {
+      //   options.data.selection = {enabled:true};
+      //   options.data.selection.multiple = false;
+      //   options.data.onselected = function (d, element) {
+      //     var filterValue = categories[d.index];
+      //     filter.$delete('main');
+      //     filter.$add('main', filterValue);
+      //     updateDocumentsTable();
+      //     updateFacets();
+      //   };
+      //   graphOptions = options;
+      //   graphId      = id;
+      //   graphPref    = pref;
+      // }
+      $('#' + id)
+      .addClass('network');
+      var network = new cytoscape({
+        container: document.getElementById(id),
+
+        elements: {
+          edges: edges,
+          nodes: nodes
+        },
+
+        style: cytoscape.stylesheet()
+          .selector('node')
+            .css({
+              'content': 'data(id)',
+              'text-valign': 'center',
+              'color': 'white',
+              'text-outline-width': 2,
+              'text-outline-color': '#888'
+            })
+          .selector('edge')
+            .css({
+              'width': 4,
+              'line-color': '#ddd',
+              // 'content': 'data(weight)'
+            })
+          .selector(':selected')
+            .css({
+              'background-color': 'black',
+              'line-color': 'black'
+            })
+          .selector('.faded')
+            .css({
+              'opacity': 0.5,
+              'text-opacity': 0.25
+            }),
+
+        layout: {
+          name: 'cola',
+          directed: false,
+          padding: 10,
+          avoidOverlap: true,
+          minNodeSpacing: 20,
+          nodeSpacing: function (node) { return 20; },
+          // animate: false
+        },
+
+        ready: function () {
+          window.cy = this;
+
+          cy.on('tap', 'node', function (e) {
+            var node = e.cyTarget;
+            var neighborhood = node.neighborhood().add(node);
+
+            cy.elements().addClass('faded');
+            neighborhood.removeClass('faded');
+
+            if (isOnlyChart(id)) {
+              filter.$delete('main');
+              filter.$add('main', node.element(0).data().id);
+              updateDocumentsTable();
+              updateFacets();
+            }
+
+          });
+
+          cy.on('tap', function (e) {
+            if (e.cyTarget === cy) {
+              cy.elements().removeClass('faded');
+              filter.$delete('main');
+              updateDocumentsTable();
+              updateFacets();
+            }
+          });
+        }
+      });
+      // Remove the spinning icon
+      $('#' + id + ' i').remove();
+    });
+  };
+
+
   /**
    * Create the facets of the graph id
    * @param  {String} id     Identifier of the graph
@@ -585,7 +738,8 @@ $(document).ready(function () {
       var id = "chart" + chartNb;
 
       if (isOnlyChart(id) || pathname !== '/chart.html') {
-        currentField = pref.field;
+        var fields = pref.fields ? pref.fields : [pref.field];
+        currentField = fields[0];
 
         $('#charts').append('<div class="panel panel-default col-md-12">' +
           '<div id="' +  id + '" class="panel-body"></div>' +
@@ -608,7 +762,7 @@ $(document).ready(function () {
               dom: "lifrtip"
             };
             var columns = [{
-              data: pref.field || pref.fields[1]
+              data: pref.field || pref.fields[1] || pref.fields[0]
             }];
             var facetsNb  = 0;
             var allFields = [];
@@ -655,6 +809,9 @@ $(document).ready(function () {
           }
           else if (pref.type === 'pie') {
             generatePie(id, pref);
+          }
+          else if (pref.type === 'network') {
+            generateNetwork(id, pref);
           }
 
           if (isOnlyChart(id)) {

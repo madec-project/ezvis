@@ -27,3 +27,8 @@
 #facetsTabs tbody tr td {
     cursor: pointer;
 }
+
+.network {
+    padding: 0;
+    height: 600px;
+}
