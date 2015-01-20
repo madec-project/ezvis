@@ -624,6 +624,114 @@ $(document).ready(function () {
     });
   };
 
+  var generateMap = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "distinct";
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=';
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+              '<h2 class="panel-title">' +
+              pref.title +
+              '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      var areas = res.body.data
+      .filter(function (area) {
+        return area._id !== null;
+      });
+      console.log('areas', areas);
+      areas = areas
+      .map(function (area) {
+        area.id = area._id;
+        return area;
+      });
+      console.log('areas', areas);
+
+      // // Colors
+      // var palette;
+      // if (pref.colors) {
+      //   palette = pref.colors;
+      // }
+      // else if (!options.data.colors) {
+      //   palette = [ '#BB9FF5', '#ff7a85', '#44b2ba', '#ffa65a', '#34cdb8'];
+      // }
+      // if (pref.colors || !options.data.colors) {
+      //   Object.keys(orderedValues, function (value, key) {
+      //     colors[key] = palette[i++ % palette.length];
+      //   });
+      //   options.data.colors = colors;
+      // }
+
+      // Generate the map.
+      $('#' + id).height('800px');
+      var map = new AmCharts.AmMap();
+      map.dataProvider = {
+        map: "worldLow",
+        areas: areas
+      };
+      /* create areas settings
+       * autoZoom set to true means that the map will zoom-in when clicked on the area
+       * selectedColor indicates color of the clicked area.
+       */
+      map.areasSettings = {
+          // autoZoom: true,
+          selectable: true,
+          selectedColor: "#EEEEEE",
+          selectedOutlineColor: "black",
+          color: "#CC0000",    // Maybe better to use chroma in dataProvider
+          colorSolid:"#0000CC" // idem
+      };
+      if (isOnlyChart(id)) {
+        // options.data.onselected = function (d, element) {
+        //   var filterValue = d.id;
+        //   filter.$delete('main');
+        //   filter.$add('main', filterValue);
+        //   updateDocumentsTable();
+        //   updateFacets();
+        // };
+        // graphOptions = options;
+        
+        // Seems to work only when map.areasSettings.autoZoom or selectable is true!
+        map.addListener("selectedObjectChanged", function () {
+          // TODO: make it more efficient (DRY)
+          if (!map.selectedObject.map) {
+            console.log('area selected');
+            console.log(map.selectedObject);
+            var filterValue = map.selectedObject.id;
+            filter.$delete('main');
+            filter.$add('main', filterValue);
+            updateDocumentsTable();
+            updateFacets();
+          }
+          else {
+            console.log('map selected');
+            filter.$delete('main');
+            updateDocumentsTable();
+            updateFacets();
+          }
+        });
+        graphId      = id;
+        graphPref    = pref;
+      }
+
+      map.write(id);
+      graphChart = map;
+    });
+  };
+
 
   /**
    * Create the facets of the graph id
@@ -812,6 +920,9 @@ $(document).ready(function () {
           }
           else if (pref.type === 'network') {
             generateNetwork(id, pref);
+          }
+          else if (pref.type === 'map') {
+            generateMap(id, pref);
           }
 
           if (isOnlyChart(id)) {
