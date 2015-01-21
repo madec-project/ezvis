@@ -652,36 +652,25 @@ $(document).ready(function () {
       .filter(function (area) {
         return area._id !== null;
       });
-      console.log('areas', areas);
+      var domain = [areas[areas.length-1].value, areas[0].value];
+      var scale  = chroma.scale(['lightblue', 'navy']).domain(domain,10,'log');
+      // var scale  = chroma.scale('RdYlBu').domain(domain,10,'log');
       areas = areas
       .map(function (area) {
         area.id = area._id;
+        area.color = scale(area.value).toString();
+        console.log(area.value,'->',area.color);
         return area;
       });
-      console.log('areas', areas);
-
-      // // Colors
-      // var palette;
-      // if (pref.colors) {
-      //   palette = pref.colors;
-      // }
-      // else if (!options.data.colors) {
-      //   palette = [ '#BB9FF5', '#ff7a85', '#44b2ba', '#ffa65a', '#34cdb8'];
-      // }
-      // if (pref.colors || !options.data.colors) {
-      //   Object.keys(orderedValues, function (value, key) {
-      //     colors[key] = palette[i++ % palette.length];
-      //   });
-      //   options.data.colors = colors;
-      // }
 
       // Generate the map.
-      $('#' + id).height('800px');
+      $('#' + id).height('600px');
       var map = new AmCharts.AmMap();
       map.dataProvider = {
         map: "worldLow",
         areas: areas
       };
+      map.pathToImages = "assets/ammap/images/";
       /* create areas settings
        * autoZoom set to true means that the map will zoom-in when clicked on the area
        * selectedColor indicates color of the clicked area.
@@ -691,8 +680,8 @@ $(document).ready(function () {
           selectable: true,
           selectedColor: "#EEEEEE",
           selectedOutlineColor: "black",
-          color: "#CC0000",    // Maybe better to use chroma in dataProvider
-          colorSolid:"#0000CC" // idem
+          // color: "#222277",    // Maybe better to use chroma in dataProvider
+          // colorSolid:"#0000CC" // idem
       };
       if (isOnlyChart(id)) {
         // options.data.onselected = function (d, element) {
@@ -717,7 +706,6 @@ $(document).ready(function () {
             updateFacets();
           }
           else {
-            console.log('map selected');
             filter.$delete('main');
             updateDocumentsTable();
             updateFacets();
