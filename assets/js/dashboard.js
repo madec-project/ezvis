@@ -653,8 +653,10 @@ $(document).ready(function () {
         return area._id !== null;
       });
       var domain = [areas[areas.length-1].value, areas[0].value];
-      var scale  = chroma.scale(['lightblue', 'navy']).domain(domain,10,'log');
-      // var scale  = chroma.scale('RdYlBu').domain(domain,10,'log');
+      // var scale  = chroma.scale(['lightblue', 'navy']).domain(domain,10,'log');
+      // color scales (see http://colorbrewer2.com/):
+      // RdYlBu (Red, Yellow Blue), BuGn (light blue, Green), YlOrRd (Yellow, Orange, Red)
+      var scale  = chroma.scale('YlOrRd').domain(domain,10,'log');
       areas = areas
       .map(function (area) {
         area.id = area._id;
@@ -679,7 +681,7 @@ $(document).ready(function () {
           // autoZoom: true,
           selectable: true,
           selectedColor: "#EEEEEE",
-          selectedOutlineColor: "black",
+          selectedOutlineColor: "red",
           // color: "#222277",    // Maybe better to use chroma in dataProvider
           // colorSolid:"#0000CC" // idem
       };
