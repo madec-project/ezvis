@@ -502,6 +502,9 @@ $(document).ready(function () {
       var nodes   = [];
 
       res.body.data.forEach(function (e, id) {
+        var affEff = JSON.parse(e._id);
+        e.source = affEff[0];
+        e.target = affEff[1];
         edges.push({
           data: {
             id: '#' + id,

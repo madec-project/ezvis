@@ -72,26 +72,6 @@ will return a JSON containing data similar to:
 ```javascript
 data: [
   {
-    _id: "2011",
-    value: {
-      SIC: 570,
-      OSU: 523,
-      TS: 105,
-      OA: 85,
-      AA: 3
-    }
-  },
-  {
-    _id: "2012",
-    value: {
-      SIC: 672,
-      OSU: 624,
-      TS: 99,
-      OA: 92,
-      AA: 3
-    }
-  },
-  {
     _id: "2009",
     value: {
       SIC: 614,
@@ -109,6 +89,26 @@ data: [
       TS: 109,
       OA: 71,
       AA: 1
+    }
+  },
+  {
+    _id: "2011",
+    value: {
+      SIC: 570,
+      OSU: 523,
+      OA: 85,
+      TS: 105,
+      AA: 3
+    }
+  },
+  {
+    _id: "2012",
+    value: {
+      SIC: 672,
+      OSU: 624,
+      OA: 92,
+      AA: 3,
+      TS: 99
     }
   }
 ]
@@ -165,45 +165,37 @@ return JSON data similar to:
 ```javascript
 [
   {
-    source: "Agricultural Sciences",
-    target: "Chemistry",
-    weight: 6
+    _id: "["Agricultural Sciences","Chemistry"]",
+    value: 6
   },
   {
-    source: "Agricultural Sciences",
-    target: "Clinical Medicine",
-    weight: 1
+    _id: "["Agricultural Sciences","Clinical Medicine"]",
+    value: 1
   },
   {
-    source: "Agricultural Sciences",
-    target: "Computer Science",
-    weight: 1
+    _id: "["Agricultural Sciences","Computer Science"]",
+    value: 1
   },
   ...
   {
-    source: "Pharmacology & Toxicology",
-    target: "Plant & Animal Science",
-    weight: 10
+    _id: "["Pharmacology & Toxicology","Plant & Animal Science"]",
+    value: 10
   },
   {
-    source: "Pharmacology & Toxicology",
-    target: "Social Sciences",
-    weight: 1
+    _id: "["Pharmacology & Toxicology","Social Sciences"]",
+    value: 1
   },
   {
-    source: "Physics",
-    target: "Space Science",
-    weight: 1
+    _id: "["Physics","Space Science"]",
+    value: 1
   },
   {
-    source: "Plant & Animal Science",
-    target: "Psychiatry/Psychology",
-    weight: 1
+    _id: "["Plant & Animal Science","Psychiatry/Psychology"]",
+    value: 1
   },
   {
-    source: "Plant & Animal Science",
-    target: "Social Sciences",
-    weight: 2
+    _id: "["Plant & Animal Science","Social Sciences"]",
+    value: 2
   }
 ]
 ```

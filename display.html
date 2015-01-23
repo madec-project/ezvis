@@ -7,7 +7,7 @@
 </div>
 {% endif %}<div class="title">
     <h2 itemprop="name">
-        {{ item.fields.title|d('no title') }}
+        {{ data.fields.title|d('no title') }}
     </h2>
 </div>
 
@@ -28,11 +28,11 @@
 		  <tr>
 			  <td>{{loop.index}}</td>
 			  <td>{{label}}</td>
-			  <td>{{item|objectPath(path)}}</td>
+			  <td>{{data|objectPath(path)}}</td>
 		  </tr>
 		  {% endfor %}
 		  {% else %}
-		  {% set  champs = item|flatten %}
+		  {% set  champs = data|flatten %}
 		  {% for k,v in champs %}
 		  {% if (k.slice(2).slice(0,3) != '_id') %}
 		  <tr>

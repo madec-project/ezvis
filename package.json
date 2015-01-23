@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/castorjs/visir",
   "dependencies": {
-    "castor-core": "^0.7.2",
+    "castor-core": "^1.0.0",
     "jquery": "^2.1.1",
     "marked": "^0.3.2",
     "moment": "^2.8.3",
