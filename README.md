@@ -467,7 +467,8 @@ In a pie, you can parameter a set of colors to be used:
 
 In a map, you can also parameter a set of colors, but you can use
 [ColorBrewer](http://colorbrewer2.org/) to choose only a color scale name
-(default value: "YlOrRd", but you can try "RdYlBu", or "BuGn"):
+(default value: "YlOrRd" -Yellow, Orange, Red-, but you can try "RdYlBu" -Red,
+Yellow Blue-, or "BuGn", -Blue, Green-):
 
 ```json
 {
@@ -513,6 +514,32 @@ You can set the number of colors to use (maximum default value: 9):
         "colors": {
           "scale" : "OrRd",
           "nb"    : 3
+        }
+      }
+    ]
+  }
+}
+```
+
+You can set the type scale you want (or the distribution of the values in the
+colors):
+
+- linear (default value): classic
+- log: logarithmic scale
+- quantiles
+- k-means
+
+```json
+{
+  "dashboard": {
+    "charts" : [
+      {
+        "field": "content.json.country",
+        "type": "map",
+        "colors": {
+          "scale"   : "OrRd",
+          "nb"      : 9,
+          "distrib" : "log"
         }
       }
     ]

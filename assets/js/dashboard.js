@@ -634,6 +634,9 @@ $(document).ready(function () {
     var colorScale  = pref.colors && pref.colors.scale ?
                         pref.colors.scale :
                         (pref.colors ? pref.colors : "YlOrRd");
+    var colorDistri = pref.colors && pref.colors.distrib ?
+                        pref.colors.distrib :
+                        'linear';
 
     fields.forEach(function (field) {
       url += '&f=' + field;
@@ -659,10 +662,9 @@ $(document).ready(function () {
       .filter(function (area) {
         return area._id !== null;
       });
-      // because values are ordered (desc)
-      var domain  = [areas[areas.length-1].value, areas[0].value];
       var values  = {};
-      areas.forEach(function (area) { if (!values["v"+area.value]) values["v"+area.value] = true; });
+      var data    = [];
+      areas.forEach(function (area) { if (!values["v"+area.value]) values["v"+area.value] = true; data.push(area.value); });
       var valuesNb = Object.getOwnPropertyNames(values).length;
       var colorNb = pref.colors && pref.colors.nb ?
                       pref.colors.nb :
@@ -670,13 +672,17 @@ $(document).ready(function () {
       // var scale  = chroma.scale(['lightblue', 'navy']).domain(domain,10,'log');
       // color scales (see http://colorbrewer2.com/):
       // RdYlBu (Red, Yellow Blue), BuGn (light blue, Green), YlOrRd (Yellow, Orange, Red)
-      var scale  = chroma.scale(colorScale).domain(domain, colorNb, 'log');
+      var scale  = colorDistri === 'linear' ?
+                    chroma.scale(colorScale).domain(data, colorNb) :
+                    chroma.scale(colorScale).domain(data, colorNb, colorDistri);
       areas = areas
       .map(function (area) {
         area.id = area._id;
         area.color = scale(area.value).toString();
         return area;
       });
+      console.info("colorNb",colorNb);
+      console.info("data",data);
 
       // Generate the map.
       $('#' + id).height('600px');
