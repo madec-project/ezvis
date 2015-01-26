@@ -342,6 +342,8 @@ Here an example:
   }
 ```
 
+You can use the [`colors`](#colors) option to set the color scale.
+
 ### Preferences
 
 #### size
@@ -462,6 +464,42 @@ In a pie, you can parameter a set of colors to be used:
   }
 }
 ```
+
+In a map, you can also parameter a set of colors, but you can use
+[ColorBrewer](http://colorbrewer2.org/) to use only a color scale name:
+
+```json
+{
+  "dashboard": {
+    "charts" : [
+      {
+        "field": "content.json.country",
+        "type": "map",
+        "colors": "OrRd"
+      }
+    ]
+  }
+}
+```
+
+Or you can use the following syntax (which allows you to add other color options):
+
+```json
+{
+  "dashboard": {
+    "charts" : [
+      {
+        "field": "content.json.country",
+        "type": "map",
+        "colors": {
+          "scale" : "OrRd"
+        }
+      }
+    ]
+  }
+}
+```
+
 
 #### help
 You can add a helping text for a particular chart, in the `help` key:
