@@ -672,7 +672,7 @@ $(document).ready(function () {
       $('#' + id).height('600px');
       var map = new AmCharts.AmMap();
       map.dataProvider = {
-        map: "worldLow",
+        map: "world",
         areas: areas
       };
       map.pathToImages = "assets/ammap/images/";
