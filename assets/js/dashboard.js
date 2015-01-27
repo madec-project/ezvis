@@ -697,7 +697,32 @@ $(document).ready(function () {
           selectable: true,
           selectedColor: "#EEEEEE",
           selectedOutlineColor: "red",
-          balloonText: "[[title]]: [[value]]"
+          outlineColor: "black",
+          balloonText: "[[title]]: [[value]]",
+          unlistedAreasAlpha: 0.5
+      };
+      var legendData = [];
+      var dom = scale.domain();
+      var maxCars = 0;
+      for (var i = 0; i < dom.length - 1; i++) {
+        var val = dom[i];
+        var title = (+ val.toFixed(1)).toString() + ' - ' + (+ dom[i+1].toFixed(1)).toString();
+        legendData.push({
+          color: scale(val),
+          title: title
+        });
+        maxCars = Math.max(maxCars, title.length);
+      }
+      console.log(maxCars);
+      map.legend = {
+        width: maxCars * 8,
+        marginRight: 0,
+        equalWidths:true,
+        maxColumns: 1,
+        right: 0,
+        data: legendData,
+        backgroundAlpha: 0.5,
+        backgroundColor: "white"
       };
       if (isOnlyChart(id)) {
         // options.data.onselected = function (d, element) {
