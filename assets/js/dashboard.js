@@ -138,10 +138,17 @@ $(document).ready(function () {
           c3.generate(graphOptions);
           break;
         case 'map':
-          console.log('map!');
-          graphOptions = updateMapOptions(res.body.data, graphOptions, graphId, graphPref);
-          graphChart.dataProvider = graphOptions.dataProvider;
-          graphChart.validateNow();
+          createMap(res.body.data, graphId, graphPref);
+          // Select the main filter again (on the map)
+          var mapObjects = graphChart.dataProvider.areas.filter(function (area) {
+            return (area.id === filter.main);
+          });
+          var mapObject = mapObjects[0];
+          if (mapObject) {
+            // TODO improve this (click twice: 1 - remove selection, 2 - add selection) ?!?!?
+            graphChart.clickMapObject(mapObject);
+            graphChart.clickMapObject(mapObject);
+          }
           break;
         default:
           console.warn('Unknown chart type ' + graphOptions.data.type + '!');
@@ -703,11 +710,12 @@ $(document).ready(function () {
         selectedColor: "#EEEEEE",
         selectedOutlineColor: "red",
         outlineColor: "black",
+        outlineThickness: 0.5,
         balloonText: "[[title]]: [[value]]",
         unlistedAreasAlpha: 0.7
       },
       legend: {
-        width: maxCars * 8,
+        width: (maxCars - 3) * 5 + 55,
         marginRight: 0,
         equalWidths: true,
         maxColumns: 1,
@@ -719,36 +727,12 @@ $(document).ready(function () {
     return options;
   };
 
-  var generateMap = function(id, pref) {
-    var operator    = pref.operator ? pref.operator : "distinct";
-    var fields      = pref.fields ? pref.fields : [pref.field];
-    var url         = '/compute.json?o=' + operator;
-
-    fields.forEach(function (field) {
-      url += '&f=' + field;
-    });
-    url += '&columns[0][data]=value&columns[0][orderable]=true';
-    url += '&order[0][column]=0&order[0][dir]=desc';
-    url += '&itemsPerPage=';
-
-    if (pref.title && !$('#' + id).prev().length) {
-      $('#' + id)
-      .before('<div class="panel-heading">' +
-              '<h2 class="panel-title">' +
-              pref.title +
-              '</h2></div>');
-      $('#' + id)
-      .append('<i class="fa fa-refresh fa-spin"></i>');
-    }
-
-    request
-    .get(url)
-    .end(function(res) {
-      // Generate the map.
+  var createMap = function (data, id, pref) {
+    // Generate the map.
       $('#' + id).height('600px');
 
       var options = {};
-      options = updateMapOptions(res.body.data, options, id, pref);
+      options = updateMapOptions(data, options, id, pref);
 
       var map = AmCharts.makeChart("#" + id, options);
 
@@ -776,6 +760,34 @@ $(document).ready(function () {
 
       map.write(id);
       graphChart = map;
+  };
+
+  var generateMap = function(id, pref) {
+    var operator    = pref.operator ? pref.operator : "distinct";
+    var fields      = pref.fields ? pref.fields : [pref.field];
+    var url         = '/compute.json?o=' + operator;
+
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=';
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+              '<h2 class="panel-title">' +
+              pref.title +
+              '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      createMap(res.body.data, id, pref);
     });
   };
 
