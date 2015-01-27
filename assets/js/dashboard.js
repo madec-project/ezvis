@@ -697,8 +697,7 @@ $(document).ready(function () {
           selectable: true,
           selectedColor: "#EEEEEE",
           selectedOutlineColor: "red",
-          // color: "#222277",    // Maybe better to use chroma in dataProvider
-          // colorSolid:"#0000CC" // idem
+          balloonText: "[[title]]: [[value]]"
       };
       if (isOnlyChart(id)) {
         // options.data.onselected = function (d, element) {
