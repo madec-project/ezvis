@@ -699,7 +699,7 @@ $(document).ready(function () {
           selectedOutlineColor: "red",
           outlineColor: "black",
           balloonText: "[[title]]: [[value]]",
-          unlistedAreasAlpha: 0.5
+          unlistedAreasAlpha: 0.7
       };
       var legendData = [];
       var dom = scale.domain();
@@ -713,7 +713,6 @@ $(document).ready(function () {
         });
         maxCars = Math.max(maxCars, title.length);
       }
-      console.log(maxCars);
       map.legend = {
         width: maxCars * 8,
         marginRight: 0,
@@ -721,35 +720,24 @@ $(document).ready(function () {
         maxColumns: 1,
         right: 0,
         data: legendData,
-        backgroundAlpha: 0.5,
-        backgroundColor: "white"
+        backgroundAlpha: 0.5
       };
       if (isOnlyChart(id)) {
-        // options.data.onselected = function (d, element) {
-        //   var filterValue = d.id;
-        //   filter.$delete('main');
-        //   filter.$add('main', filterValue);
-        //   updateDocumentsTable();
-        //   updateFacets();
-        // };
-        // graphOptions = options;
         
         // Seems to work only when map.areasSettings.autoZoom or selectable is true!
         map.addListener("selectedObjectChanged", function () {
-          // TODO: make it more efficient (DRY)
           if (!map.selectedObject.map) {
             var filterValue = map.selectedObject.id;
             filter.$delete('main');
             filter.$add('main', filterValue);
-            updateDocumentsTable();
-            updateFacets();
           }
           else {
             filter.$delete('main');
-            updateDocumentsTable();
-            updateFacets();
           }
+          updateDocumentsTable();
+          updateFacets();
         });
+        // graphOptions = options;
         graphId      = id;
         graphPref    = pref;
       }
