@@ -636,7 +636,7 @@ $(document).ready(function () {
                         (pref.colors ? pref.colors : "YlOrRd");
     var colorDistri = pref.colors && pref.colors.distrib ?
                         pref.colors.distrib :
-                        'linear';
+                        'log';
 
     fields.forEach(function (field) {
       url += '&f=' + field;
@@ -666,9 +666,7 @@ $(document).ready(function () {
       var data    = [];
       areas.forEach(function (area) { if (!values["v"+area.value]) values["v"+area.value] = true; data.push(area.value); });
       var valuesNb = Object.getOwnPropertyNames(values).length;
-      var colorNb = pref.colors && pref.colors.nb ?
-                      pref.colors.nb :
-                      Math.min(9, valuesNb);
+      var colorNb  = Math.min(9, valuesNb);
       // var scale  = chroma.scale(['lightblue', 'navy']).domain(domain,10,'log');
       // color scales (see http://colorbrewer2.com/):
       // RdYlBu (Red, Yellow Blue), BuGn (light blue, Green), YlOrRd (Yellow, Orange, Red)
@@ -681,8 +679,6 @@ $(document).ready(function () {
         area.color = scale(area.value).toString();
         return area;
       });
-      console.info("colorNb",colorNb);
-      console.info("data",data);
 
       // Generate the map.
       $('#' + id).height('600px');
@@ -718,8 +714,6 @@ $(document).ready(function () {
         map.addListener("selectedObjectChanged", function () {
           // TODO: make it more efficient (DRY)
           if (!map.selectedObject.map) {
-            console.log('area selected');
-            console.log(map.selectedObject);
             var filterValue = map.selectedObject.id;
             filter.$delete('main');
             filter.$add('main', filterValue);

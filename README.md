@@ -502,30 +502,12 @@ Or you can use the following syntax (which allows you to add other color options
 }
 ```
 
-You can set the number of colors to use (maximum default value: 9):
-
-```json
-{
-  "dashboard": {
-    "charts" : [
-      {
-        "field": "content.json.country",
-        "type": "map",
-        "colors": {
-          "scale" : "OrRd",
-          "nb"    : 3
-        }
-      }
-    ]
-  }
-}
-```
 
 You can set the type scale you want (or the distribution of the values in the
 colors):
 
-- linear (default value): classic
-- log: logarithmic scale
+- linear: classic
+- log (default value): logarithmic scale
 - quantiles
 - k-means
 
@@ -538,8 +520,7 @@ colors):
         "type": "map",
         "colors": {
           "scale"   : "OrRd",
-          "nb"      : 9,
-          "distrib" : "log"
+          "distrib" : "linear"
         }
       }
     ]
