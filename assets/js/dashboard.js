@@ -81,8 +81,8 @@ $(document).ready(function () {
 
   var updateGraph = function updateGraph() {
     if (!graphOptions) return;
-    if (!graphOptions.data) return;
-    if (!graphOptions.data.type && !graphOptions.data.types) return;
+    if (!graphOptions.data && !graphOptions.dataProvider) return;
+    if (!graphPref.type && !graphOptions.data && !graphOptions.data.type && !graphOptions.data.types) return;
 
     var operator = graphPref.operator ? graphPref.operator : "distinct";
     var maxItems = graphPref.maxItems ? graphPref.maxItems : 0;
@@ -108,7 +108,9 @@ $(document).ready(function () {
     request
     .get(url)
     .end(function(res) {
-      var type = graphOptions.data.type || graphOptions.data.types.notices;
+      var type = graphOptions.data ?
+        graphOptions.data.type || graphOptions.data.types.notices :
+        graphPref.type;
       switch(type) {
         case 'pie':
           var columns = [];
@@ -134,6 +136,12 @@ $(document).ready(function () {
           // Maybe more proper using graphChart.load, but some bugs...
           graphOptions.axis.x.categories = categories;
           c3.generate(graphOptions);
+          break;
+        case 'map':
+          console.log('map!');
+          graphOptions = updateMapOptions(res.body.data, graphOptions, graphId, graphPref);
+          graphChart.dataProvider = graphOptions.dataProvider;
+          graphChart.validateNow();
           break;
         default:
           console.warn('Unknown chart type ' + graphOptions.data.type + '!');
@@ -627,16 +635,94 @@ $(document).ready(function () {
     });
   };
 
-  var generateMap = function(id, pref) {
-    var operator    = pref.operator ? pref.operator : "distinct";
-    var fields      = pref.fields ? pref.fields : [pref.field];
-    var url         = '/compute.json?o=' + operator;
+  /**
+   * Update the options of an AmMap
+   * @param  {Array}  areas   result of an Ajax request
+   * @param  {Object} options options to give to an AmMap
+   * @param  {String} id      identifier of the DIV
+   * @param  {Object} pref    preferences coming from the JSON settings
+   * @return {Object}         options
+   */
+  var updateMapOptions = function (areas, options, id, pref) {
     var colorScale  = pref.colors && pref.colors.scale ?
                         pref.colors.scale :
                         (pref.colors ? pref.colors : "YlOrRd");
     var colorDistri = pref.colors && pref.colors.distrib ?
                         pref.colors.distrib :
                         'log';
+
+    areas = areas
+    .filter(function (area) {
+      return area._id !== null;
+    });
+    var values  = {};
+    var data    = [];
+    areas.forEach(function (area) { if (!values["v"+area.value]) values["v"+area.value] = true; data.push(area.value); });
+    var valuesNb = Object.getOwnPropertyNames(values).length;
+    var colorNb  = Math.min(9, valuesNb);
+    // var scale  = chroma.scale(['lightblue', 'navy']).domain(domain,10,'log');
+    // color scales (see http://colorbrewer2.com/):
+    // RdYlBu (Red, Yellow Blue), BuGn (light blue, Green), YlOrRd (Yellow, Orange, Red)
+    var scale  = colorDistri === 'linear' ?
+                  chroma.scale(colorScale).domain(data, colorNb) :
+                  chroma.scale(colorScale).domain(data, colorNb, colorDistri);
+    areas = areas
+    .map(function (area) {
+      area.id = area._id;
+      area.color = scale(area.value).toString();
+      return area;
+    });
+
+
+    /* create areas settings
+     * autoZoom set to true means that the map will zoom-in when clicked on the area
+     * selectedColor indicates color of the clicked area.
+     */
+    var legendData = [];
+    var dom = scale.domain();
+    var maxCars = 0;
+    for (var i = 0; i < dom.length - 1; i++) {
+      var val = dom[i];
+      var title = (+ val.toFixed(1)).toString() + ' - ' + (+ dom[i+1].toFixed(1)).toString();
+      legendData.push({
+        color: scale(val),
+        title: title
+      });
+      maxCars = Math.max(maxCars, title.length);
+    }
+    options = {
+      type: "map",
+      theme: "none", // Useless?
+      pathToImages: "assets/ammap/images/",
+      dataProvider: {
+        map: "world",
+        areas: areas
+      },
+      areasSettings: {
+        selectable: isOnlyChart(id),
+        selectedColor: "#EEEEEE",
+        selectedOutlineColor: "red",
+        outlineColor: "black",
+        balloonText: "[[title]]: [[value]]",
+        unlistedAreasAlpha: 0.7
+      },
+      legend: {
+        width: maxCars * 8,
+        marginRight: 0,
+        equalWidths: true,
+        maxColumns: 1,
+        right: 0,
+        data: legendData,
+        backgroundAlpha: 0.5
+      }
+    };
+    return options;
+  };
+
+  var generateMap = function(id, pref) {
+    var operator    = pref.operator ? pref.operator : "distinct";
+    var fields      = pref.fields ? pref.fields : [pref.field];
+    var url         = '/compute.json?o=' + operator;
 
     fields.forEach(function (field) {
       url += '&f=' + field;
@@ -658,72 +744,11 @@ $(document).ready(function () {
     request
     .get(url)
     .end(function(res) {
-      var areas = res.body.data
-      .filter(function (area) {
-        return area._id !== null;
-      });
-      var values  = {};
-      var data    = [];
-      areas.forEach(function (area) { if (!values["v"+area.value]) values["v"+area.value] = true; data.push(area.value); });
-      var valuesNb = Object.getOwnPropertyNames(values).length;
-      var colorNb  = Math.min(9, valuesNb);
-      // var scale  = chroma.scale(['lightblue', 'navy']).domain(domain,10,'log');
-      // color scales (see http://colorbrewer2.com/):
-      // RdYlBu (Red, Yellow Blue), BuGn (light blue, Green), YlOrRd (Yellow, Orange, Red)
-      var scale  = colorDistri === 'linear' ?
-                    chroma.scale(colorScale).domain(data, colorNb) :
-                    chroma.scale(colorScale).domain(data, colorNb, colorDistri);
-      areas = areas
-      .map(function (area) {
-        area.id = area._id;
-        area.color = scale(area.value).toString();
-        return area;
-      });
-
       // Generate the map.
       $('#' + id).height('600px');
-      /* create areas settings
-       * autoZoom set to true means that the map will zoom-in when clicked on the area
-       * selectedColor indicates color of the clicked area.
-       */
-      var legendData = [];
-      var dom = scale.domain();
-      var maxCars = 0;
-      for (var i = 0; i < dom.length - 1; i++) {
-        var val = dom[i];
-        var title = (+ val.toFixed(1)).toString() + ' - ' + (+ dom[i+1].toFixed(1)).toString();
-        legendData.push({
-          color: scale(val),
-          title: title
-        });
-        maxCars = Math.max(maxCars, title.length);
-      }
-      var options = {
-        type: "map",
-        theme: "none", // Useless?
-        pathToImages: "assets/ammap/images/",
-        dataProvider: {
-          map: "world",
-          areas: areas
-        },
-        areasSettings: {
-          selectable: isOnlyChart(id),
-          selectedColor: "#EEEEEE",
-          selectedOutlineColor: "red",
-          outlineColor: "black",
-          balloonText: "[[title]]: [[value]]",
-          unlistedAreasAlpha: 0.7
-        },
-        legend: {
-          width: maxCars * 8,
-          marginRight: 0,
-          equalWidths: true,
-          maxColumns: 1,
-          right: 0,
-          data: legendData,
-          backgroundAlpha: 0.5
-        }
-      };
+
+      var options = {};
+      options = updateMapOptions(res.body.data, options, id, pref);
 
       var map = AmCharts.makeChart("#" + id, options);
 
