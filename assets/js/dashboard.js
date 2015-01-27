@@ -682,25 +682,10 @@ $(document).ready(function () {
 
       // Generate the map.
       $('#' + id).height('600px');
-      var map = new AmCharts.AmMap();
-      map.dataProvider = {
-        map: "world",
-        areas: areas
-      };
-      map.pathToImages = "assets/ammap/images/";
       /* create areas settings
        * autoZoom set to true means that the map will zoom-in when clicked on the area
        * selectedColor indicates color of the clicked area.
        */
-      map.areasSettings = {
-          // autoZoom: true,
-          selectable: isOnlyChart(id),
-          selectedColor: "#EEEEEE",
-          selectedOutlineColor: "red",
-          outlineColor: "black",
-          balloonText: "[[title]]: [[value]]",
-          unlistedAreasAlpha: 0.7
-      };
       var legendData = [];
       var dom = scale.domain();
       var maxCars = 0;
@@ -713,15 +698,35 @@ $(document).ready(function () {
         });
         maxCars = Math.max(maxCars, title.length);
       }
-      map.legend = {
-        width: maxCars * 8,
-        marginRight: 0,
-        equalWidths:true,
-        maxColumns: 1,
-        right: 0,
-        data: legendData,
-        backgroundAlpha: 0.5
+      var options = {
+        type: "map",
+        theme: "none", // Useless?
+        pathToImages: "assets/ammap/images/",
+        dataProvider: {
+          map: "world",
+          areas: areas
+        },
+        areasSettings: {
+          selectable: isOnlyChart(id),
+          selectedColor: "#EEEEEE",
+          selectedOutlineColor: "red",
+          outlineColor: "black",
+          balloonText: "[[title]]: [[value]]",
+          unlistedAreasAlpha: 0.7
+        },
+        legend: {
+          width: maxCars * 8,
+          marginRight: 0,
+          equalWidths: true,
+          maxColumns: 1,
+          right: 0,
+          data: legendData,
+          backgroundAlpha: 0.5
+        }
       };
+
+      var map = AmCharts.makeChart("#" + id, options);
+
       if (isOnlyChart(id)) {
         
         // Seems to work only when map.areasSettings.autoZoom or selectable is true!
@@ -739,7 +744,7 @@ $(document).ready(function () {
           updateDocumentsTable();
           updateFacets();
         });
-        // graphOptions = options;
+        graphOptions = options;
         graphId      = id;
         graphPref    = pref;
       }
