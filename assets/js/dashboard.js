@@ -694,7 +694,7 @@ $(document).ready(function () {
        */
       map.areasSettings = {
           // autoZoom: true,
-          selectable: true,
+          selectable: isOnlyChart(id),
           selectedColor: "#EEEEEE",
           selectedOutlineColor: "red",
           outlineColor: "black",
@@ -725,14 +725,16 @@ $(document).ready(function () {
       if (isOnlyChart(id)) {
         
         // Seems to work only when map.areasSettings.autoZoom or selectable is true!
-        map.addListener("selectedObjectChanged", function () {
-          if (!map.selectedObject.map) {
-            var filterValue = map.selectedObject.id;
+        map.addListener('clickMapObject', function (event) {
+          var filterValue = event.mapObject.id;
+          if (filter.main !== filterValue) {
             filter.$delete('main');
             filter.$add('main', filterValue);
           }
-          else {
+          else if (!event.mapObject.map) {
             filter.$delete('main');
+            // unselect area on the map by clicking on the background
+            map.clickMapObject(map.dataProvider);
           }
           updateDocumentsTable();
           updateFacets();
