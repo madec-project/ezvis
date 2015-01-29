@@ -124,6 +124,15 @@ $(document).ready(function () {
           graphOptions.axis.x.categories = categories;
           c3.generate(graphOptions);
           break;
+        case 'horizontalbars':
+          res.body.data.each(function (e) {
+            if (e._id === filter.main) {
+              e.alpha = 0.5;
+            }
+          });
+          graphChart.dataProvider = res.body.data;
+          graphChart.validateData();
+          break;
         case 'map':
           createMap(res.body.data, graphId, graphPref);
           // Select the main filter again (on the map)
@@ -138,7 +147,7 @@ $(document).ready(function () {
           }
           break;
         default:
-          console.warn('Unknown chart type ' + graphOptions.data.type + '!');
+          console.warn('Unknown chart type ' + type + '!');
       }
     });
   };
