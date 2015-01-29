@@ -507,98 +507,6 @@ $(document).ready(function () {
   };
 
 
-  var generateHorizontalBars = function(id, pref) {
-    var operator = pref.operator ? pref.operator : "distinct";
-    var maxItems = pref.maxItems ? pref.maxItems : 0;
-    var fields   = pref.fields ? pref.fields : [pref.field];
-    var url      = '/compute.json?o=' + operator;
-    fields.forEach(function (field) {
-      url += '&f=' + field;
-    });
-    url += '&columns[0][data]=value&columns[0][orderable]=true';
-    url += '&order[0][column]=0&order[0][dir]=desc';
-    url += '&itemsPerPage=' + maxItems;
-
-    if (pref.title && !$('#' + id).prev().length) {
-      $('#' + id)
-      .before('<div class="panel-heading">' +
-        '<h2 class="panel-title">' +
-        pref.title +
-        '</h2></div>');
-      $('#' + id)
-      .append('<i class="fa fa-refresh fa-spin"></i>');
-    }
-
-    request
-    .get(url)
-    .end(function(res) {
-      var keys = res.body.data;
-
-      // Create a dictionary: key -> occurrence
-      var k = {};
-      keys.each(function(e) {
-        k[e._id] = e.value;
-      });
-
-      var categories = Object.keys(k);
-      var columns = Object.values(k);
-      columns.unshift('notices'); // TODO make it configurable?
-
-      // Default options values
-      var options = {
-        bindto: '#' + id,
-        data: {
-          columns: [
-            columns
-          ],
-          types: { notices: 'bar'}
-        },
-        axis: {
-          rotated: true,
-          x: {
-            type: 'category',
-            categories: categories
-          }
-        },
-        size: {
-          height: 'auto'
-        },
-        legend: {
-          show: false
-        }
-      };
-      // Override options with configuration values
-      if (pref.size) {
-        options.size = pref.size;
-        bootstrapPosition(id, pref.size);
-      }
-      // Color
-      if (pref.color) {
-        options.data.colors = { notices : pref.color };
-      }
-      if (pref.legend) {
-        options.legend = pref.legend;
-      }
-
-      if (isOnlyChart(id)) {
-        options.data.selection = {enabled:true};
-        options.data.selection.multiple = false;
-        options.data.onselected = function (d, element) {
-          var filterValue = categories[d.index];
-          filter.$delete('main');
-          filter.$add('main', filterValue);
-          updateDocumentsTable();
-          updateFacets();
-        };
-        graphOptions = options;
-        graphId      = id;
-        graphPref    = pref;
-      }
-      var horizontalbars = c3.generate(options);
-      graphChart = horizontalbars;
-    });
-  };
-
   var generateNetwork = function(id, pref) {
     var operator = pref.operator ? pref.operator : "graph";
     var maxItems = pref.maxItems ? pref.maxItems : 100;
@@ -1083,7 +991,6 @@ $(document).ready(function () {
             generateHistogram(id, pref);
           }
           else if (pref.type === 'horizontalbars') {
-            // generateHorizontalBars(id, pref);
             initHorizontalBars(id, pref);
           }
           else if (pref.type === 'pie') {
