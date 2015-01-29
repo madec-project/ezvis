@@ -109,22 +109,8 @@ $(document).ready(function () {
             columns: columns
           });
           break;
-        case 'bar': // Both horizontalbars and histogram
-          // Create a dictionary: key -> occurrence
-          var k = {};
-          res.body.data.each(function(e) {
-            k[e._id] = e.value;
-          });
-
-          var categories = Object.keys(k);
-          columns = Object.values(k);
-          columns.unshift('notices'); // TODO make it configurable?
-          graphOptions.data.columns = [columns];
-          // Maybe more proper using graphChart.load, but some bugs...
-          graphOptions.axis.x.categories = categories;
-          c3.generate(graphOptions);
-          break;
         case 'horizontalbars':
+        case 'histogram':
           res.body.data.each(function (e) {
             if (e._id === filter.main) {
               e.alpha = 0.5;
@@ -199,90 +185,6 @@ $(document).ready(function () {
       $('#' + id)
       .height(size.height + 'px');
     }
-  };
-
-  var generateHistogram = function(id, pref) {
-    var operator = pref.operator ? pref.operator : "distinct";
-    var fields   = pref.fields ? pref.fields : [pref.field];
-    var url      = '/compute.json?o=' + operator;
-    fields.forEach(function (field) {
-      url += '&f=' + field;
-    });
-    url += '&itemsPerPage=';
-
-    if (pref.title && !$('#' + id).prev().length) {
-      $('#' + id).before('<div class="panel-heading">' +
-                         '<h2 class="panel-title">' +
-                         pref.title +
-                         '</h2></div>');
-      $('#' + id)
-      .append('<i class="fa fa-refresh fa-spin"></i>');
-    }
-
-    request
-    .get(url)
-    .end(function(res) {
-      self.years = res.body.data;
-
-      // Create a dictionary: year -> occurrence
-      var y = {};
-      self.years.each(function(e) {
-        y[e._id] = e.value;
-      });
-
-      var categories = Object.keys(y);
-      var columns = Object.values(y);
-      columns.unshift('notices'); // TODO make it configurable?
-
-      // Default options values
-      var options = {
-        bindto: '#' + id,
-        data: {
-          columns: [
-            columns
-          ],
-          types: { notices: 'bar'}
-        },
-        axis: {
-          x: {
-            type: 'category',
-            categories: categories
-          }
-        },
-        size: {
-          height: 'auto'
-        }
-      };
-      // Override options with configuration values
-      if (pref.size) {
-        options.size = pref.size;
-        bootstrapPosition(id, pref.size);
-      }
-      // Color
-      if (pref.color) {
-        options.data.colors = { notices : pref.color };
-      }
-      // Legend
-      options.legend = pref.legend || { show: false };
-
-      if (isOnlyChart(id)) {
-        options.data.selection = { enabled : true };
-        options.data.selection.multiple = false;
-        options.data.onselected = function (d, element) {
-          var filterValue = categories[d.index];
-          filter.$delete('main');
-          filter.$add('main', filterValue);
-          updateDocumentsTable();
-          updateFacets();
-        };
-        graphOptions = options;
-        graphId      = id;
-        graphPref    = pref;
-      }
-
-      var histogram = c3.generate(options);
-      graphChart = histogram;
-    });
   };
 
   var generatePie = function(id, pref) {
@@ -395,6 +297,103 @@ $(document).ready(function () {
     });
   };
 
+  /**
+   * Update the options of an histogram
+   * @param  {Array}  data    result of an Ajax request
+   * @param  {String} id      identifier of the DIV
+   * @param  {Object} pref    preferences coming from the JSON settings
+   * @return {Object}         options
+   */
+  var updateHistogramOptions = function (data, id, pref) {
+    var options = {
+      "type"  : "serial",
+      "rotate": false,
+      "theme" : "light",
+      "pathToImages" : "assets/amcharts/images/",
+      "dataProvider" : data,
+      "categoryField": "_id",
+      "startDuration": 1,
+      "graphs" : [{
+        "type"        : "column",
+        "alphaField"  : "alpha",
+        "fillAlphas": 1,
+        "balloonText" : "[[_id]]: [[value]]",
+        "dashLengthField": "dashLengthColumn", // REMOVE ?
+        "title"       : pref.title ? pref.title : "",
+        "valueField"  : "value",
+        "showHanOnHover" : true
+      }]
+    };
+    if (pref.color) {
+      options.graphs[0].fillColors = [ pref.color ];
+    }
+    return options;
+  };
+
+  var createHistogram = function (data, id, pref) {
+    var options = updateHistogramOptions(data, id, pref);
+
+    var chart = window.chart = AmCharts.makeChart("#" + id, options);
+
+    if (isOnlyChart(id)) {
+      chart.addListener("rendered", function addBarsListeners() {
+        chart.addListener('clickGraphItem', function (event) {
+          var filterValue = event.item.category;
+          if (filter.main !== filterValue) {
+            filter.$delete('main');
+            filter.$add('main', filterValue);
+            highlightOnly(chart, event.item);
+          }
+          else {
+            filter.$delete('main');
+            unhighlightAll(chart);
+          }
+          chart.validateData();
+          updateDocumentsTable();
+          updateFacets();
+        });
+      });
+
+      graphOptions = options;
+      graphId      = id;
+      graphPref    = pref;
+    }
+
+    chart.write(id);
+    graphChart = chart;
+  };
+
+  var initHistogram = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "distinct";
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&itemsPerPage=';
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+              '<h2 class="panel-title">' +
+              pref.title +
+              '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+    $('#' + id).height('500px'); // Default height
+    if (pref.size) {
+      bootstrapPosition(id, pref.size);
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      createHistogram(res.body.data, id, pref);
+    });
+  };
+
+
   var initHorizontalBars = function(id, pref) {
     var operator = pref.operator ? pref.operator : "distinct";
     var maxItems = pref.maxItems ? pref.maxItems : 0;
@@ -478,7 +477,7 @@ $(document).ready(function () {
 
   /**
    * Update the options of an horizontalbar
-   * @param  {Array}  keys    result of an Ajax request
+   * @param  {Array}  data    result of an Ajax request
    * @param  {String} id      identifier of the DIV
    * @param  {Object} pref    preferences coming from the JSON settings
    * @return {Object}         options
@@ -494,15 +493,19 @@ $(document).ready(function () {
       "startDuration": 1,
       "graphs" : [{
         "type"        : "column",
-        "alphaField"  : "alpha", // TODO add "alpha" column to data?
+        "alphaField"  : "alpha",
         "fillAlphas": 1,
         "balloonText" : "[[_id]]: [[value]]",
         "dashLengthField": "dashLengthColumn", // REMOVE ?
         "title"       : pref.title ? pref.title : "",
         "valueField"  : "value",
         "showHanOnHover" : true
-      }]
+      }],
+      "creditsPosition": "right"
     };
+    if (pref.color) {
+      options.graphs[0].fillColors = [ pref.color ];
+    }
     return options;
   };
 
@@ -988,7 +991,7 @@ $(document).ready(function () {
 
 
           if (pref.type === 'histogram') {
-            generateHistogram(id, pref);
+            initHistogram(id, pref);
           }
           else if (pref.type === 'horizontalbars') {
             initHorizontalBars(id, pref);
