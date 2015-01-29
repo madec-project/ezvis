@@ -59,7 +59,7 @@ $(document).ready(function () {
       var facet = facetsPrefs[facetId];
       var url = '/compute.json?o=distinct&f=' + facet.path;
       if (filter.main) {
-        url += '&sel={"' + currentField + '":"'+filter.main+'"}';
+        url += '&sel={"' + currentField + '":"'+encodeURIComponent(filter.main)+'"}';
       }
       dtFacets[facetId].ajax.url(url);
       dtFacets[facetId].ajax.reload();
@@ -198,7 +198,7 @@ $(document).ready(function () {
     var options = {
       "type"  : "pie",
       "theme" : "light",
-      // "pathToImages" : "assets/amcharts/images/",
+      "pathToImages" : "assets/amcharts/images/",
       "dataProvider" : data,
       "valueField"  : "value",
       "titleField": "_id",
