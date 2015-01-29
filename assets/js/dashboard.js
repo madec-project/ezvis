@@ -100,13 +100,13 @@ $(document).ready(function () {
         graphPref.type;
       switch(type) {
         case 'pie':
-          var columns = [];
-          res.body.data.each(function(e) {
-            columns.push([e._id, e.value]);
-          });
-          graphChart.unload();
-          graphChart.load({
-            columns: columns
+          graphChart.dataProvider = res.body.data;
+          graphChart.validateData();
+          // Select the main filter again (on the pie)
+          graphChart.dataProvider.forEach(function (slice, index) {
+            if (slice._id === filter.main) {
+              graphChart.clickSlice(index);
+            }
           });
           break;
         case 'horizontalbars':
@@ -187,7 +187,62 @@ $(document).ready(function () {
     }
   };
 
-  var generatePie = function(id, pref) {
+  /**
+   * Update the options of an pie
+   * @param  {Array}  data    result of an Ajax request
+   * @param  {String} id      identifier of the DIV
+   * @param  {Object} pref    preferences coming from the JSON settings
+   * @return {Object}         options
+   */
+  var updatePieOptions = function (data, id, pref) {
+    var options = {
+      "type"  : "pie",
+      "theme" : "light",
+      // "pathToImages" : "assets/amcharts/images/",
+      "dataProvider" : data,
+      "valueField"  : "value",
+      "titleField": "_id",
+      "labelText" : "[[title]]: [[value]]",
+      "balloonText" : "[[title]]: <strong>[[value]]</strong>",
+      "pullOutOnlyOne": true,
+      "startDuration": 1
+    };
+    return options;
+  };
+
+
+  var createPie = function (data, id, pref) {
+    var options = updatePieOptions(data, id, pref);
+
+    var chart = window.chart = AmCharts.makeChart("#" + id, options);
+
+    if (isOnlyChart(id)) {
+      chart.addListener("rendered", function addBarsListeners() {
+        chart.addListener('pullOutSlice', function (event) {
+          var filterValue = event.dataItem.title;
+          filter.$add('main', filterValue);
+          updateDocumentsTable();
+          updateFacets();
+        });
+        chart.addListener('pullInSlice', function (event) {
+          var filterValue = event.dataItem.title;
+          filter.$delete('main');
+          updateDocumentsTable();
+          updateFacets();
+        });
+      });
+
+      graphOptions = options;
+      graphId      = id;
+      graphPref    = pref;
+    }
+
+    chart.write(id);
+    graphChart = chart;
+  };
+
+
+  var initPie = function(id, pref) {
     var operator = pref.operator ? pref.operator : "distinct";
     var fields   = pref.fields ? pref.fields : [pref.field];
     var url      = '/compute.json?o=' + operator;
@@ -207,93 +262,15 @@ $(document).ready(function () {
       $('#' + id)
       .append('<i class="fa fa-refresh fa-spin"></i>');
     }
-
-    var maxItems = pref.maxItems ? pref.maxItems : 100;
+    $('#' + id).height('500px'); // Default height
+    if (pref.size) {
+      bootstrapPosition(id, pref.size);
+    }
 
     request
     .get(url)
     .end(function(res) {
-      self.themes = res.body.data;
-
-      var columns = [];
-      self.themes.each(function(e) {
-        columns.push([e._id, e.value]);
-      });
-
-      // Default options values
-      var options = {
-        bindto: '#' + id,
-        data: {
-          columns: columns,
-          type: 'pie'
-        },
-        pie: {
-          label: {
-            format: function (v, r) { return String(v); }
-          }
-        },
-        legend: {
-          position: 'right'
-        },
-        size: {
-          height: "auto"
-        },
-        tooltip: {
-          format: {
-            value: function (value, ratio, id) {
-              return value;
-            }
-          }
-        }
-      };
-      // Override options with configuration values
-      if (pref.legend) {
-        options.legend = pref.legend;
-      }
-      if (pref.size) {
-        options.size = pref.size;
-        bootstrapPosition(id, pref.size);
-      }
-      var colors        = {};
-      var i             = 0;
-      var orderedValues = {};
-      // Reorder by values
-      columns.each(function (e) {
-        orderedValues[e[1]] = e[0];
-      });
-      // Colors
-      var palette;
-      if (pref.colors) {
-        palette = pref.colors;
-      }
-      else if (!options.data.colors) {
-        palette = [ '#BB9FF5', '#ff7a85', '#44b2ba', '#ffa65a', '#34cdb8'];
-      }
-      if (pref.colors || !options.data.colors) {
-        Object.keys(orderedValues, function (value, key) {
-          colors[key] = palette[i++ % palette.length];
-        });
-        options.data.colors = colors;
-      }
-
-      if (isOnlyChart(id)) {
-        options.data.selection          = {enabled:true};
-        options.data.selection.multiple = false;
-        options.data.onselected = function (d, element) {
-          var filterValue = d.id;
-          filter.$delete('main');
-          filter.$add('main', filterValue);
-          updateDocumentsTable();
-          updateFacets();
-        };
-        graphOptions = options;
-        graphId      = id;
-        graphPref    = pref;
-      }
-
-      // Generate the pie.
-      var pie = c3.generate(options);
-      graphChart = pie;
+      createPie(res.body.data, id, pref);
     });
   };
 
@@ -997,7 +974,7 @@ $(document).ready(function () {
             initHorizontalBars(id, pref);
           }
           else if (pref.type === 'pie') {
-            generatePie(id, pref);
+            initPie(id, pref);
           }
           else if (pref.type === 'network') {
             generateNetwork(id, pref);
