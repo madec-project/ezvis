@@ -199,6 +199,10 @@ $(document).ready(function () {
       .parent()
       .addClass("col-md-offset-" + size.offset);
     }
+    if (size.height) {
+      $('#' + id)
+      .height(size.height + 'px');
+    }
   };
 
   var generateHistogram = function(id, pref) {
@@ -416,7 +420,10 @@ $(document).ready(function () {
       $('#' + id)
       .append('<i class="fa fa-refresh fa-spin"></i>');
     }
-    $('#' + id).height('500px');
+    $('#' + id).height('500px'); // Default height
+    if (pref.size) {
+      bootstrapPosition(id, pref.size);
+    }
 
     request
     .get(url)
