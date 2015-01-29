@@ -645,12 +645,11 @@ $(document).ready(function () {
   /**
    * Update the options of an AmMap
    * @param  {Array}  areas   result of an Ajax request
-   * @param  {Object} options options to give to an AmMap
    * @param  {String} id      identifier of the DIV
    * @param  {Object} pref    preferences coming from the JSON settings
    * @return {Object}         options
    */
-  var updateMapOptions = function (areas, options, id, pref) {
+  var updateMapOptions = function (areas, id, pref) {
     var colorScale  = pref.colors && pref.colors.scale ?
                         pref.colors.scale :
                         (pref.colors ? pref.colors : "YlOrRd");
@@ -697,7 +696,7 @@ $(document).ready(function () {
       });
       maxCars = Math.max(maxCars, title.length);
     }
-    options = {
+    var options = {
       type: "map",
       theme: "none", // Useless?
       pathToImages: "assets/ammap/images/",
@@ -732,7 +731,7 @@ $(document).ready(function () {
       $('#' + id).height('600px');
 
       var options = {};
-      options = updateMapOptions(data, options, id, pref);
+      options = updateMapOptions(data, id, pref);
 
       var map = AmCharts.makeChart("#" + id, options);
 
