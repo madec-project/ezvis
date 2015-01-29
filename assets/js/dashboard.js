@@ -395,6 +395,115 @@ $(document).ready(function () {
     });
   };
 
+  var initHorizontalBars = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "distinct";
+    var maxItems = pref.maxItems ? pref.maxItems : 0;
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=' + maxItems;
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+              '<h2 class="panel-title">' +
+              pref.title +
+              '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+    $('#' + id).height('500px');
+
+    request
+    .get(url)
+    .end(function(res) {
+      createHorizontalBars(res.body.data, id, pref);
+    });
+  };
+
+  var unhighlightAll = function (chart) {
+    chart.dataProvider.forEach(function (i) {
+      if (i.alpha) {
+        delete i.alpha;
+      }
+    });
+  };
+
+  var highlightOnly = function (chart, item) {
+    unhighlightAll(chart);
+    item.dataContext.alpha = 0.5;
+  };
+
+  var createHorizontalBars = function (data, id, pref) {
+    var options = updateHorizontalBarsOptions(data, id, pref);
+
+    var chart = window.chart = AmCharts.makeChart("#" + id, options);
+
+    if (isOnlyChart(id)) {
+      chart.addListener("rendered", function addBarsListeners() {
+        console.info('rendered');
+        chart.addListener('clickGraphItem', function (event) {
+          console.info('clickItem', event);
+          var filterValue = event.item.category;
+          if (filter.main !== filterValue) {
+            filter.$delete('main');
+            filter.$add('main', filterValue);
+            highlightOnly(chart, event.item);
+          }
+          else {
+            filter.$delete('main');
+            unhighlightAll(chart);
+          }
+          chart.validateData();
+          updateDocumentsTable();
+          updateFacets();
+        });
+      });
+
+      graphOptions = options;
+      graphId      = id;
+      graphPref    = pref;
+    }
+
+    chart.write(id);
+    graphChart = chart;
+  };
+
+  /**
+   * Update the options of an horizontalbar
+   * @param  {Array}  keys    result of an Ajax request
+   * @param  {String} id      identifier of the DIV
+   * @param  {Object} pref    preferences coming from the JSON settings
+   * @return {Object}         options
+   */
+  var updateHorizontalBarsOptions = function (data, id, pref) {
+    var options = {
+      "type"  : "serial",
+      "rotate": true,
+      "theme" : "light",
+      "pathToImages" : "assets/amcharts/images/",
+      "dataProvider" : data,
+      "categoryField": "_id",
+      "startDuration": 1,
+      "graphs" : [{
+        "type"        : "column",
+        "alphaField"  : "alpha", // TODO add "alpha" column to data?
+        "fillAlphas": 1,
+        "balloonText" : "[[_id]]: [[value]]",
+        "dashLengthField": "dashLengthColumn", // REMOVE ?
+        "title"       : pref.title ? pref.title : "",
+        "valueField"  : "value",
+        "showHanOnHover" : true
+      }]
+    };
+    return options;
+  };
+
+
   var generateHorizontalBars = function(id, pref) {
     var operator = pref.operator ? pref.operator : "distinct";
     var maxItems = pref.maxItems ? pref.maxItems : 0;
@@ -761,7 +870,7 @@ $(document).ready(function () {
       graphChart = map;
   };
 
-  var generateMap = function(id, pref) {
+  var initMap = function(id, pref) {
     var operator    = pref.operator ? pref.operator : "distinct";
     var fields      = pref.fields ? pref.fields : [pref.field];
     var url         = '/compute.json?o=' + operator;
@@ -971,7 +1080,8 @@ $(document).ready(function () {
             generateHistogram(id, pref);
           }
           else if (pref.type === 'horizontalbars') {
-            generateHorizontalBars(id, pref);
+            // generateHorizontalBars(id, pref);
+            initHorizontalBars(id, pref);
           }
           else if (pref.type === 'pie') {
             generatePie(id, pref);
@@ -980,7 +1090,7 @@ $(document).ready(function () {
             generateNetwork(id, pref);
           }
           else if (pref.type === 'map') {
-            generateMap(id, pref);
+            initMap(id, pref);
           }
 
           if (isOnlyChart(id)) {
