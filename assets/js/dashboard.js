@@ -24,19 +24,6 @@ $(document).ready(function () {
            params.id === id;
   };
 
-  var verbalize = function verbalize (filter) {
-    var verbalized = '';
-    Object.keys(filter, function (label, value) {
-      verbalized += (label === 'main' ? '' :' ' + label + '=') +
-                    '<strong>' + value + '</strong>';
-    });
-    return verbalized;
-  };
-
-  var displayFilter = function displayFilter() {
-    $('#filter').html(verbalize(filter));
-  };
-
   var filter2Selector = function filter2Selector() {
     var sel = {};
     Object.keys(filter, function (key, value) {
