@@ -692,25 +692,25 @@ Here is an example, displaying `Year`, `Title`, `Authors`, and `Keywords`:
 
 ```javascript
 "documentFields" : {
-  "year"   : {
-    "path" : "content.json.Py",
+  "$year"   : {
+    "visible": true,
     "label": "Publication Year",
-    "visible": true
+    "path" : "content.json.Py"
   },
-  "title"  : {
-    "path" : "content.json.Ti",
+  "$title"  : {
+    "visible": true,
     "label": "Title",
-    "visible": true
+    "path" : "content.json.Ti"
   },
-  "authors": {
-    "path" : "content.json.Af",
+  "$authors": {
+    "visible": true,
     "label": "Authors",
-    "visible": true
+    "path" : "content.json.Af"
   },
-  "keywords" : {
-    "path" : "content.json.DiscESI",
+  "$keywords" : {
+    "visible": true,
     "label": "Keywords",
-    "visible": true
+    "path" : "content.json.DiscESI"
   }
 }
 ```
@@ -719,6 +719,20 @@ All *custom fields* which `visible` key is set to `true` will be
 present in the table.
 
 By default, `visible` key value is `false`.
+
+The `Search` field above the documents table uses a field named `text`, which
+must contain the content of all fields you want to be able to search.
+
+Ex:
+
+```javascript
+"documentFields" : {
+  "$text": {
+    "get" : ["content.json.Py", "content.json.Ti", "content.json.Af"],
+    "join": "|"
+  }
+}
+```
 
 ## Facets
 
