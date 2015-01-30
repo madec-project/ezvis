@@ -935,9 +935,9 @@ $(document).ready(function () {
             var facetsNb  = 0;
             var allFields = [];
             fieldNb       = 1;
-            for (var userfield in Config.documentFields) {
-              if (Config.documentFields[userfield].visible) {
-                columns.push({data: "fields." + userfield});
+            for (var documentfield in Config.documentFields) {
+              if (Config.documentFields[documentfield].visible) {
+                columns.push({data: documentfield.replace('$','')});
                 allFields.push(fieldNb);
                 fieldNb++;
               }
@@ -945,7 +945,6 @@ $(document).ready(function () {
             if (pref.facets) {
               facetsPrefs = pref.facets;
               facetsNb = pref.facets.length;
-              // Object.keys(pref.facets, function (facetId, facet) {
               pref.facets.forEach(function (facet, facetNb) {
                 facets.push(facet.label);
                 var facetId = "facet" + facetNb;
