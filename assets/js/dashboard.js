@@ -205,7 +205,9 @@ $(document).ready(function () {
       "labelText" : "[[title]]: [[value]]",
       "balloonText" : "[[title]]: <strong>[[value]]</strong>",
       "pullOutOnlyOne": true,
-      "startDuration": 1
+      "startDuration": 1,
+      "marginBottom": 0,
+      "marginTop"   : 0
     };
     return options;
   };
