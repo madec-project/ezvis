@@ -19,7 +19,7 @@ $(document).ready(function() {
     allFields.push(i);
   }
   var columns = Object.keys(Config.documentFields).map(function(x) {
-    return Config.documentFields[x].visible ? { data : 'fields.' + x} :  undefined;
+    return Config.documentFields[x].visible ? { data : x.replace('$','')} :  undefined;
   }).filter(function(x) { return (x !== undefined); });
 
   var vexp = new Vue( {
