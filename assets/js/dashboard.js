@@ -497,8 +497,8 @@ $(document).ready(function () {
     fields.forEach(function (field) {
       url += '&f=' + field;
     });
-    // url += '&columns[0][data]=weight&columns[0][orderable]=true';
-    // url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
     url += '&itemsPerPage=' + maxItems;
 
     if (pref.title && !$('#' + id).prev().length) {
