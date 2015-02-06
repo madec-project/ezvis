@@ -837,7 +837,7 @@ $(document).ready(function () {
         '  </thead>' +
         '</table>');
 
-      var dtFacet = $('#dtFacets-' + facetId).DataTable({
+      var options = {
         ajax: '/compute.json?o=distinct&f=' + facet.path,
         serverSide: true,
         dom: "rtip",
@@ -847,7 +847,11 @@ $(document).ready(function () {
           { "data": "value" }
         ],
         "order": [[1, "desc"]]
-      });
+      };
+      if (facet.paging === false) {
+        options.dom = "rti";
+      }
+      var dtFacet = $('#dtFacets-' + facetId).DataTable(options);
       dtFacets[facetId] = dtFacet; // for later reference
       if (facetNb) {
         $('#dtFacets-' + facetId + '_wrapper').hide();

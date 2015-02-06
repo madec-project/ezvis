@@ -750,7 +750,8 @@ Thus, you can have facets in each chart. Example:
         {
           "path": "content.json.Py",
           "label": "Year",
-          "help": "Production per year"
+          "help": "Production per year",
+          "paging": false
         },
         {
           "path": "fields.Themes",
@@ -766,6 +767,9 @@ Here, you have a pie displaying sections, and two facets:
 2. pointing to `fields.Theme`  in the document
 
 The first facet has a `help` field, which will appear as a tooltip.
+
+The first facet won't have pagination buttons, as its `paging` field is set to
+`false` (this is useful when there is only one page to display).
 
 # Document's page
 ## Title
