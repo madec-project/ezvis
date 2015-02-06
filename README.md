@@ -755,7 +755,8 @@ Thus, you can have facets in each chart. Example:
         },
         {
           "path": "fields.Themes",
-          "label": "Theme"
+          "label": "Theme",
+          "column2": "#Publi"
         }
       ]
     },
@@ -770,6 +771,9 @@ The first facet has a `help` field, which will appear as a tooltip.
 
 The first facet won't have pagination buttons, as its `paging` field is set to
 `false` (this is useful when there is only one page to display).
+
+The second facet changes the lable of its second columns to `#Publi`, instead
+of `Occ` by default.
 
 # Document's page
 ## Title

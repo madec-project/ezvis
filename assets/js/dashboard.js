@@ -832,7 +832,7 @@ $(document).ready(function () {
         '  <thead>' +
         '  <tr>' +
         '    <th>' + facet.label + '</th>' +
-        '    <th>Occ</th>' +
+        '    <th>' + (facet.column2 || 'Occ') + '</th>' +
         '  </tr>' +
         '  </thead>' +
         '</table>');
