@@ -715,7 +715,7 @@ Here is an example, displaying `Year`, `Title`, `Authors`, and `Keywords`:
 }
 ```
 
-All *custom fields* which `visible` key is set to `true` will be
+All *document fields* which `visible` key is set to `true` will be
 present in the table.
 
 By default, `visible` key value is `false`.
@@ -769,7 +769,7 @@ The first facet has a `help` field, which will appear as a tooltip.
 
 # Document's page
 ## Title
-To indicate the title of a document, use the `documentFields` named `title`.
+To indicate the title of a document, use the `documentFields` named `$title`.
 
 ## Fields
 In order to make the `/display/id.html` page work, one filter has
