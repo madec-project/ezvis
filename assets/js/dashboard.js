@@ -514,7 +514,13 @@ $(document).ready(function () {
     request
     .get(url)
     .end(function(res) {
-      var nodesUrl = '/compute.json?o=distinct&f=' + fields[0] + '&itemsPerPage=';
+      // FIXME: distinct operator does not use several fields
+      var nodesUrl = '/compute.json?o=distinct';
+      fields.forEach(function (field) {
+        nodesUrl += '&f=' + field;
+      });
+      nodesUrl += '&itemsPerPage=';
+
       request
       .get(nodesUrl)
       .end(function(res2) {
