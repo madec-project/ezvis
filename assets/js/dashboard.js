@@ -591,7 +591,8 @@ $(document).ready(function () {
               .css({
                 'content': 'data(id)',
                 'text-valign': 'center',
-                'color': 'mapData(occ, 1, 5, blue, red)',
+                'color': 'black',
+                'text-opacity': 'mapData(occ, 1, 5, 0.50, 1.00)',
                 'text-outline-width': 2,
                 'text-outline-color': '#888'
               })
