@@ -561,8 +561,6 @@ $(document).ready(function () {
             }
           });
         });
-        console.log(nodes);
-        console.log(edges);
 
         // Override options with configuration values
         if (pref.size) {
@@ -584,7 +582,6 @@ $(document).ready(function () {
         //   graphId      = id;
         //   graphPref    = pref;
         // }
-        console.log('mapData(weight, ' + minWeight + ', ' + maxWeight + ', 1, 6)');
         $('#' + id)
         .addClass('network');
         var network = new cytoscape({
@@ -635,7 +632,7 @@ $(document).ready(function () {
           ready: function () {
             window.cy = this;
 
-            cy.on('tap', 'node', function (e) {
+            cy.on('select', 'node', function (e) {
               var node = e.cyTarget;
               var neighborhood = node.neighborhood().add(node);
 
@@ -643,22 +640,21 @@ $(document).ready(function () {
               neighborhood.removeClass('faded');
 
               if (isOnlyChart(id)) {
-                filter.$delete('main');
                 filter.$add('main', node.element(0).data().id);
                 updateDocumentsTable();
                 updateFacets();
               }
-
             });
 
-            cy.on('tap', function (e) {
-              if (e.cyTarget === cy) {
-                cy.elements().removeClass('faded');
+            cy.on('unselect', 'node', function (e) {
+              cy.elements().removeClass('faded');
+              if (isOnlyChart(id)) {
                 filter.$delete('main');
                 updateDocumentsTable();
                 updateFacets();
               }
             });
+
           }
         });
         // Remove the spinning icon
