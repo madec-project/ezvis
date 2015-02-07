@@ -532,6 +532,8 @@ $(document).ready(function () {
         var cn  = new ConceptNetwork();
         var cns = new ConceptNetworkState(cn);
         res2.body.data.forEach(function (e, id) {
+          maxOcc = Math.max(maxOcc, e.value);
+          minOcc = Math.min(minOcc, e.value);
           cn.addNode(e._id, e.value);
         });
 
@@ -566,22 +568,28 @@ $(document).ready(function () {
           cns.propagate();
         }
 
+        var domain = pref.activate ? [0, 100] : [minOcc, maxOcc];
+        console.log('domain',domain);
+        var scale = chroma.scale('YlOrRd').domain(domain, 9);
+
         // fill nodes table
         Object.keys(nodeIds).forEach(function (nodeId, i, a) {
           var filteredNodes = res2.body.data.filter(function findNode(n) {
             return n._id === nodeId;
           });
           var node = filteredNodes[0];
-          maxOcc   = Math.max(maxOcc, node.value);
-          minOcc   = Math.min(minOcc, node.value);
+          // maxOcc   = Math.max(maxOcc, node.value);
+          // minOcc   = Math.min(minOcc, node.value);
           var activationValue = cns.getActivationValue(cn.getNode(nodeId).id);
-          if (activationValue > pref.threshold) {
-            console.log(nodeId, activationValue);
+          if (activationValue > pref.threshold || !pref.activate) {
+            var value = pref.activate ? activationValue : node.value;
+            console.log(nodeId, value);
             nodes.push({
               data: {
                 id: nodeId,
                 name: nodeId,
-                occ: node.value
+                occ: node.value,
+                color: scale(value).toString()
               }
             });
           }
@@ -610,7 +618,7 @@ $(document).ready(function () {
         // }
         $('#' + id)
         .addClass('network');
-        var network = new cytoscape({
+        var options = {
           container: document.getElementById(id),
 
           elements: {
@@ -624,6 +632,7 @@ $(document).ready(function () {
                 'content': 'data(id)',
                 'text-valign': 'center',
                 'color': 'black',
+                'background-color': 'data(color)',
                 'text-opacity': 'mapData(occ, ' + minOcc + ', ' +  maxOcc + ', 0.50, 1.00)',
                 'text-outline-width': 2,
                 'text-outline-color': '#888'
@@ -682,7 +691,10 @@ $(document).ready(function () {
             });
 
           }
-        });
+        };
+
+        var network = new cytoscape(options);
+
         // Remove the spinning icon
         $('#' + id + ' i').remove();
       });
