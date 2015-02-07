@@ -1,5 +1,5 @@
 module.exports = {
-  "browserifyModules" : [ 'jquery', 'vue', 'moment', 'qs', 'marked' ],
+  "browserifyModules" : [ 'jquery', 'vue', 'moment', 'qs', 'marked', 'concept-network' ],
   "loaders": [
     {
       "script": "castor-load-csv",

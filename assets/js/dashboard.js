@@ -526,6 +526,15 @@ $(document).ready(function () {
         var maxOcc    = -Infinity;
         var minOcc    = +Infinity;
 
+        // ConceptNetwork
+        var ConceptNetwork      = require('concept-network').ConceptNetwork;
+        var ConceptNetworkState = require('concept-network').ConceptNetworkState;
+        var cn  = new ConceptNetwork();
+        var cns = new ConceptNetworkState(cn);
+        res2.body.data.forEach(function (e, id) {
+          cn.addNode(e._id, e.value);
+        });
+
         res.body.data.forEach(function (e, id) {
           var affEff = JSON.parse(e._id);
           e.source = affEff[0];
@@ -543,7 +552,19 @@ $(document).ready(function () {
           // memorize nodeIds
           nodeIds[e.source] = true;
           nodeIds[e.target] = true;
+          cn.addLink(cn.getNode(e.source).id,cn.getNode(e.target).id,e.value);
+          cn.addLink(cn.getNode(e.target).id,cn.getNode(e.source).id,e.value);
         });
+
+        if (pref.activate) {
+          pref.activate.forEach(function (nodeLabel) {
+            var node = cn.getNode(nodeLabel);
+            if (node) {
+              cns.activate(node.id);
+            }
+          });
+          cns.propagate();
+        }
 
         // fill nodes table
         Object.keys(nodeIds).forEach(function (nodeId, i, a) {
@@ -553,13 +574,17 @@ $(document).ready(function () {
           var node = filteredNodes[0];
           maxOcc   = Math.max(maxOcc, node.value);
           minOcc   = Math.min(minOcc, node.value);
-          nodes.push({
-            data: {
-              id: nodeId,
-              name: nodeId,
-              occ: node.value
-            }
-          });
+          var activationValue = cns.getActivationValue(cn.getNode(nodeId).id);
+          if (activationValue > pref.threshold) {
+            console.log(nodeId, activationValue);
+            nodes.push({
+              data: {
+                id: nodeId,
+                name: nodeId,
+                occ: node.value
+              }
+            });
+          }
         });
 
         // Override options with configuration values
@@ -567,6 +592,7 @@ $(document).ready(function () {
           options.size = pref.size;
           bootstrapPosition(id, pref.size);
         }
+
 
         // if (isOnlyChart(id)) {
         //   options.data.selection = {enabled:true};

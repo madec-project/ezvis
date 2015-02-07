@@ -32,6 +32,7 @@
   "homepage": "https://github.com/madec-project/ezvisir",
   "dependencies": {
     "castor-core": "^2.0.4",
+    "concept-network": "^1.1.0",
     "jquery": "^2.1.1",
     "marked": "^0.3.2",
     "moment": "^2.8.3",
