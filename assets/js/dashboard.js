@@ -514,133 +514,146 @@ $(document).ready(function () {
     request
     .get(url)
     .end(function(res) {
-      var edges   = [];
-      var nodeIds = {};
-      var nodes   = [];
+      var nodesUrl = '/compute.json?o=distinct&f=' + fields[0] + '&itemsPerPage=';
+      request
+      .get(nodesUrl)
+      .end(function(res2) {
+        var edges   = [];
+        var nodeIds = {};
+        var nodes   = [];
 
-      res.body.data.forEach(function (e, id) {
-        var affEff = JSON.parse(e._id);
-        e.source = affEff[0];
-        e.target = affEff[1];
-        edges.push({
-          data: {
-            id: '#' + id,
-            weight: e.weight,
-            source: e.source,
-            target: e.target
-          }
-        });
-        // memorize nodeIds
-        nodeIds[e.source] = true;
-        nodeIds[e.target] = true;
-      });
-
-      // fill nodes table
-      Object.keys(nodeIds).forEach(function (nodeId, i, a) {
-        nodes.push({
-          data: {
-            id: nodeId
-          }
-        });
-      });
-
-      // Override options with configuration values
-      if (pref.size) {
-        options.size = pref.size;
-        bootstrapPosition(id, pref.size);
-      }
-
-      // if (isOnlyChart(id)) {
-      //   options.data.selection = {enabled:true};
-      //   options.data.selection.multiple = false;
-      //   options.data.onselected = function (d, element) {
-      //     var filterValue = categories[d.index];
-      //     filter.$delete('main');
-      //     filter.$add('main', filterValue);
-      //     updateDocumentsTable();
-      //     updateFacets();
-      //   };
-      //   graphOptions = options;
-      //   graphId      = id;
-      //   graphPref    = pref;
-      // }
-      $('#' + id)
-      .addClass('network');
-      var network = new cytoscape({
-        container: document.getElementById(id),
-
-        elements: {
-          edges: edges,
-          nodes: nodes
-        },
-
-        style: cytoscape.stylesheet()
-          .selector('node')
-            .css({
-              'content': 'data(id)',
-              'text-valign': 'center',
-              'color': 'white',
-              'text-outline-width': 2,
-              'text-outline-color': '#888'
-            })
-          .selector('edge')
-            .css({
-              'width': 4,
-              'line-color': '#ddd',
-              // 'content': 'data(weight)'
-            })
-          .selector(':selected')
-            .css({
-              'background-color': 'black',
-              'line-color': 'black'
-            })
-          .selector('.faded')
-            .css({
-              'opacity': 0.5,
-              'text-opacity': 0.25
-            }),
-
-        layout: {
-          name: 'cola',
-          directed: false,
-          padding: 10,
-          avoidOverlap: true,
-          minNodeSpacing: 20,
-          nodeSpacing: function (node) { return 20; },
-          // animate: false
-        },
-
-        ready: function () {
-          window.cy = this;
-
-          cy.on('tap', 'node', function (e) {
-            var node = e.cyTarget;
-            var neighborhood = node.neighborhood().add(node);
-
-            cy.elements().addClass('faded');
-            neighborhood.removeClass('faded');
-
-            if (isOnlyChart(id)) {
-              filter.$delete('main');
-              filter.$add('main', node.element(0).data().id);
-              updateDocumentsTable();
-              updateFacets();
-            }
-
-          });
-
-          cy.on('tap', function (e) {
-            if (e.cyTarget === cy) {
-              cy.elements().removeClass('faded');
-              filter.$delete('main');
-              updateDocumentsTable();
-              updateFacets();
+        res.body.data.forEach(function (e, id) {
+          var affEff = JSON.parse(e._id);
+          e.source = affEff[0];
+          e.target = affEff[1];
+          edges.push({
+            data: {
+              id: '#' + id,
+              weight: e.value,
+              source: e.source,
+              target: e.target
             }
           });
+          // memorize nodeIds
+          nodeIds[e.source] = true;
+          nodeIds[e.target] = true;
+        });
+
+        // fill nodes table
+        Object.keys(nodeIds).forEach(function (nodeId, i, a) {
+          var filteredNodes = res2.body.data.filter(function findNode(n) {
+            return n._id === nodeId;
+          });
+          var node = filteredNodes[0];
+          nodes.push({
+            data: {
+              id: nodeId,
+              name: nodeId,
+              occ: node.value
+            }
+          });
+        });
+        console.log(nodes);
+        console.log(edges);
+
+        // Override options with configuration values
+        if (pref.size) {
+          options.size = pref.size;
+          bootstrapPosition(id, pref.size);
         }
+
+        // if (isOnlyChart(id)) {
+        //   options.data.selection = {enabled:true};
+        //   options.data.selection.multiple = false;
+        //   options.data.onselected = function (d, element) {
+        //     var filterValue = categories[d.index];
+        //     filter.$delete('main');
+        //     filter.$add('main', filterValue);
+        //     updateDocumentsTable();
+        //     updateFacets();
+        //   };
+        //   graphOptions = options;
+        //   graphId      = id;
+        //   graphPref    = pref;
+        // }
+        $('#' + id)
+        .addClass('network');
+        var network = new cytoscape({
+          container: document.getElementById(id),
+
+          elements: {
+            edges: edges,
+            nodes: nodes
+          },
+
+          style: cytoscape.stylesheet()
+            .selector('node')
+              .css({
+                'content': 'data(id)',
+                'text-valign': 'center',
+                'color': 'mapData(occ, 1, 5, blue, red)',
+                'text-outline-width': 2,
+                'text-outline-color': '#888'
+              })
+            .selector('edge')
+              .css({
+                'width': 'mapData(weight, 1, 3, 1, 6)',
+                'line-color': '#ddd',
+                // 'content': 'data(weight)'
+              })
+            .selector(':selected')
+              .css({
+                'background-color': 'black',
+                'line-color': 'black'
+              })
+            .selector('.faded')
+              .css({
+                'opacity': 0.5,
+                'text-opacity': 0.25
+              }),
+
+          layout: {
+            name: 'cola',
+            directed: false,
+            padding: 10,
+            avoidOverlap: true,
+            minNodeSpacing: 20,
+            nodeSpacing: function (node) { return 20; },
+            // animate: false
+          },
+
+          ready: function () {
+            window.cy = this;
+
+            cy.on('tap', 'node', function (e) {
+              var node = e.cyTarget;
+              var neighborhood = node.neighborhood().add(node);
+
+              cy.elements().addClass('faded');
+              neighborhood.removeClass('faded');
+
+              if (isOnlyChart(id)) {
+                filter.$delete('main');
+                filter.$add('main', node.element(0).data().id);
+                updateDocumentsTable();
+                updateFacets();
+              }
+
+            });
+
+            cy.on('tap', function (e) {
+              if (e.cyTarget === cy) {
+                cy.elements().removeClass('faded');
+                filter.$delete('main');
+                updateDocumentsTable();
+                updateFacets();
+              }
+            });
+          }
+        });
+        // Remove the spinning icon
+        $('#' + id + ' i').remove();
       });
-      // Remove the spinning icon
-      $('#' + id + ' i').remove();
     });
   };
 
@@ -738,7 +751,7 @@ $(document).ready(function () {
       var map = AmCharts.makeChart("#" + id, options);
 
       if (isOnlyChart(id)) {
-        
+
         // Seems to work only when map.areasSettings.autoZoom or selectable is true!
         map.addListener('clickMapObject', function (event) {
           var filterValue = event.mapObject.id;
