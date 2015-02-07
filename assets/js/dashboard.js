@@ -518,14 +518,20 @@ $(document).ready(function () {
       request
       .get(nodesUrl)
       .end(function(res2) {
-        var edges   = [];
-        var nodeIds = {};
-        var nodes   = [];
+        var edges     = [];
+        var nodeIds   = {};
+        var nodes     = [];
+        var maxWeight = -Infinity;
+        var minWeight = +Infinity;
+        var maxOcc    = -Infinity;
+        var minOcc    = +Infinity;
 
         res.body.data.forEach(function (e, id) {
           var affEff = JSON.parse(e._id);
           e.source = affEff[0];
           e.target = affEff[1];
+          maxWeight = Math.max(maxWeight, e.value);
+          minWeight = Math.min(minWeight, e.value);
           edges.push({
             data: {
               id: '#' + id,
@@ -545,6 +551,8 @@ $(document).ready(function () {
             return n._id === nodeId;
           });
           var node = filteredNodes[0];
+          maxOcc   = Math.max(maxOcc, node.value);
+          minOcc   = Math.min(minOcc, node.value);
           nodes.push({
             data: {
               id: nodeId,
@@ -576,6 +584,7 @@ $(document).ready(function () {
         //   graphId      = id;
         //   graphPref    = pref;
         // }
+        console.log('mapData(weight, ' + minWeight + ', ' + maxWeight + ', 1, 6)');
         $('#' + id)
         .addClass('network');
         var network = new cytoscape({
@@ -592,13 +601,13 @@ $(document).ready(function () {
                 'content': 'data(id)',
                 'text-valign': 'center',
                 'color': 'black',
-                'text-opacity': 'mapData(occ, 1, 5, 0.50, 1.00)',
+                'text-opacity': 'mapData(occ, ' + minOcc + ', ' +  maxOcc + ', 0.50, 1.00)',
                 'text-outline-width': 2,
                 'text-outline-color': '#888'
               })
             .selector('edge')
               .css({
-                'width': 'mapData(weight, 1, 3, 1, 6)',
+                'width': 'mapData(weight, ' + minWeight + ', ' + maxWeight + ', 1, 10)',
                 'line-color': '#ddd',
                 // 'content': 'data(weight)'
               })
