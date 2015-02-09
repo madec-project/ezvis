@@ -525,7 +525,7 @@ $(document).ready(function () {
         edges.push({
           data: {
             id: '#' + id,
-            weight: e.weight,
+            weight: e.value,
             source: e.source,
             target: e.target
           }
