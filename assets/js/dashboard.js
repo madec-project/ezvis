@@ -68,8 +68,8 @@ $(document).ready(function () {
 
   var updateGraph = function updateGraph() {
     if (!graphOptions) return;
-    if (!graphOptions.data && !graphOptions.dataProvider) return;
-    if (!graphPref.type && !graphOptions.data && !graphOptions.data.type && !graphOptions.data.types) return;
+    if (!(graphOptions.data || graphOptions.dataProvider || graphOptions.elements)) return;
+    if (!(graphPref.type || graphOptions.data || graphOptions.data.type || graphOptions.data.types)) return;
 
     var operator = graphPref.operator ? graphPref.operator : "distinct";
     var maxItems = graphPref.maxItems ? graphPref.maxItems : 0;
@@ -131,6 +131,9 @@ $(document).ready(function () {
             graphChart.clickMapObject(mapObject);
             graphChart.clickMapObject(mapObject);
           }
+          break;
+        case 'network':
+          console.log('network',graphId,graphPref);
           break;
         default:
           console.warn('Unknown chart type ' + type + '!');
@@ -587,7 +590,6 @@ $(document).ready(function () {
           // TODO: instead, display:none
           if (activationValue > pref.threshold || !pref.activate) {
             var value = pref.activate ? activationValue : node.value;
-            console.log(nodeId, value);
             nodes.push({
               data: {
                 id: nodeId,
@@ -698,6 +700,10 @@ $(document).ready(function () {
         };
 
         var network = new cytoscape(options);
+        graphPref    = pref;
+        graphId      = id;
+        graphChart   = network;
+        graphOptions = options;
 
         // Remove the spinning icon
         $('#' + id + ' i').remove();
