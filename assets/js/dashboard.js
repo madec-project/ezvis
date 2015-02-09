@@ -517,6 +517,212 @@ $(document).ready(function () {
       graphChart = map;
   };
 
+  var createNetwork = function (data, id, pref, fields) {
+    var options = updateNetworkOptions(data, id, pref, fields);
+    // TODO: finish refactoring (async the two ajax queries in updateNetworkOptions)
+
+    // FIXME: distinct operator does not use several fields
+    var nodesUrl = '/compute.json?o=distinct';
+    fields.forEach(function (field) {
+      nodesUrl += '&f=' + field;
+    });
+    nodesUrl += '&itemsPerPage=';
+
+    request
+    .get(nodesUrl)
+    .end(function(res2) {
+      var edges     = [];
+      var nodeIds   = {};
+      var nodes     = [];
+      var maxWeight = -Infinity;
+      var minWeight = +Infinity;
+      var maxOcc    = -Infinity;
+      var minOcc    = +Infinity;
+
+      // ConceptNetwork
+      var ConceptNetwork      = require('concept-network').ConceptNetwork;
+      var ConceptNetworkState = require('concept-network').ConceptNetworkState;
+      var cn  = new ConceptNetwork();
+      var cns = new ConceptNetworkState(cn);
+      res2.body.data.forEach(function (e, id) {
+        maxOcc = Math.max(maxOcc, e.value);
+        minOcc = Math.min(minOcc, e.value);
+        cn.addNode(e._id, e.value);
+      });
+
+      res.body.data.forEach(function (e, id) {
+        var affEff = JSON.parse(e._id);
+        e.source = affEff[0];
+        e.target = affEff[1];
+        maxWeight = Math.max(maxWeight, e.value);
+        minWeight = Math.min(minWeight, e.value);
+        edges.push({
+          data: {
+            id: '#' + id,
+            weight: e.value,
+            source: e.source,
+            target: e.target
+          }
+        });
+        // memorize nodeIds
+        nodeIds[e.source] = true;
+        nodeIds[e.target] = true;
+        cn.addLink(cn.getNode(e.source).id,cn.getNode(e.target).id,e.value);
+        cn.addLink(cn.getNode(e.target).id,cn.getNode(e.source).id,e.value);
+      });
+
+      if (pref.activate) {
+        pref.activate.forEach(function (nodeLabel) {
+          var node = cn.getNode(nodeLabel);
+          if (node) {
+            cns.activate(node.id);
+          }
+        });
+        cns.propagate();
+      }
+
+      var domain = pref.activate ? [0, 100] : [minOcc, maxOcc];
+      var scale = chroma.scale('YlOrRd').domain(domain, 9);
+
+      // fill nodes table
+      Object.keys(nodeIds).forEach(function (nodeId, i, a) {
+        var filteredNodes = res2.body.data.filter(function findNode(n) {
+          return n._id === nodeId;
+        });
+        var node = filteredNodes[0];
+        var activationValue = cns.getActivationValue(cn.getNode(nodeId).id);
+        // TODO: instead, display:none
+        if (activationValue > pref.threshold || !pref.activate) {
+          var value = pref.activate ? activationValue : node.value;
+          nodes.push({
+            data: {
+              id: nodeId,
+              name: nodeId,
+              occ: node.value,
+              color: scale(value).toString()
+            }
+          });
+        }
+      });
+
+      // Override options with configuration values
+      if (pref.size) {
+        options.size = pref.size;
+        bootstrapPosition(id, pref.size);
+      }
+
+
+      // if (isOnlyChart(id)) {
+      //   options.data.selection = {enabled:true};
+      //   options.data.selection.multiple = false;
+      //   options.data.onselected = function (d, element) {
+      //     var filterValue = categories[d.index];
+      //     filter.$delete('main');
+      //     filter.$add('main', filterValue);
+      //     updateDocumentsTable();
+      //     updateFacets();
+      //   };
+      //   graphOptions = options;
+      //   graphId      = id;
+      //   graphPref    = pref;
+      // }
+      $('#' + id)
+      .addClass('network');
+      var options = {
+        container: document.getElementById(id),
+
+        elements: {
+          edges: edges,
+          nodes: nodes
+        },
+
+        style: cytoscape.stylesheet()
+          .selector('node')
+            .css({
+              'content': 'data(id)',
+              'text-valign': 'center',
+              'color': 'black',
+              'background-color': 'data(color)',
+              'text-opacity': 'mapData(occ, ' + minOcc + ', ' +  maxOcc + ', 0.50, 1.00)',
+              'text-outline-width': 2,
+              'text-outline-color': '#888'
+            })
+          .selector('edge')
+            .css({
+              'width': 'mapData(weight, ' + minWeight + ', ' + maxWeight + ', 1, 10)',
+              'line-color': '#ddd',
+              // 'content': 'data(weight)'
+            })
+          .selector(':selected')
+            .css({
+              'background-color': 'black',
+              'line-color': 'black'
+            })
+          .selector('.faded')
+            .css({
+              'opacity': 0.5,
+              'text-opacity': 0.25
+            }),
+
+        layout: {
+          name: 'cola',
+          directed: false,
+          padding: 10,
+          avoidOverlap: true,
+          minNodeSpacing: 20,
+          nodeSpacing: function (node) { return 20; },
+          // animate: false
+        },
+
+        ready: function () {
+          window.cy = this;
+
+          cy.on('select', 'node', function (e) {
+            var node = e.cyTarget;
+            var neighborhood = node.neighborhood().add(node);
+
+            cy.elements().addClass('faded');
+            neighborhood.removeClass('faded');
+
+            if (isOnlyChart(id)) {
+              filter.$delete('main');
+              filter.$add('main', node.element(0).data().id);
+              updateDocumentsTable();
+              updateFacets();
+            }
+          });
+
+          cy.on('tap', function (e) {
+            // If tap on no element
+            if (e.cyTarget === cy) {
+              filter.$delete('main');
+            }
+          });
+
+          cy.on('unselect', 'node', function (e) {
+            cy.elements().removeClass('faded');
+            if (isOnlyChart(id)) {
+              cy.nodes(':selected').unselect();
+              updateDocumentsTable();
+              updateFacets();
+            }
+          });
+
+        }
+      };
+
+      var network = new cytoscape(options);
+      graphPref    = pref;
+      graphId      = id;
+      graphChart   = network;
+      graphOptions = options;
+
+      // Remove the spinning icon
+      $('#' + id + ' i').remove();
+    });
+
+  };
+
   var initPie = function(id, pref) {
     var operator = pref.operator ? pref.operator : "distinct";
     var fields   = pref.fields ? pref.fields : [pref.field];
@@ -641,6 +847,35 @@ $(document).ready(function () {
     });
   };
 
+  var initNetwork = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "graph";
+    var maxItems = pref.maxItems ? pref.maxItems : 100;
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=' + maxItems;
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+        '<h2 class="panel-title">' +
+        pref.title +
+        '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      createNetwork(res.body.data, id, pref, fields);
+    });
+  };
+
   var generateNetwork = function(id, pref) {
     var operator = pref.operator ? pref.operator : "graph";
     var maxItems = pref.maxItems ? pref.maxItems : 100;
@@ -736,6 +971,7 @@ $(document).ready(function () {
           });
           var node = filteredNodes[0];
           var activationValue = cns.getActivationValue(cn.getNode(nodeId).id);
+          pref.threshold = pref.threshold || 10;
           // TODO: instead, display:none
           if (activationValue > pref.threshold || !pref.activate) {
             var value = pref.activate ? activationValue : node.value;
