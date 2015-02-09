@@ -575,7 +575,6 @@ $(document).ready(function () {
         }
 
         var domain = pref.activate ? [0, 100] : [minOcc, maxOcc];
-        console.log('domain',domain);
         var scale = chroma.scale('YlOrRd').domain(domain, 9);
 
         // fill nodes table
@@ -584,9 +583,8 @@ $(document).ready(function () {
             return n._id === nodeId;
           });
           var node = filteredNodes[0];
-          // maxOcc   = Math.max(maxOcc, node.value);
-          // minOcc   = Math.min(minOcc, node.value);
           var activationValue = cns.getActivationValue(cn.getNode(nodeId).id);
+          // TODO: instead, display:none
           if (activationValue > pref.threshold || !pref.activate) {
             var value = pref.activate ? activationValue : node.value;
             console.log(nodeId, value);
