@@ -133,7 +133,12 @@ $(document).ready(function () {
           }
           break;
         case 'network':
-          console.log('network',graphId,graphPref);
+          // Unselect all nodes
+          graphChart.nodes(':selected').unselect();
+          // Select the node
+          if (filter.main) {
+            graphChart.nodes('[name="' + filter.main + '"]').select();
+          }
           break;
         default:
           console.warn('Unknown chart type ' + type + '!');
@@ -681,16 +686,24 @@ $(document).ready(function () {
               neighborhood.removeClass('faded');
 
               if (isOnlyChart(id)) {
+                filter.$delete('main');
                 filter.$add('main', node.element(0).data().id);
                 updateDocumentsTable();
                 updateFacets();
               }
             });
 
+            cy.on('tap', function (e) {
+              // If tap on no element
+              if (e.cyTarget === cy) {
+                filter.$delete('main');
+              }
+            });
+
             cy.on('unselect', 'node', function (e) {
               cy.elements().removeClass('faded');
               if (isOnlyChart(id)) {
-                filter.$delete('main');
+                cy.nodes(':selected').unselect();
                 updateDocumentsTable();
                 updateFacets();
               }
