@@ -220,70 +220,6 @@ $(document).ready(function () {
     return options;
   };
 
-
-  var createPie = function (data, id, pref) {
-    var options = updatePieOptions(data, id, pref);
-
-    var chart = window.chart = AmCharts.makeChart("#" + id, options);
-
-    if (isOnlyChart(id)) {
-      chart.addListener("rendered", function addBarsListeners() {
-        chart.addListener('pullOutSlice', function (event) {
-          var filterValue = event.dataItem.title;
-          filter.$add('main', filterValue);
-          updateDocumentsTable();
-          updateFacets();
-        });
-        chart.addListener('pullInSlice', function (event) {
-          var filterValue = event.dataItem.title;
-          filter.$delete('main');
-          updateDocumentsTable();
-          updateFacets();
-        });
-      });
-
-      graphOptions = options;
-      graphId      = id;
-      graphPref    = pref;
-    }
-
-    chart.write(id);
-    graphChart = chart;
-  };
-
-
-  var initPie = function(id, pref) {
-    var operator = pref.operator ? pref.operator : "distinct";
-    var fields   = pref.fields ? pref.fields : [pref.field];
-    var url      = '/compute.json?o=' + operator;
-    fields.forEach(function (field) {
-      url += '&f=' + field;
-    });
-    url += '&columns[0][data]=value&columns[0][orderable]=true';
-    url += '&order[0][column]=0&order[0][dir]=desc';
-    url += '&itemsPerPage=';
-
-    if (pref.title && !$('#' + id).prev().length) {
-      $('#' + id)
-      .before('<div class="panel-heading">' +
-              '<h2 class="panel-title">' +
-              pref.title +
-              '</h2></div>');
-      $('#' + id)
-      .append('<i class="fa fa-refresh fa-spin"></i>');
-    }
-    $('#' + id).height('500px'); // Default height
-    if (pref.size) {
-      bootstrapPosition(id, pref.size);
-    }
-
-    request
-    .get(url)
-    .end(function(res) {
-      createPie(res.body.data, id, pref);
-    });
-  };
-
   /**
    * Update the options of an histogram
    * @param  {Array}  data    result of an Ajax request
@@ -315,6 +251,154 @@ $(document).ready(function () {
       options.graphs[0].fillColors = [ pref.color ];
     }
     return options;
+  };
+
+  /**
+   * Update the options of an horizontalbar
+   * @param  {Array}  data    result of an Ajax request
+   * @param  {String} id      identifier of the DIV
+   * @param  {Object} pref    preferences coming from the JSON settings
+   * @return {Object}         options
+   */
+  var updateHorizontalBarsOptions = function (data, id, pref) {
+    var options = {
+      "type"  : "serial",
+      "rotate": true,
+      "theme" : "light",
+      "pathToImages" : "assets/amcharts/images/",
+      "dataProvider" : data,
+      "categoryField": "_id",
+      "startDuration": 1,
+      "graphs" : [{
+        "type"        : "column",
+        "alphaField"  : "alpha",
+        "fillAlphas": 1,
+        "balloonText" : "[[_id]]: [[value]]",
+        "dashLengthField": "dashLengthColumn", // REMOVE ?
+        "title"       : pref.title ? pref.title : "",
+        "valueField"  : "value",
+        "showHanOnHover" : true
+      }],
+      "creditsPosition": "right"
+    };
+    if (pref.color) {
+      options.graphs[0].fillColors = [ pref.color ];
+    }
+    return options;
+  };
+
+  /**
+   * Update the options of an AmMap
+   * @param  {Array}  areas   result of an Ajax request
+   * @param  {String} id      identifier of the DIV
+   * @param  {Object} pref    preferences coming from the JSON settings
+   * @return {Object}         options
+   */
+  var updateMapOptions = function (areas, id, pref) {
+    var colorScale  = pref.colors && pref.colors.scale ?
+                        pref.colors.scale :
+                        (pref.colors ? pref.colors : "YlOrRd");
+    var colorDistri = pref.colors && pref.colors.distrib ?
+                        pref.colors.distrib :
+                        'log';
+
+    areas = areas
+    .filter(function (area) {
+      return area._id !== null;
+    });
+    var values  = {};
+    var data    = [];
+    areas.forEach(function (area) { if (!values["v"+area.value]) values["v"+area.value] = true; data.push(area.value); });
+    var valuesNb = Object.getOwnPropertyNames(values).length;
+    var colorNb  = Math.min(9, valuesNb);
+    // var scale  = chroma.scale(['lightblue', 'navy']).domain(domain,10,'log');
+    // color scales (see http://colorbrewer2.com/):
+    // RdYlBu (Red, Yellow Blue), BuGn (light blue, Green), YlOrRd (Yellow, Orange, Red)
+    var scale  = colorDistri === 'linear' ?
+                  chroma.scale(colorScale).domain(data, colorNb) :
+                  chroma.scale(colorScale).domain(data, colorNb, colorDistri);
+    areas = areas
+    .map(function (area) {
+      area.id = area._id;
+      area.color = scale(area.value).toString();
+      return area;
+    });
+
+
+    /* create areas settings
+     * autoZoom set to true means that the map will zoom-in when clicked on the area
+     * selectedColor indicates color of the clicked area.
+     */
+    var legendData = [];
+    var dom = scale.domain();
+    var maxCars = 0;
+    for (var i = 0; i < dom.length - 1; i++) {
+      var val = dom[i];
+      var title = (+ val.toFixed(1)).toString() + ' - ' + (+ dom[i+1].toFixed(1)).toString();
+      legendData.push({
+        color: scale(val),
+        title: title
+      });
+      maxCars = Math.max(maxCars, title.length);
+    }
+    var options = {
+      type: "map",
+      theme: "none", // Useless?
+      pathToImages: "assets/ammap/images/",
+      dataProvider: {
+        map: "world",
+        areas: areas
+      },
+      areasSettings: {
+        selectable: isOnlyChart(id),
+        selectedColor: "#EEEEEE",
+        selectedOutlineColor: "red",
+        outlineColor: "black",
+        outlineThickness: 0.5,
+        balloonText: "[[title]]: [[value]]",
+        unlistedAreasAlpha: 0.7
+      },
+      legend: {
+        width: (maxCars - 3) * 5 + 55,
+        marginRight: 0,
+        equalWidths: true,
+        maxColumns: 1,
+        right: 0,
+        data: legendData,
+        backgroundAlpha: 0.5
+      }
+    };
+    return options;
+  };
+
+  var createPie = function (data, id, pref) {
+    var options = updatePieOptions(data, id, pref);
+
+    var chart = window.chart = AmCharts.makeChart("#" + id, options);
+
+    if (isOnlyChart(id)) {
+      chart.addListener("rendered", function addBarsListeners() {
+        chart.addListener('pullOutSlice', function (event) {
+          var filterValue = event.dataItem.title;
+          filter.$add('main', filterValue);
+          updateDocumentsTable();
+          updateFacets();
+        });
+        chart.addListener('pullInSlice', function (event) {
+          var filterValue = event.dataItem.title;
+          filter.$delete('main');
+          updateDocumentsTable();
+          updateFacets();
+        });
+      });
+
+      graphOptions = options;
+      graphId      = id;
+      graphPref    = pref;
+    }
+
+    chart.write(id);
+    graphChart = chart;
   };
 
   var createHistogram = function (data, id, pref) {
@@ -350,71 +434,7 @@ $(document).ready(function () {
     graphChart = chart;
   };
 
-  var initHistogram = function(id, pref) {
-    var operator = pref.operator ? pref.operator : "distinct";
-    var fields   = pref.fields ? pref.fields : [pref.field];
-    var url      = '/compute.json?o=' + operator;
-    fields.forEach(function (field) {
-      url += '&f=' + field;
-    });
-    url += '&itemsPerPage=';
-
-    if (pref.title && !$('#' + id).prev().length) {
-      $('#' + id)
-      .before('<div class="panel-heading">' +
-              '<h2 class="panel-title">' +
-              pref.title +
-              '</h2></div>');
-      $('#' + id)
-      .append('<i class="fa fa-refresh fa-spin"></i>');
-    }
-    $('#' + id).height('500px'); // Default height
-    if (pref.size) {
-      bootstrapPosition(id, pref.size);
-    }
-
-    request
-    .get(url)
-    .end(function(res) {
-      createHistogram(res.body.data, id, pref);
-    });
-  };
-
-
-  var initHorizontalBars = function(id, pref) {
-    var operator = pref.operator ? pref.operator : "distinct";
-    var maxItems = pref.maxItems ? pref.maxItems : 0;
-    var fields   = pref.fields ? pref.fields : [pref.field];
-    var url      = '/compute.json?o=' + operator;
-    fields.forEach(function (field) {
-      url += '&f=' + field;
-    });
-    url += '&columns[0][data]=value&columns[0][orderable]=true';
-    url += '&order[0][column]=0&order[0][dir]=desc';
-    url += '&itemsPerPage=' + maxItems;
-
-    if (pref.title && !$('#' + id).prev().length) {
-      $('#' + id)
-      .before('<div class="panel-heading">' +
-              '<h2 class="panel-title">' +
-              pref.title +
-              '</h2></div>');
-      $('#' + id)
-      .append('<i class="fa fa-refresh fa-spin"></i>');
-    }
-    $('#' + id).height('500px'); // Default height
-    if (pref.size) {
-      bootstrapPosition(id, pref.size);
-    }
-
-    request
-    .get(url)
-    .end(function(res) {
-      createHorizontalBars(res.body.data, id, pref);
-    });
-  };
-
-  var unhighlightAll = function (chart) {
+  var unhighlightAll = function unhighlightAll(chart) {
     chart.dataProvider.forEach(function (i) {
       if (i.alpha) {
         delete i.alpha;
@@ -422,7 +442,7 @@ $(document).ready(function () {
     });
   };
 
-  var highlightOnly = function (chart, item) {
+  var highlightOnly = function highlightOnly(chart, item) {
     unhighlightAll(chart);
     item.dataContext.alpha = 0.5;
   };
@@ -462,40 +482,164 @@ $(document).ready(function () {
     graphChart = chart;
   };
 
-  /**
-   * Update the options of an horizontalbar
-   * @param  {Array}  data    result of an Ajax request
-   * @param  {String} id      identifier of the DIV
-   * @param  {Object} pref    preferences coming from the JSON settings
-   * @return {Object}         options
-   */
-  var updateHorizontalBarsOptions = function (data, id, pref) {
-    var options = {
-      "type"  : "serial",
-      "rotate": true,
-      "theme" : "light",
-      "pathToImages" : "assets/amcharts/images/",
-      "dataProvider" : data,
-      "categoryField": "_id",
-      "startDuration": 1,
-      "graphs" : [{
-        "type"        : "column",
-        "alphaField"  : "alpha",
-        "fillAlphas": 1,
-        "balloonText" : "[[_id]]: [[value]]",
-        "dashLengthField": "dashLengthColumn", // REMOVE ?
-        "title"       : pref.title ? pref.title : "",
-        "valueField"  : "value",
-        "showHanOnHover" : true
-      }],
-      "creditsPosition": "right"
-    };
-    if (pref.color) {
-      options.graphs[0].fillColors = [ pref.color ];
-    }
-    return options;
+  var createMap = function (data, id, pref) {
+    // Generate the map.
+      $('#' + id).height('600px');
+
+      var options = {};
+      options = updateMapOptions(data, id, pref);
+
+      var map = AmCharts.makeChart("#" + id, options);
+
+      if (isOnlyChart(id)) {
+
+        // Seems to work only when map.areasSettings.autoZoom or selectable is true!
+        map.addListener('clickMapObject', function (event) {
+          var filterValue = event.mapObject.id;
+          if (filter.main !== filterValue) {
+            filter.$delete('main');
+            filter.$add('main', filterValue);
+          }
+          else if (!event.mapObject.map) {
+            filter.$delete('main');
+            // unselect area on the map by clicking on the background
+            map.clickMapObject(map.dataProvider);
+          }
+          updateDocumentsTable();
+          updateFacets();
+        });
+        graphOptions = options;
+        graphId      = id;
+        graphPref    = pref;
+      }
+
+      map.write(id);
+      graphChart = map;
   };
 
+  var initPie = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "distinct";
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=';
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+              '<h2 class="panel-title">' +
+              pref.title +
+              '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+    $('#' + id).height('500px'); // Default height
+    if (pref.size) {
+      bootstrapPosition(id, pref.size);
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      createPie(res.body.data, id, pref);
+    });
+  };
+
+  var initHistogram = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "distinct";
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&itemsPerPage=';
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+              '<h2 class="panel-title">' +
+              pref.title +
+              '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+    $('#' + id).height('500px'); // Default height
+    if (pref.size) {
+      bootstrapPosition(id, pref.size);
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      createHistogram(res.body.data, id, pref);
+    });
+  };
+
+  var initHorizontalBars = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "distinct";
+    var maxItems = pref.maxItems ? pref.maxItems : 0;
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=' + maxItems;
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+              '<h2 class="panel-title">' +
+              pref.title +
+              '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+    $('#' + id).height('500px'); // Default height
+    if (pref.size) {
+      bootstrapPosition(id, pref.size);
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      createHorizontalBars(res.body.data, id, pref);
+    });
+  };
+
+  var initMap = function(id, pref) {
+    var operator    = pref.operator ? pref.operator : "distinct";
+    var fields      = pref.fields ? pref.fields : [pref.field];
+    var url         = '/compute.json?o=' + operator;
+
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=';
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+              '<h2 class="panel-title">' +
+              pref.title +
+              '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      createMap(res.body.data, id, pref);
+    });
+  };
 
   var generateNetwork = function(id, pref) {
     var operator = pref.operator ? pref.operator : "graph";
@@ -723,155 +867,6 @@ $(document).ready(function () {
       });
     });
   };
-
-  /**
-   * Update the options of an AmMap
-   * @param  {Array}  areas   result of an Ajax request
-   * @param  {String} id      identifier of the DIV
-   * @param  {Object} pref    preferences coming from the JSON settings
-   * @return {Object}         options
-   */
-  var updateMapOptions = function (areas, id, pref) {
-    var colorScale  = pref.colors && pref.colors.scale ?
-                        pref.colors.scale :
-                        (pref.colors ? pref.colors : "YlOrRd");
-    var colorDistri = pref.colors && pref.colors.distrib ?
-                        pref.colors.distrib :
-                        'log';
-
-    areas = areas
-    .filter(function (area) {
-      return area._id !== null;
-    });
-    var values  = {};
-    var data    = [];
-    areas.forEach(function (area) { if (!values["v"+area.value]) values["v"+area.value] = true; data.push(area.value); });
-    var valuesNb = Object.getOwnPropertyNames(values).length;
-    var colorNb  = Math.min(9, valuesNb);
-    // var scale  = chroma.scale(['lightblue', 'navy']).domain(domain,10,'log');
-    // color scales (see http://colorbrewer2.com/):
-    // RdYlBu (Red, Yellow Blue), BuGn (light blue, Green), YlOrRd (Yellow, Orange, Red)
-    var scale  = colorDistri === 'linear' ?
-                  chroma.scale(colorScale).domain(data, colorNb) :
-                  chroma.scale(colorScale).domain(data, colorNb, colorDistri);
-    areas = areas
-    .map(function (area) {
-      area.id = area._id;
-      area.color = scale(area.value).toString();
-      return area;
-    });
-
-
-    /* create areas settings
-     * autoZoom set to true means that the map will zoom-in when clicked on the area
-     * selectedColor indicates color of the clicked area.
-     */
-    var legendData = [];
-    var dom = scale.domain();
-    var maxCars = 0;
-    for (var i = 0; i < dom.length - 1; i++) {
-      var val = dom[i];
-      var title = (+ val.toFixed(1)).toString() + ' - ' + (+ dom[i+1].toFixed(1)).toString();
-      legendData.push({
-        color: scale(val),
-        title: title
-      });
-      maxCars = Math.max(maxCars, title.length);
-    }
-    var options = {
-      type: "map",
-      theme: "none", // Useless?
-      pathToImages: "assets/ammap/images/",
-      dataProvider: {
-        map: "world",
-        areas: areas
-      },
-      areasSettings: {
-        selectable: isOnlyChart(id),
-        selectedColor: "#EEEEEE",
-        selectedOutlineColor: "red",
-        outlineColor: "black",
-        outlineThickness: 0.5,
-        balloonText: "[[title]]: [[value]]",
-        unlistedAreasAlpha: 0.7
-      },
-      legend: {
-        width: (maxCars - 3) * 5 + 55,
-        marginRight: 0,
-        equalWidths: true,
-        maxColumns: 1,
-        right: 0,
-        data: legendData,
-        backgroundAlpha: 0.5
-      }
-    };
-    return options;
-  };
-
-  var createMap = function (data, id, pref) {
-    // Generate the map.
-      $('#' + id).height('600px');
-
-      var options = {};
-      options = updateMapOptions(data, id, pref);
-
-      var map = AmCharts.makeChart("#" + id, options);
-
-      if (isOnlyChart(id)) {
-
-        // Seems to work only when map.areasSettings.autoZoom or selectable is true!
-        map.addListener('clickMapObject', function (event) {
-          var filterValue = event.mapObject.id;
-          if (filter.main !== filterValue) {
-            filter.$delete('main');
-            filter.$add('main', filterValue);
-          }
-          else if (!event.mapObject.map) {
-            filter.$delete('main');
-            // unselect area on the map by clicking on the background
-            map.clickMapObject(map.dataProvider);
-          }
-          updateDocumentsTable();
-          updateFacets();
-        });
-        graphOptions = options;
-        graphId      = id;
-        graphPref    = pref;
-      }
-
-      map.write(id);
-      graphChart = map;
-  };
-
-  var initMap = function(id, pref) {
-    var operator    = pref.operator ? pref.operator : "distinct";
-    var fields      = pref.fields ? pref.fields : [pref.field];
-    var url         = '/compute.json?o=' + operator;
-
-    fields.forEach(function (field) {
-      url += '&f=' + field;
-    });
-    url += '&columns[0][data]=value&columns[0][orderable]=true';
-    url += '&order[0][column]=0&order[0][dir]=desc';
-    url += '&itemsPerPage=';
-
-    if (pref.title && !$('#' + id).prev().length) {
-      $('#' + id)
-      .before('<div class="panel-heading">' +
-              '<h2 class="panel-title">' +
-              pref.title +
-              '</h2></div>');
-      $('#' + id)
-      .append('<i class="fa fa-refresh fa-spin"></i>');
-    }
-
-    request
-    .get(url)
-    .end(function(res) {
-      createMap(res.body.data, id, pref);
-    });
-  };
-
 
   /**
    * Create the facets of the graph id
