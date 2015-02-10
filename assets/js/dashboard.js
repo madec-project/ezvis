@@ -887,6 +887,9 @@ $(document).ready(function () {
     url += '&columns[0][data]=value&columns[0][orderable]=true';
     url += '&order[0][column]=0&order[0][dir]=desc';
     url += '&itemsPerPage=' + maxItems;
+    if (!pref.activate && pref.threshold && typeof pref.threshold === 'number') {
+      url += '&query={"$gte":' + pref.threshold + '}';
+    }
 
     if (pref.title && !$('#' + id).prev().length) {
       $('#' + id)
