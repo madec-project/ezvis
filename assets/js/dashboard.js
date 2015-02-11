@@ -1072,7 +1072,7 @@ $(document).ready(function () {
           },
 
           ready: function () {
-            window.cy = this;
+            var cy = this;
 
             cy.layout().on('layoutstop', function () {
               cy.fit(cy.nodes(':visible'),10);
