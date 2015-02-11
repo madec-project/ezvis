@@ -925,7 +925,7 @@ $(document).ready(function () {
         // ConceptNetwork
         var ConceptNetwork      = require('concept-network').ConceptNetwork;
         var ConceptNetworkState = require('concept-network').ConceptNetworkState;
-        var cn  = new ConceptNetwork();
+        var cn  = window.cn = new ConceptNetwork();
         var cns = new ConceptNetworkState(cn);
         res2.body.data.forEach(function (e, id) {
           maxOcc = Math.max(maxOcc, e.value);
@@ -961,33 +961,45 @@ $(document).ready(function () {
               cns.activate(node.id);
             }
           });
-          cns.propagate();
+          pref.propagate = pref.propagate || 1;
+          for (var i=0; i < pref.propagate; i++) {
+            cns.propagate();
+          }
         }
+        console.log('max',cns.getMaximumActivationValue());
 
         var domain = pref.activate ? [0, 100] : [minOcc, maxOcc];
         var scale = chroma.scale('YlOrRd').domain(domain, 9);
 
+        console.log('nodeIds', Object.keys(nodeIds));
         // fill nodes table
         Object.keys(nodeIds).forEach(function (nodeId, i, a) {
           var filteredNodes = res2.body.data.filter(function findNode(n) {
             return n._id === nodeId;
           });
           var node = filteredNodes[0];
+          console.log('node',node)
           var activationValue = cns.getActivationValue(cn.getNode(nodeId).id);
+          console.log('av', activationValue)
           pref.threshold = pref.threshold || 10;
           // TODO: instead, display:none
-          if (activationValue > pref.threshold || !pref.activate) {
+          // if (activationValue > pref.threshold || !pref.activate) {
+            // console.log('activationValue',activationValue,"pref.threshold",pref.threshold, nodeId);
             var value = pref.activate ? activationValue : node.value;
             nodes.push({
               data: {
                 id: nodeId,
                 name: nodeId,
                 occ: node.value,
-                color: scale(value).toString()
+                color: scale(value).toString(),
+                display: (activationValue > pref.threshold || !pref.activate)
+                        ? "element"
+                        : "none"
               }
             });
-          }
+          // }
         });
+        console.log('nb noeuds',nodes.length);
 
         // Override options with configuration values
         if (pref.size) {
@@ -1029,7 +1041,8 @@ $(document).ready(function () {
                 'background-color': 'data(color)',
                 'text-opacity': 'mapData(occ, ' + minOcc + ', ' +  maxOcc + ', 0.50, 1.00)',
                 'text-outline-width': 2,
-                'text-outline-color': '#888'
+                'text-outline-color': '#888',
+                'display': 'data(display)'
               })
             .selector('edge')
               .css({
@@ -1061,6 +1074,10 @@ $(document).ready(function () {
           ready: function () {
             window.cy = this;
 
+            cy.layout().on('layoutstop', function () {
+              cy.fit(cy.nodes(':visible'),10);
+            });
+
             cy.on('select', 'node', function (e) {
               var node = e.cyTarget;
               var neighborhood = node.neighborhood().add(node);
@@ -1080,6 +1097,8 @@ $(document).ready(function () {
               // If tap on no element
               if (e.cyTarget === cy) {
                 filter.$delete('main');
+                updateDocumentsTable();
+                updateFacets();
               }
             });
 
@@ -1095,7 +1114,7 @@ $(document).ready(function () {
           }
         };
 
-        var network = new cytoscape(options);
+        var network = window.network = new cytoscape(options);
         graphPref    = pref;
         graphId      = id;
         graphChart   = network;
