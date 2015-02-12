@@ -288,6 +288,180 @@ $(document).ready(function () {
   };
 
   /**
+   * Update a network options
+   * @param  {Array}   data   result of the graph operator
+   * @param  {String}   id     identifier of the network
+   * @param  {Object}   pref   preferences for the network
+   * @param  {Array}   fields array of fields to display
+   * @param  {Function} cb     cb(err, options)
+   */
+  var updateNetworkOptions = function updateNetworkOptions(data, id, pref, fields, cb) {
+    // TODO: finish refactoring (async the two ajax queries in updateNetworkOptions)
+
+    // FIXME: distinct operator does not use several fields
+    var nodesUrl = '/compute.json?o=distinct';
+    fields.forEach(function (field) {
+      nodesUrl += '&f=' + field;
+    });
+    nodesUrl += '&itemsPerPage=';
+
+    request
+    .get(nodesUrl)
+    .end(function(res2) {
+      var edges     = [];
+      var nodeIds   = {};
+      var nodes     = [];
+      var maxWeight = -Infinity;
+      var minWeight = +Infinity;
+      var maxOcc    = -Infinity;
+      var minOcc    = +Infinity;
+
+      res2.body.data.forEach(function (e, id) {
+        maxOcc = Math.max(maxOcc, e.value);
+        minOcc = Math.min(minOcc, e.value);
+      });
+
+      data.forEach(function (e, id) {
+        var affEff = JSON.parse(e._id);
+        e.source = affEff[0];
+        e.target = affEff[1];
+        maxWeight = Math.max(maxWeight, e.value);
+        minWeight = Math.min(minWeight, e.value);
+        edges.push({
+          data: {
+            id: '#' + id,
+            weight: e.value,
+            source: e.source,
+            target: e.target
+          }
+        });
+        // memorize nodeIds
+        nodeIds[e.source] = true;
+        nodeIds[e.target] = true;
+      });
+
+      var domain = [minOcc, maxOcc];
+      var scale  = chroma.scale('YlOrRd').domain(domain, 9);
+
+      // fill nodes table
+      Object.keys(nodeIds).forEach(function (nodeId, i, a) {
+        var filteredNodes = res2.body.data.filter(function findNode(n) {
+          return n._id === nodeId;
+        });
+        var node = filteredNodes[0];
+        nodes.push({
+          data: {
+            id: nodeId,
+            name: nodeId,
+            occ: node.value,
+            color: scale(node.value).toString()
+          }
+        });
+      });
+
+      // Override options with configuration values
+      if (pref.size) {
+        options.size = pref.size;
+        bootstrapPosition(id, pref.size);
+      }
+
+
+      // if (isOnlyChart(id)) {
+      // }
+      $('#' + id)
+      .addClass('network');
+      var options = {
+        container: document.getElementById(id),
+
+        elements: {
+          edges: edges,
+          nodes: nodes
+        },
+
+        style: cytoscape.stylesheet()
+          .selector('node')
+            .css({
+              'content': 'data(id)',
+              'text-valign': 'center',
+              'color': 'black',
+              'background-color': 'data(color)',
+              'text-opacity': 'mapData(occ, ' + minOcc + ', ' +  maxOcc + ', 0.50, 1.00)',
+              'text-outline-width': 2,
+              'text-outline-color': '#888'
+            })
+          .selector('edge')
+            .css({
+              'width': 'mapData(weight, ' + minWeight + ', ' + maxWeight + ', 1, 10)',
+              'line-color': '#ddd'
+            })
+          .selector(':selected')
+            .css({
+              'background-color': 'black',
+              'line-color': 'black'
+            })
+          .selector('.faded')
+            .css({
+              'opacity': 0.5,
+              'text-opacity': 0.25
+            }),
+
+        layout: {
+          name: 'cola',
+          directed: false,
+          padding: 10,
+          avoidOverlap: true,
+          minNodeSpacing: 20,
+          nodeSpacing: function (node) { return 20; },
+          // animate: false
+        },
+
+        ready: function () {
+          var cy = this;
+
+          cy.layout().on('layoutstop', function () {
+            cy.fit(cy.nodes(':visible'), 10);
+          });
+
+          cy.on('select', 'node', function (e) {
+            var node = e.cyTarget;
+            var neighborhood = node.neighborhood().add(node);
+
+            cy.elements().addClass('faded');
+            neighborhood.removeClass('faded');
+
+            if (isOnlyChart(id)) {
+              filter.$delete('main');
+              filter.$add('main', node.element(0).data().id);
+              updateDocumentsTable();
+              updateFacets();
+            }
+          });
+
+          cy.on('tap', function (e) {
+            // If tap on no element
+            if (e.cyTarget === cy) {
+              filter.$delete('main');
+              updateDocumentsTable();
+              updateFacets();
+            }
+          });
+
+          cy.on('unselect', 'node', function (e) {
+            cy.elements().removeClass('faded');
+            if (isOnlyChart(id)) {
+              cy.nodes(':selected').unselect();
+              updateDocumentsTable();
+              updateFacets();
+            }
+          });
+
+        }
+      };
+      cb(null, options);
+    });
+  };
+
+  /**
    * Update the options of an AmMap
    * @param  {Array}  areas   result of an Ajax request
    * @param  {String} id      identifier of the DIV
@@ -515,172 +689,6 @@ $(document).ready(function () {
 
       map.write(id);
       graphChart = map;
-  };
-
-  var updateNetworkOptions = function updateNetworkOptions(data, id, pref, fields, cb) {
-    // TODO: finish refactoring (async the two ajax queries in updateNetworkOptions)
-
-    // FIXME: distinct operator does not use several fields
-    var nodesUrl = '/compute.json?o=distinct';
-    fields.forEach(function (field) {
-      nodesUrl += '&f=' + field;
-    });
-    nodesUrl += '&itemsPerPage=';
-
-    request
-    .get(nodesUrl)
-    .end(function(res2) {
-      var edges     = [];
-      var nodeIds   = {};
-      var nodes     = [];
-      var maxWeight = -Infinity;
-      var minWeight = +Infinity;
-      var maxOcc    = -Infinity;
-      var minOcc    = +Infinity;
-
-      res2.body.data.forEach(function (e, id) {
-        maxOcc = Math.max(maxOcc, e.value);
-        minOcc = Math.min(minOcc, e.value);
-      });
-
-      data.forEach(function (e, id) {
-        var affEff = JSON.parse(e._id);
-        e.source = affEff[0];
-        e.target = affEff[1];
-        maxWeight = Math.max(maxWeight, e.value);
-        minWeight = Math.min(minWeight, e.value);
-        edges.push({
-          data: {
-            id: '#' + id,
-            weight: e.value,
-            source: e.source,
-            target: e.target
-          }
-        });
-        // memorize nodeIds
-        nodeIds[e.source] = true;
-        nodeIds[e.target] = true;
-      });
-
-      var domain = [minOcc, maxOcc];
-      var scale  = chroma.scale('YlOrRd').domain(domain, 9);
-
-      // fill nodes table
-      Object.keys(nodeIds).forEach(function (nodeId, i, a) {
-        var filteredNodes = res2.body.data.filter(function findNode(n) {
-          return n._id === nodeId;
-        });
-        var node = filteredNodes[0];
-        nodes.push({
-          data: {
-            id: nodeId,
-            name: nodeId,
-            occ: node.value,
-            color: scale(node.value).toString()
-          }
-        });
-      });
-
-      // Override options with configuration values
-      if (pref.size) {
-        options.size = pref.size;
-        bootstrapPosition(id, pref.size);
-      }
-
-
-      // if (isOnlyChart(id)) {
-      // }
-      $('#' + id)
-      .addClass('network');
-      var options = {
-        container: document.getElementById(id),
-
-        elements: {
-          edges: edges,
-          nodes: nodes
-        },
-
-        style: cytoscape.stylesheet()
-          .selector('node')
-            .css({
-              'content': 'data(id)',
-              'text-valign': 'center',
-              'color': 'black',
-              'background-color': 'data(color)',
-              'text-opacity': 'mapData(occ, ' + minOcc + ', ' +  maxOcc + ', 0.50, 1.00)',
-              'text-outline-width': 2,
-              'text-outline-color': '#888'
-            })
-          .selector('edge')
-            .css({
-              'width': 'mapData(weight, ' + minWeight + ', ' + maxWeight + ', 1, 10)',
-              'line-color': '#ddd'
-            })
-          .selector(':selected')
-            .css({
-              'background-color': 'black',
-              'line-color': 'black'
-            })
-          .selector('.faded')
-            .css({
-              'opacity': 0.5,
-              'text-opacity': 0.25
-            }),
-
-        layout: {
-          name: 'cola',
-          directed: false,
-          padding: 10,
-          avoidOverlap: true,
-          minNodeSpacing: 20,
-          nodeSpacing: function (node) { return 20; },
-          // animate: false
-        },
-
-        ready: function () {
-          var cy = this;
-
-          cy.layout().on('layoutstop', function () {
-            cy.fit(cy.nodes(':visible'), 10);
-          });
-
-          cy.on('select', 'node', function (e) {
-            var node = e.cyTarget;
-            var neighborhood = node.neighborhood().add(node);
-
-            cy.elements().addClass('faded');
-            neighborhood.removeClass('faded');
-
-            if (isOnlyChart(id)) {
-              filter.$delete('main');
-              filter.$add('main', node.element(0).data().id);
-              updateDocumentsTable();
-              updateFacets();
-            }
-          });
-
-          cy.on('tap', function (e) {
-            // If tap on no element
-            if (e.cyTarget === cy) {
-              filter.$delete('main');
-              updateDocumentsTable();
-              updateFacets();
-            }
-          });
-
-          cy.on('unselect', 'node', function (e) {
-            cy.elements().removeClass('faded');
-            if (isOnlyChart(id)) {
-              cy.nodes(':selected').unselect();
-              updateDocumentsTable();
-              updateFacets();
-            }
-          });
-
-        }
-      };
-      cb(null, options);
-    });
   };
 
   var createNetwork = function createNetwork (data, id, pref, fields) {
