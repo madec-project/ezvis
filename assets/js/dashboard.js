@@ -68,8 +68,8 @@ $(document).ready(function () {
 
   var updateGraph = function updateGraph() {
     if (!graphOptions) return;
-    if (!graphOptions.data && !graphOptions.dataProvider) return;
-    if (!graphPref.type && !graphOptions.data && !graphOptions.data.type && !graphOptions.data.types) return;
+    if (!(graphOptions.data || graphOptions.dataProvider || graphOptions.elements)) return;
+    if (!(graphPref.type || graphOptions.data || graphOptions.data.type || graphOptions.data.types)) return;
 
     var operator = graphPref.operator ? graphPref.operator : "distinct";
     var maxItems = graphPref.maxItems ? graphPref.maxItems : 0;
@@ -130,6 +130,14 @@ $(document).ready(function () {
             // TODO improve this (click twice: 1 - remove selection, 2 - add selection) ?!?!?
             graphChart.clickMapObject(mapObject);
             graphChart.clickMapObject(mapObject);
+          }
+          break;
+        case 'network':
+          // Unselect all nodes
+          graphChart.nodes(':selected').unselect();
+          // Select the node
+          if (filter.main) {
+            graphChart.nodes('[name="' + filter.main + '"]').select();
           }
           break;
         default:
@@ -212,70 +220,6 @@ $(document).ready(function () {
     return options;
   };
 
-
-  var createPie = function (data, id, pref) {
-    var options = updatePieOptions(data, id, pref);
-
-    var chart = window.chart = AmCharts.makeChart("#" + id, options);
-
-    if (isOnlyChart(id)) {
-      chart.addListener("rendered", function addBarsListeners() {
-        chart.addListener('pullOutSlice', function (event) {
-          var filterValue = event.dataItem.title;
-          filter.$add('main', filterValue);
-          updateDocumentsTable();
-          updateFacets();
-        });
-        chart.addListener('pullInSlice', function (event) {
-          var filterValue = event.dataItem.title;
-          filter.$delete('main');
-          updateDocumentsTable();
-          updateFacets();
-        });
-      });
-
-      graphOptions = options;
-      graphId      = id;
-      graphPref    = pref;
-    }
-
-    chart.write(id);
-    graphChart = chart;
-  };
-
-
-  var initPie = function(id, pref) {
-    var operator = pref.operator ? pref.operator : "distinct";
-    var fields   = pref.fields ? pref.fields : [pref.field];
-    var url      = '/compute.json?o=' + operator;
-    fields.forEach(function (field) {
-      url += '&f=' + field;
-    });
-    url += '&columns[0][data]=value&columns[0][orderable]=true';
-    url += '&order[0][column]=0&order[0][dir]=desc';
-    url += '&itemsPerPage=';
-
-    if (pref.title && !$('#' + id).prev().length) {
-      $('#' + id)
-      .before('<div class="panel-heading">' +
-              '<h2 class="panel-title">' +
-              pref.title +
-              '</h2></div>');
-      $('#' + id)
-      .append('<i class="fa fa-refresh fa-spin"></i>');
-    }
-    $('#' + id).height('500px'); // Default height
-    if (pref.size) {
-      bootstrapPosition(id, pref.size);
-    }
-
-    request
-    .get(url)
-    .end(function(res) {
-      createPie(res.body.data, id, pref);
-    });
-  };
-
   /**
    * Update the options of an histogram
    * @param  {Array}  data    result of an Ajax request
@@ -307,151 +251,6 @@ $(document).ready(function () {
       options.graphs[0].fillColors = [ pref.color ];
     }
     return options;
-  };
-
-  var createHistogram = function (data, id, pref) {
-    var options = updateHistogramOptions(data, id, pref);
-
-    var chart = window.chart = AmCharts.makeChart("#" + id, options);
-
-    if (isOnlyChart(id)) {
-      chart.addListener("rendered", function addBarsListeners() {
-        chart.addListener('clickGraphItem', function (event) {
-          var filterValue = event.item.category;
-          if (filter.main !== filterValue) {
-            filter.$delete('main');
-            filter.$add('main', filterValue);
-            highlightOnly(chart, event.item);
-          }
-          else {
-            filter.$delete('main');
-            unhighlightAll(chart);
-          }
-          chart.validateData();
-          updateDocumentsTable();
-          updateFacets();
-        });
-      });
-
-      graphOptions = options;
-      graphId      = id;
-      graphPref    = pref;
-    }
-
-    chart.write(id);
-    graphChart = chart;
-  };
-
-  var initHistogram = function(id, pref) {
-    var operator = pref.operator ? pref.operator : "distinct";
-    var fields   = pref.fields ? pref.fields : [pref.field];
-    var url      = '/compute.json?o=' + operator;
-    fields.forEach(function (field) {
-      url += '&f=' + field;
-    });
-    url += '&itemsPerPage=';
-
-    if (pref.title && !$('#' + id).prev().length) {
-      $('#' + id)
-      .before('<div class="panel-heading">' +
-              '<h2 class="panel-title">' +
-              pref.title +
-              '</h2></div>');
-      $('#' + id)
-      .append('<i class="fa fa-refresh fa-spin"></i>');
-    }
-    $('#' + id).height('500px'); // Default height
-    if (pref.size) {
-      bootstrapPosition(id, pref.size);
-    }
-
-    request
-    .get(url)
-    .end(function(res) {
-      createHistogram(res.body.data, id, pref);
-    });
-  };
-
-
-  var initHorizontalBars = function(id, pref) {
-    var operator = pref.operator ? pref.operator : "distinct";
-    var maxItems = pref.maxItems ? pref.maxItems : 0;
-    var fields   = pref.fields ? pref.fields : [pref.field];
-    var url      = '/compute.json?o=' + operator;
-    fields.forEach(function (field) {
-      url += '&f=' + field;
-    });
-    url += '&columns[0][data]=value&columns[0][orderable]=true';
-    url += '&order[0][column]=0&order[0][dir]=desc';
-    url += '&itemsPerPage=' + maxItems;
-
-    if (pref.title && !$('#' + id).prev().length) {
-      $('#' + id)
-      .before('<div class="panel-heading">' +
-              '<h2 class="panel-title">' +
-              pref.title +
-              '</h2></div>');
-      $('#' + id)
-      .append('<i class="fa fa-refresh fa-spin"></i>');
-    }
-    $('#' + id).height('500px'); // Default height
-    if (pref.size) {
-      bootstrapPosition(id, pref.size);
-    }
-
-    request
-    .get(url)
-    .end(function(res) {
-      createHorizontalBars(res.body.data, id, pref);
-    });
-  };
-
-  var unhighlightAll = function (chart) {
-    chart.dataProvider.forEach(function (i) {
-      if (i.alpha) {
-        delete i.alpha;
-      }
-    });
-  };
-
-  var highlightOnly = function (chart, item) {
-    unhighlightAll(chart);
-    item.dataContext.alpha = 0.5;
-  };
-
-  var createHorizontalBars = function (data, id, pref) {
-    var options = updateHorizontalBarsOptions(data, id, pref);
-
-    var chart = window.chart = AmCharts.makeChart("#" + id, options);
-
-    if (isOnlyChart(id)) {
-      chart.addListener("rendered", function addBarsListeners() {
-        console.info('rendered');
-        chart.addListener('clickGraphItem', function (event) {
-          console.info('clickItem', event);
-          var filterValue = event.item.category;
-          if (filter.main !== filterValue) {
-            filter.$delete('main');
-            filter.$add('main', filterValue);
-            highlightOnly(chart, event.item);
-          }
-          else {
-            filter.$delete('main');
-            unhighlightAll(chart);
-          }
-          chart.validateData();
-          updateDocumentsTable();
-          updateFacets();
-        });
-      });
-
-      graphOptions = options;
-      graphId      = id;
-      graphPref    = pref;
-    }
-
-    chart.write(id);
-    graphChart = chart;
   };
 
   /**
@@ -486,162 +285,6 @@ $(document).ready(function () {
       options.graphs[0].fillColors = [ pref.color ];
     }
     return options;
-  };
-
-
-  var generateNetwork = function(id, pref) {
-    var operator = pref.operator ? pref.operator : "graph";
-    var maxItems = pref.maxItems ? pref.maxItems : 100;
-    var fields   = pref.fields ? pref.fields : [pref.field];
-    var url      = '/compute.json?o=' + operator;
-    fields.forEach(function (field) {
-      url += '&f=' + field;
-    });
-    url += '&columns[0][data]=value&columns[0][orderable]=true';
-    url += '&order[0][column]=0&order[0][dir]=desc';
-    url += '&itemsPerPage=' + maxItems;
-
-    if (pref.title && !$('#' + id).prev().length) {
-      $('#' + id)
-      .before('<div class="panel-heading">' +
-        '<h2 class="panel-title">' +
-        pref.title +
-        '</h2></div>');
-      $('#' + id)
-      .append('<i class="fa fa-refresh fa-spin"></i>');
-    }
-
-    request
-    .get(url)
-    .end(function(res) {
-      var edges   = [];
-      var nodeIds = {};
-      var nodes   = [];
-
-      res.body.data.forEach(function (e, id) {
-        var affEff = JSON.parse(e._id);
-        e.source = affEff[0];
-        e.target = affEff[1];
-        edges.push({
-          data: {
-            id: '#' + id,
-            weight: e.value,
-            source: e.source,
-            target: e.target
-          }
-        });
-        // memorize nodeIds
-        nodeIds[e.source] = true;
-        nodeIds[e.target] = true;
-      });
-
-      // fill nodes table
-      Object.keys(nodeIds).forEach(function (nodeId, i, a) {
-        nodes.push({
-          data: {
-            id: nodeId
-          }
-        });
-      });
-
-      // Override options with configuration values
-      if (pref.size) {
-        options.size = pref.size;
-        bootstrapPosition(id, pref.size);
-      }
-
-      // if (isOnlyChart(id)) {
-      //   options.data.selection = {enabled:true};
-      //   options.data.selection.multiple = false;
-      //   options.data.onselected = function (d, element) {
-      //     var filterValue = categories[d.index];
-      //     filter.$delete('main');
-      //     filter.$add('main', filterValue);
-      //     updateDocumentsTable();
-      //     updateFacets();
-      //   };
-      //   graphOptions = options;
-      //   graphId      = id;
-      //   graphPref    = pref;
-      // }
-      $('#' + id)
-      .addClass('network');
-      var network = new cytoscape({
-        container: document.getElementById(id),
-
-        elements: {
-          edges: edges,
-          nodes: nodes
-        },
-
-        style: cytoscape.stylesheet()
-          .selector('node')
-            .css({
-              'content': 'data(id)',
-              'text-valign': 'center',
-              'color': 'white',
-              'text-outline-width': 2,
-              'text-outline-color': '#888'
-            })
-          .selector('edge')
-            .css({
-              'width': 4,
-              'line-color': '#ddd',
-              // 'content': 'data(weight)'
-            })
-          .selector(':selected')
-            .css({
-              'background-color': 'black',
-              'line-color': 'black'
-            })
-          .selector('.faded')
-            .css({
-              'opacity': 0.5,
-              'text-opacity': 0.25
-            }),
-
-        layout: {
-          name: 'cola',
-          directed: false,
-          padding: 10,
-          avoidOverlap: true,
-          minNodeSpacing: 20,
-          nodeSpacing: function (node) { return 20; },
-          // animate: false
-        },
-
-        ready: function () {
-          window.cy = this;
-
-          cy.on('tap', 'node', function (e) {
-            var node = e.cyTarget;
-            var neighborhood = node.neighborhood().add(node);
-
-            cy.elements().addClass('faded');
-            neighborhood.removeClass('faded');
-
-            if (isOnlyChart(id)) {
-              filter.$delete('main');
-              filter.$add('main', node.element(0).data().id);
-              updateDocumentsTable();
-              updateFacets();
-            }
-
-          });
-
-          cy.on('tap', function (e) {
-            if (e.cyTarget === cy) {
-              cy.elements().removeClass('faded');
-              filter.$delete('main');
-              updateDocumentsTable();
-              updateFacets();
-            }
-          });
-        }
-      });
-      // Remove the spinning icon
-      $('#' + id + ' i').remove();
-    });
   };
 
   /**
@@ -728,6 +371,117 @@ $(document).ready(function () {
     return options;
   };
 
+  var createPie = function (data, id, pref) {
+    var options = updatePieOptions(data, id, pref);
+
+    var chart = window.chart = AmCharts.makeChart("#" + id, options);
+
+    if (isOnlyChart(id)) {
+      chart.addListener("rendered", function addBarsListeners() {
+        chart.addListener('pullOutSlice', function (event) {
+          var filterValue = event.dataItem.title;
+          filter.$add('main', filterValue);
+          updateDocumentsTable();
+          updateFacets();
+        });
+        chart.addListener('pullInSlice', function (event) {
+          var filterValue = event.dataItem.title;
+          filter.$delete('main');
+          updateDocumentsTable();
+          updateFacets();
+        });
+      });
+
+      graphOptions = options;
+      graphId      = id;
+      graphPref    = pref;
+    }
+
+    chart.write(id);
+    graphChart = chart;
+  };
+
+  var createHistogram = function (data, id, pref) {
+    var options = updateHistogramOptions(data, id, pref);
+
+    var chart = window.chart = AmCharts.makeChart("#" + id, options);
+
+    if (isOnlyChart(id)) {
+      chart.addListener("rendered", function addBarsListeners() {
+        chart.addListener('clickGraphItem', function (event) {
+          var filterValue = event.item.category;
+          if (filter.main !== filterValue) {
+            filter.$delete('main');
+            filter.$add('main', filterValue);
+            highlightOnly(chart, event.item);
+          }
+          else {
+            filter.$delete('main');
+            unhighlightAll(chart);
+          }
+          chart.validateData();
+          updateDocumentsTable();
+          updateFacets();
+        });
+      });
+
+      graphOptions = options;
+      graphId      = id;
+      graphPref    = pref;
+    }
+
+    chart.write(id);
+    graphChart = chart;
+  };
+
+  var unhighlightAll = function unhighlightAll(chart) {
+    chart.dataProvider.forEach(function (i) {
+      if (i.alpha) {
+        delete i.alpha;
+      }
+    });
+  };
+
+  var highlightOnly = function highlightOnly(chart, item) {
+    unhighlightAll(chart);
+    item.dataContext.alpha = 0.5;
+  };
+
+  var createHorizontalBars = function (data, id, pref) {
+    var options = updateHorizontalBarsOptions(data, id, pref);
+
+    var chart = window.chart = AmCharts.makeChart("#" + id, options);
+
+    if (isOnlyChart(id)) {
+      chart.addListener("rendered", function addBarsListeners() {
+        console.info('rendered');
+        chart.addListener('clickGraphItem', function (event) {
+          console.info('clickItem', event);
+          var filterValue = event.item.category;
+          if (filter.main !== filterValue) {
+            filter.$delete('main');
+            filter.$add('main', filterValue);
+            highlightOnly(chart, event.item);
+          }
+          else {
+            filter.$delete('main');
+            unhighlightAll(chart);
+          }
+          chart.validateData();
+          updateDocumentsTable();
+          updateFacets();
+        });
+      });
+
+      graphOptions = options;
+      graphId      = id;
+      graphPref    = pref;
+    }
+
+    chart.write(id);
+    graphChart = chart;
+  };
+
   var createMap = function (data, id, pref) {
     // Generate the map.
       $('#' + id).height('600px');
@@ -738,7 +492,7 @@ $(document).ready(function () {
       var map = AmCharts.makeChart("#" + id, options);
 
       if (isOnlyChart(id)) {
-        
+
         // Seems to work only when map.areasSettings.autoZoom or selectable is true!
         map.addListener('clickMapObject', function (event) {
           var filterValue = event.mapObject.id;
@@ -761,6 +515,307 @@ $(document).ready(function () {
 
       map.write(id);
       graphChart = map;
+  };
+
+  var createNetwork = function (data, id, pref, fields) {
+    var options = updateNetworkOptions(data, id, pref, fields);
+    // TODO: finish refactoring (async the two ajax queries in updateNetworkOptions)
+
+    // FIXME: distinct operator does not use several fields
+    var nodesUrl = '/compute.json?o=distinct';
+    fields.forEach(function (field) {
+      nodesUrl += '&f=' + field;
+    });
+    nodesUrl += '&itemsPerPage=';
+
+    request
+    .get(nodesUrl)
+    .end(function(res2) {
+      var edges     = [];
+      var nodeIds   = {};
+      var nodes     = [];
+      var maxWeight = -Infinity;
+      var minWeight = +Infinity;
+      var maxOcc    = -Infinity;
+      var minOcc    = +Infinity;
+
+      // ConceptNetwork
+      var ConceptNetwork      = require('concept-network').ConceptNetwork;
+      var ConceptNetworkState = require('concept-network').ConceptNetworkState;
+      var cn  = new ConceptNetwork();
+      var cns = new ConceptNetworkState(cn);
+      res2.body.data.forEach(function (e, id) {
+        maxOcc = Math.max(maxOcc, e.value);
+        minOcc = Math.min(minOcc, e.value);
+        cn.addNode(e._id, e.value);
+      });
+
+      res.body.data.forEach(function (e, id) {
+        var affEff = JSON.parse(e._id);
+        e.source = affEff[0];
+        e.target = affEff[1];
+        maxWeight = Math.max(maxWeight, e.value);
+        minWeight = Math.min(minWeight, e.value);
+        edges.push({
+          data: {
+            id: '#' + id,
+            weight: e.value,
+            source: e.source,
+            target: e.target
+          }
+        });
+        // memorize nodeIds
+        nodeIds[e.source] = true;
+        nodeIds[e.target] = true;
+        cn.addLink(cn.getNode(e.source).id,cn.getNode(e.target).id,e.value);
+        cn.addLink(cn.getNode(e.target).id,cn.getNode(e.source).id,e.value);
+      });
+
+      if (pref.activate) {
+        pref.activate.forEach(function (nodeLabel) {
+          var node = cn.getNode(nodeLabel);
+          if (node) {
+            cns.activate(node.id);
+          }
+        });
+        cns.propagate();
+      }
+
+      var domain = pref.activate ? [0, 100] : [minOcc, maxOcc];
+      var scale = chroma.scale('YlOrRd').domain(domain, 9);
+
+      // fill nodes table
+      Object.keys(nodeIds).forEach(function (nodeId, i, a) {
+        var filteredNodes = res2.body.data.filter(function findNode(n) {
+          return n._id === nodeId;
+        });
+        var node = filteredNodes[0];
+        var activationValue = cns.getActivationValue(cn.getNode(nodeId).id);
+        // TODO: instead, display:none
+        if (activationValue > pref.threshold || !pref.activate) {
+          var value = pref.activate ? activationValue : node.value;
+          nodes.push({
+            data: {
+              id: nodeId,
+              name: nodeId,
+              occ: node.value,
+              color: scale(value).toString()
+            }
+          });
+        }
+      });
+
+      // Override options with configuration values
+      if (pref.size) {
+        options.size = pref.size;
+        bootstrapPosition(id, pref.size);
+      }
+
+
+      // if (isOnlyChart(id)) {
+      //   options.data.selection = {enabled:true};
+      //   options.data.selection.multiple = false;
+      //   options.data.onselected = function (d, element) {
+      //     var filterValue = categories[d.index];
+      //     filter.$delete('main');
+      //     filter.$add('main', filterValue);
+      //     updateDocumentsTable();
+      //     updateFacets();
+      //   };
+      //   graphOptions = options;
+      //   graphId      = id;
+      //   graphPref    = pref;
+      // }
+      $('#' + id)
+      .addClass('network');
+      var options = {
+        container: document.getElementById(id),
+
+        elements: {
+          edges: edges,
+          nodes: nodes
+        },
+
+        style: cytoscape.stylesheet()
+          .selector('node')
+            .css({
+              'content': 'data(id)',
+              'text-valign': 'center',
+              'color': 'black',
+              'background-color': 'data(color)',
+              'text-opacity': 'mapData(occ, ' + minOcc + ', ' +  maxOcc + ', 0.50, 1.00)',
+              'text-outline-width': 2,
+              'text-outline-color': '#888'
+            })
+          .selector('edge')
+            .css({
+              'width': 'mapData(weight, ' + minWeight + ', ' + maxWeight + ', 1, 10)',
+              'line-color': '#ddd',
+              // 'content': 'data(weight)'
+            })
+          .selector(':selected')
+            .css({
+              'background-color': 'black',
+              'line-color': 'black'
+            })
+          .selector('.faded')
+            .css({
+              'opacity': 0.5,
+              'text-opacity': 0.25
+            }),
+
+        layout: {
+          name: 'cola',
+          directed: false,
+          padding: 10,
+          avoidOverlap: true,
+          minNodeSpacing: 20,
+          nodeSpacing: function (node) { return 20; },
+          // animate: false
+        },
+
+        ready: function () {
+          window.cy = this;
+
+          cy.on('select', 'node', function (e) {
+            var node = e.cyTarget;
+            var neighborhood = node.neighborhood().add(node);
+
+            cy.elements().addClass('faded');
+            neighborhood.removeClass('faded');
+
+            if (isOnlyChart(id)) {
+              filter.$delete('main');
+              filter.$add('main', node.element(0).data().id);
+              updateDocumentsTable();
+              updateFacets();
+            }
+          });
+
+          cy.on('tap', function (e) {
+            // If tap on no element
+            if (e.cyTarget === cy) {
+              filter.$delete('main');
+            }
+          });
+
+          cy.on('unselect', 'node', function (e) {
+            cy.elements().removeClass('faded');
+            if (isOnlyChart(id)) {
+              cy.nodes(':selected').unselect();
+              updateDocumentsTable();
+              updateFacets();
+            }
+          });
+
+        }
+      };
+
+      var network = new cytoscape(options);
+      graphPref    = pref;
+      graphId      = id;
+      graphChart   = network;
+      graphOptions = options;
+
+      // Remove the spinning icon
+      $('#' + id + ' i').remove();
+    });
+
+  };
+
+  var initPie = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "distinct";
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=';
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+              '<h2 class="panel-title">' +
+              pref.title +
+              '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+    $('#' + id).height('500px'); // Default height
+    if (pref.size) {
+      bootstrapPosition(id, pref.size);
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      createPie(res.body.data, id, pref);
+    });
+  };
+
+  var initHistogram = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "distinct";
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&itemsPerPage=';
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+              '<h2 class="panel-title">' +
+              pref.title +
+              '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+    $('#' + id).height('500px'); // Default height
+    if (pref.size) {
+      bootstrapPosition(id, pref.size);
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      createHistogram(res.body.data, id, pref);
+    });
+  };
+
+  var initHorizontalBars = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "distinct";
+    var maxItems = pref.maxItems ? pref.maxItems : 0;
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=' + maxItems;
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+              '<h2 class="panel-title">' +
+              pref.title +
+              '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+    $('#' + id).height('500px'); // Default height
+    if (pref.size) {
+      bootstrapPosition(id, pref.size);
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      createHorizontalBars(res.body.data, id, pref);
+    });
   };
 
   var initMap = function(id, pref) {
@@ -792,6 +847,284 @@ $(document).ready(function () {
     });
   };
 
+  var initNetwork = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "graph";
+    var maxItems = pref.maxItems ? pref.maxItems : 100;
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=' + maxItems;
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+        '<h2 class="panel-title">' +
+        pref.title +
+        '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      createNetwork(res.body.data, id, pref, fields);
+    });
+  };
+
+  var generateNetwork = function(id, pref) {
+    var operator = pref.operator ? pref.operator : "graph";
+    var maxItems = pref.maxItems ? pref.maxItems : 100;
+    var fields   = pref.fields ? pref.fields : [pref.field];
+    var url      = '/compute.json?o=' + operator;
+    fields.forEach(function (field) {
+      url += '&f=' + field;
+    });
+    url += '&columns[0][data]=value&columns[0][orderable]=true';
+    url += '&order[0][column]=0&order[0][dir]=desc';
+    url += '&itemsPerPage=' + maxItems;
+    if (!pref.activate && pref.threshold && typeof pref.threshold === 'number') {
+      url += '&query={"$gte":' + pref.threshold + '}';
+    }
+
+    if (pref.title && !$('#' + id).prev().length) {
+      $('#' + id)
+      .before('<div class="panel-heading">' +
+        '<h2 class="panel-title">' +
+        pref.title +
+        '</h2></div>');
+      $('#' + id)
+      .append('<i class="fa fa-refresh fa-spin"></i>');
+    }
+
+    request
+    .get(url)
+    .end(function(res) {
+      // FIXME: distinct operator does not use several fields
+      var nodesUrl = '/compute.json?o=distinct';
+      fields.forEach(function (field) {
+        nodesUrl += '&f=' + field;
+      });
+      nodesUrl += '&itemsPerPage=';
+
+      request
+      .get(nodesUrl)
+      .end(function(res2) {
+        var edges     = [];
+        var nodeIds   = {};
+        var nodes     = [];
+        var maxWeight = -Infinity;
+        var minWeight = +Infinity;
+        var maxOcc    = -Infinity;
+        var minOcc    = +Infinity;
+
+        // ConceptNetwork
+        var ConceptNetwork      = require('concept-network').ConceptNetwork;
+        var ConceptNetworkState = require('concept-network').ConceptNetworkState;
+        var cn  = window.cn = new ConceptNetwork();
+        var cns = new ConceptNetworkState(cn);
+        res2.body.data.forEach(function (e, id) {
+          maxOcc = Math.max(maxOcc, e.value);
+          minOcc = Math.min(minOcc, e.value);
+          cn.addNode(e._id, e.value);
+        });
+
+        res.body.data.forEach(function (e, id) {
+          var affEff = JSON.parse(e._id);
+          e.source = affEff[0];
+          e.target = affEff[1];
+          maxWeight = Math.max(maxWeight, e.value);
+          minWeight = Math.min(minWeight, e.value);
+          edges.push({
+            data: {
+              id: '#' + id,
+              weight: e.value,
+              source: e.source,
+              target: e.target
+            }
+          });
+          // memorize nodeIds
+          nodeIds[e.source] = true;
+          nodeIds[e.target] = true;
+          cn.addLink(cn.getNode(e.source).id,cn.getNode(e.target).id,e.value);
+          cn.addLink(cn.getNode(e.target).id,cn.getNode(e.source).id,e.value);
+        });
+
+        if (pref.activate) {
+          pref.activate.forEach(function (nodeLabel) {
+            var node = cn.getNode(nodeLabel);
+            if (node) {
+              cns.activate(node.id);
+            }
+          });
+          pref.propagate = pref.propagate || 1;
+          for (var i=0; i < pref.propagate; i++) {
+            cns.propagate();
+          }
+        }
+        console.log('max',cns.getMaximumActivationValue());
+
+        var domain = pref.activate ? [0, 100] : [minOcc, maxOcc];
+        var scale = chroma.scale('YlOrRd').domain(domain, 9);
+
+        console.log('nodeIds', Object.keys(nodeIds));
+        // fill nodes table
+        Object.keys(nodeIds).forEach(function (nodeId, i, a) {
+          var filteredNodes = res2.body.data.filter(function findNode(n) {
+            return n._id === nodeId;
+          });
+          var node = filteredNodes[0];
+          console.log('node',node)
+          var activationValue = cns.getActivationValue(cn.getNode(nodeId).id);
+          console.log('av', activationValue)
+          pref.threshold = pref.threshold || 10;
+          // TODO: instead, display:none
+          // if (activationValue > pref.threshold || !pref.activate) {
+            // console.log('activationValue',activationValue,"pref.threshold",pref.threshold, nodeId);
+            var value = pref.activate ? activationValue : node.value;
+            nodes.push({
+              data: {
+                id: nodeId,
+                name: nodeId,
+                occ: node.value,
+                color: scale(value).toString(),
+                display: (activationValue > pref.threshold || !pref.activate)
+                        ? "element"
+                        : "none"
+              }
+            });
+          // }
+        });
+        console.log('nb noeuds',nodes.length);
+
+        // Override options with configuration values
+        if (pref.size) {
+          options.size = pref.size;
+          bootstrapPosition(id, pref.size);
+        }
+
+
+        // if (isOnlyChart(id)) {
+        //   options.data.selection = {enabled:true};
+        //   options.data.selection.multiple = false;
+        //   options.data.onselected = function (d, element) {
+        //     var filterValue = categories[d.index];
+        //     filter.$delete('main');
+        //     filter.$add('main', filterValue);
+        //     updateDocumentsTable();
+        //     updateFacets();
+        //   };
+        //   graphOptions = options;
+        //   graphId      = id;
+        //   graphPref    = pref;
+        // }
+        $('#' + id)
+        .addClass('network');
+        var options = {
+          container: document.getElementById(id),
+
+          elements: {
+            edges: edges,
+            nodes: nodes
+          },
+
+          style: cytoscape.stylesheet()
+            .selector('node')
+              .css({
+                'content': 'data(id)',
+                'text-valign': 'center',
+                'color': 'black',
+                'background-color': 'data(color)',
+                'text-opacity': 'mapData(occ, ' + minOcc + ', ' +  maxOcc + ', 0.50, 1.00)',
+                'text-outline-width': 2,
+                'text-outline-color': '#888',
+                'display': 'data(display)'
+              })
+            .selector('edge')
+              .css({
+                'width': 'mapData(weight, ' + minWeight + ', ' + maxWeight + ', 1, 10)',
+                'line-color': '#ddd',
+                // 'content': 'data(weight)'
+              })
+            .selector(':selected')
+              .css({
+                'background-color': 'black',
+                'line-color': 'black'
+              })
+            .selector('.faded')
+              .css({
+                'opacity': 0.5,
+                'text-opacity': 0.25
+              }),
+
+          layout: {
+            name: 'cola',
+            directed: false,
+            padding: 10,
+            avoidOverlap: true,
+            minNodeSpacing: 20,
+            nodeSpacing: function (node) { return 20; },
+            // animate: false
+          },
+
+          ready: function () {
+            var cy = this;
+
+            cy.layout().on('layoutstop', function () {
+              cy.fit(cy.nodes(':visible'),10);
+            });
+
+            cy.on('select', 'node', function (e) {
+              var node = e.cyTarget;
+              var neighborhood = node.neighborhood().add(node);
+
+              cy.elements().addClass('faded');
+              neighborhood.removeClass('faded');
+
+              if (isOnlyChart(id)) {
+                filter.$delete('main');
+                filter.$add('main', node.element(0).data().id);
+                updateDocumentsTable();
+                updateFacets();
+              }
+            });
+
+            cy.on('tap', function (e) {
+              // If tap on no element
+              if (e.cyTarget === cy) {
+                filter.$delete('main');
+                updateDocumentsTable();
+                updateFacets();
+              }
+            });
+
+            cy.on('unselect', 'node', function (e) {
+              cy.elements().removeClass('faded');
+              if (isOnlyChart(id)) {
+                cy.nodes(':selected').unselect();
+                updateDocumentsTable();
+                updateFacets();
+              }
+            });
+
+          }
+        };
+
+        var network = window.network = new cytoscape(options);
+        graphPref    = pref;
+        graphId      = id;
+        graphChart   = network;
+        graphOptions = options;
+
+        // Remove the spinning icon
+        $('#' + id + ' i').remove();
+      });
+    });
+  };
 
   /**
    * Create the facets of the graph id

@@ -349,6 +349,40 @@ Here an example:
 
 You can use the [`colors`](#colors) option to set the color scale.
 
+#### network
+
+ex:
+
+Classical Network, with all links (at least until 100k).
+
+```javascript
+      {
+        "type": "network",
+        "fields": [ "actors" ],
+        "maxItems": 100000,
+        "title": "Actors net",
+        "help": "Links between actors."
+      },
+```
+
+Activated Network, where only the actors "near" `Arnold Schwarzenegger` and
+`Peter Weller` are visible.
+
+If you want to see less nodes, increase the `threshold` value.
+
+```javascript
+      {
+        "type": "network",
+        "fields": [ "actors" ],
+        "maxItems": 100000,
+        "title": "Arnold & Peter",
+        "help": "Actors linked to Arnold Schwarzenegger and Peter Weller",
+        "activate": ["Arnold Schwarzenegger", "Peter Weller"],
+        "threshold": 10
+      }
+```
+
+
 ### Preferences
 
 #### size
@@ -871,11 +905,11 @@ Here is the default settings:
 ```
 
 These settings mean that all `.csv` files within the data directory (and all
-its descendants, thanks to `**/`) will be loaded by 
+its descendants, thanks to `**/`) will be loaded by
 [`castor-load-csv`](https://github.com/castorjs/castor-load-csv).
 
-You can add any castor loader you find in 
-[castorjs repositories](https://github.com/castorjs?query=castor-load) 
+You can add any castor loader you find in
+[castorjs repositories](https://github.com/castorjs?query=castor-load)
 (except [castor-load](https://github.com/castorjs/castor-load), which manages
 (all loaders).
 
