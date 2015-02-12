@@ -518,7 +518,7 @@ $(document).ready(function () {
   };
 
   var createNetwork = function (data, id, pref, fields) {
-    var options = updateNetworkOptions(data, id, pref, fields);
+    // var options = updateNetworkOptions(data, id, pref, fields);
     // TODO: finish refactoring (async the two ajax queries in updateNetworkOptions)
 
     // FIXME: distinct operator does not use several fields
@@ -539,18 +539,12 @@ $(document).ready(function () {
       var maxOcc    = -Infinity;
       var minOcc    = +Infinity;
 
-      // ConceptNetwork
-      var ConceptNetwork      = require('concept-network').ConceptNetwork;
-      var ConceptNetworkState = require('concept-network').ConceptNetworkState;
-      var cn  = new ConceptNetwork();
-      var cns = new ConceptNetworkState(cn);
       res2.body.data.forEach(function (e, id) {
         maxOcc = Math.max(maxOcc, e.value);
         minOcc = Math.min(minOcc, e.value);
-        cn.addNode(e._id, e.value);
       });
 
-      res.body.data.forEach(function (e, id) {
+      data.forEach(function (e, id) {
         var affEff = JSON.parse(e._id);
         e.source = affEff[0];
         e.target = affEff[1];
@@ -567,22 +561,10 @@ $(document).ready(function () {
         // memorize nodeIds
         nodeIds[e.source] = true;
         nodeIds[e.target] = true;
-        cn.addLink(cn.getNode(e.source).id,cn.getNode(e.target).id,e.value);
-        cn.addLink(cn.getNode(e.target).id,cn.getNode(e.source).id,e.value);
       });
 
-      if (pref.activate) {
-        pref.activate.forEach(function (nodeLabel) {
-          var node = cn.getNode(nodeLabel);
-          if (node) {
-            cns.activate(node.id);
-          }
-        });
-        cns.propagate();
-      }
-
-      var domain = pref.activate ? [0, 100] : [minOcc, maxOcc];
-      var scale = chroma.scale('YlOrRd').domain(domain, 9);
+      var domain = [minOcc, maxOcc];
+      var scale  = chroma.scale('YlOrRd').domain(domain, 9);
 
       // fill nodes table
       Object.keys(nodeIds).forEach(function (nodeId, i, a) {
@@ -590,19 +572,14 @@ $(document).ready(function () {
           return n._id === nodeId;
         });
         var node = filteredNodes[0];
-        var activationValue = cns.getActivationValue(cn.getNode(nodeId).id);
-        // TODO: instead, display:none
-        if (activationValue > pref.threshold || !pref.activate) {
-          var value = pref.activate ? activationValue : node.value;
-          nodes.push({
-            data: {
-              id: nodeId,
-              name: nodeId,
-              occ: node.value,
-              color: scale(value).toString()
-            }
-          });
-        }
+        nodes.push({
+          data: {
+            id: nodeId,
+            name: nodeId,
+            occ: node.value,
+            color: scale(node.value).toString()
+          }
+        });
       });
 
       // Override options with configuration values
@@ -613,18 +590,6 @@ $(document).ready(function () {
 
 
       // if (isOnlyChart(id)) {
-      //   options.data.selection = {enabled:true};
-      //   options.data.selection.multiple = false;
-      //   options.data.onselected = function (d, element) {
-      //     var filterValue = categories[d.index];
-      //     filter.$delete('main');
-      //     filter.$add('main', filterValue);
-      //     updateDocumentsTable();
-      //     updateFacets();
-      //   };
-      //   graphOptions = options;
-      //   graphId      = id;
-      //   graphPref    = pref;
       // }
       $('#' + id)
       .addClass('network');
@@ -650,8 +615,7 @@ $(document).ready(function () {
           .selector('edge')
             .css({
               'width': 'mapData(weight, ' + minWeight + ', ' + maxWeight + ', 1, 10)',
-              'line-color': '#ddd',
-              // 'content': 'data(weight)'
+              'line-color': '#ddd'
             })
           .selector(':selected')
             .css({
@@ -675,7 +639,11 @@ $(document).ready(function () {
         },
 
         ready: function () {
-          window.cy = this;
+          var cy = this;
+
+          cy.layout().on('layoutstop', function () {
+            cy.fit(cy.nodes(':visible'), 10);
+          });
 
           cy.on('select', 'node', function (e) {
             var node = e.cyTarget;
@@ -696,6 +664,8 @@ $(document).ready(function () {
             // If tap on no element
             if (e.cyTarget === cy) {
               filter.$delete('main');
+              updateDocumentsTable();
+              updateFacets();
             }
           });
 
@@ -711,11 +681,13 @@ $(document).ready(function () {
         }
       };
 
-      var network = new cytoscape(options);
-      graphPref    = pref;
-      graphId      = id;
-      graphChart   = network;
-      graphOptions = options;
+      var network = window.network = new cytoscape(options);
+      if (isOnlyChart(id)) {
+        graphPref    = pref;
+        graphId      = id;
+        graphChart   = network;
+        graphOptions = options;
+      }
 
       // Remove the spinning icon
       $('#' + id + ' i').remove();
@@ -1315,7 +1287,8 @@ $(document).ready(function () {
             initPie(id, pref);
           }
           else if (pref.type === 'network') {
-            generateNetwork(id, pref);
+            // generateNetwork(id, pref);
+            initNetwork(id, pref);
           }
           else if (pref.type === 'map') {
             initMap(id, pref);
