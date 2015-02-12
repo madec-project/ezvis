@@ -821,7 +821,7 @@ $(document).ready(function () {
 
   var initNetwork = function(id, pref) {
     var operator = pref.operator ? pref.operator : "graph";
-    var maxItems = pref.maxItems ? pref.maxItems : 100;
+    var maxItems = pref.maxItems ? pref.maxItems : 1000;
     var fields   = pref.fields ? pref.fields : [pref.field];
     var url      = '/compute.json?o=' + operator;
     fields.forEach(function (field) {
@@ -830,6 +830,9 @@ $(document).ready(function () {
     url += '&columns[0][data]=value&columns[0][orderable]=true';
     url += '&order[0][column]=0&order[0][dir]=desc';
     url += '&itemsPerPage=' + maxItems;
+    if (pref.threshold && typeof pref.threshold === 'number') {
+      url += '&query={"$gte":' + pref.threshold + '}';
+    }
 
     if (pref.title && !$('#' + id).prev().length) {
       $('#' + id)
