@@ -517,8 +517,7 @@ $(document).ready(function () {
       graphChart = map;
   };
 
-  var createNetwork = function (data, id, pref, fields) {
-    // var options = updateNetworkOptions(data, id, pref, fields);
+  var updateNetworkOptions = function updateNetworkOptions(data, id, pref, fields, cb) {
     // TODO: finish refactoring (async the two ajax queries in updateNetworkOptions)
 
     // FIXME: distinct operator does not use several fields
@@ -680,6 +679,12 @@ $(document).ready(function () {
 
         }
       };
+      cb(null, options);
+    });
+  };
+
+  var createNetwork = function createNetwork (data, id, pref, fields) {
+    updateNetworkOptions(data, id, pref, fields, function (err, options) {
 
       var network = window.network = new cytoscape(options);
       if (isOnlyChart(id)) {
@@ -691,6 +696,7 @@ $(document).ready(function () {
 
       // Remove the spinning icon
       $('#' + id + ' i').remove();
+
     });
 
   };
