@@ -56,10 +56,31 @@ $(document).ready(function () {
 
   var updateFacets = function updateFacets() {
     facets.forEach(function (facetLabel, facetId) {
+      var pref = graphPref;
+      var sel  = {};
+      var selMain = {};
+      var selCenter = {};
+      if (pref.centerOn && pref.centerOn.length) {
+        selCenter[currentField] = {'$elemMatch':{ '$in': pref.centerOn }};
+      }
+
       var facet = facetsPrefs[facetId];
       var url = '/compute.json?o=distinct&f=' + facet.path;
       if (filter.main) {
-        url += '&sel={"' + currentField + '":"'+encodeURIComponent(filter.main)+'"}';
+        // url += '&sel={"' + currentField + '":"'+encodeURIComponent(filter.main)+'"}';
+        selMain[currentField] = filter.main;
+        if (Object.keys(selCenter).length) {
+          sel = { '$and': [ selMain, selCenter ]};
+        }
+        else {
+          sel = selMain;
+        }
+      }
+      else if (Object.keys(selCenter).length) {
+        sel = selCenter;
+      }
+      if (Object.keys(sel).length) {
+        url += '&sel=' + encodeURIComponent(JSON.stringify(sel));
       }
       dtFacets[facetId].ajax.url(url);
       dtFacets[facetId].ajax.reload();
@@ -893,8 +914,9 @@ $(document).ready(function () {
    * Create the facets of the graph id
    * @param  {String} id     Identifier of the graph
    * @param  {Array}  facets Facets to draw for the graph
+   * @param  {Object} pref   preferences of the chart
    */
-  var createFacets = function createFacets(id, facets) {
+  var createFacets = function createFacets(id, facets, pref) {
     if (!facets) {
       $('#charts').removeClass('col-md-9').addClass('col-md-12');
       $('#facetsTabs').addClass('hidden');
@@ -933,8 +955,32 @@ $(document).ready(function () {
         '  </thead>' +
         '</table>');
 
+      var sel  = {};
+      var selMain = {};
+      var selCenter = {};
+      if (pref.centerOn && pref.centerOn.length) {
+        selCenter[currentField] = {'$elemMatch':{ '$in': pref.centerOn }};
+      }
+
+      var url = '/compute.json?o=distinct&f=' + facet.path;
+      if (filter.main) {
+        selMain[currentField] = filter.main;
+        if (Object.keys(selCenter).length) {
+          sel = { '$and': [ selMain, selCenter ]};
+        }
+        else {
+          sel = selMain;
+        }
+      }
+      else if (Object.keys(selCenter).length) {
+        sel = selCenter;
+      }
+      if (Object.keys(sel).length) {
+        url += '&sel=' + encodeURIComponent(JSON.stringify(sel));
+      }
+
       var options = {
-        ajax: '/compute.json?o=distinct&f=' + facet.path,
+        ajax: url,
         serverSide: true,
         dom: "rtip",
         pagingType: "simple",
@@ -1019,6 +1065,13 @@ $(document).ready(function () {
             var addLink = function addLink(data, type, row) {
               return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
             };
+            var url = "/browse.json";
+            // TODO FIXME: add a sel parameter to browse
+            if (pref.centerOn && pref.centerOn.length) {
+              url += "?sel={" + (pref.field || pref.fields[0]) + ":" +
+                     "{$elemMatch:{$in:" + JSON.stringify(pref.centerOn) + "}}" +
+                     "}";
+            }
             var options = {
               search: {
                 regex: true
@@ -1026,7 +1079,7 @@ $(document).ready(function () {
               ordering: true,
               serverSide: true,
               lengthMenu: [Config.itemsPerPage||5,10,25,50,100],
-              ajax: "/browse.json",
+              ajax: url,
               dom: "lifrtip"
             };
             var columns = [{
@@ -1064,7 +1117,7 @@ $(document).ready(function () {
             for (var i = 0; i < facetsNb; i++) {
               table.column(fieldNb + i).visible(false);
             }
-            createFacets(id, pref.facets);
+            createFacets(id, pref.facets, pref);
           }
 
 
