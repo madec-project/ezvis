@@ -56,6 +56,7 @@ $(document).ready(function () {
 
   var updateFacets = function updateFacets() {
     facets.forEach(function (facetLabel, facetId) {
+      // TODO: make this a function (also used in createFacets)
       var pref = graphPref;
       var sel  = {};
       var selMain = {};
@@ -82,6 +83,7 @@ $(document).ready(function () {
       if (Object.keys(sel).length) {
         url += '&sel=' + encodeURIComponent(JSON.stringify(sel));
       }
+      // end of todo
       dtFacets[facetId].ajax.url(url);
       dtFacets[facetId].ajax.reload();
     });
