@@ -730,10 +730,14 @@ $(document).ready(function () {
         pref.centerOn.forEach(function (value) {
           eles[value] = network.elements('node[id="' + value + '"]').closedNeighborhood();
         });
-        network.elements().remove();
+        var edges = network.edges();
+        network.nodes().remove();
         Object.keys(eles).forEach(function (element) {
           eles[element].restore();
         });
+        edges.restore();
+        // This restores also edges which nodes are still removed, thus yielding
+        // messages in console.
       }
 
       // Remove the spinning icon
@@ -874,7 +878,7 @@ $(document).ready(function () {
       network.nodes('[name="' + nodes[0] + '"]').show();
       network.nodes('[name="' + nodes[1] + '"]').show();
     });
-    network.fit(network.nodes(':visible'));
+    network.fit(network.nodes(':visible'), 10);
   };
 
   var initNetwork = function(id, pref) {
