@@ -365,10 +365,8 @@ Classical Network, with all links (at least until 100k).
       },
 ```
 
-Activated Network, where only the actors "near" `Arnold Schwarzenegger` and
+Centered Network, where only the actors "near" `Arnold Schwarzenegger` and
 `Peter Weller` are visible.
-
-If you want to see less nodes, increase the `threshold` value.
 
 ```javascript
       {
@@ -377,8 +375,7 @@ If you want to see less nodes, increase the `threshold` value.
         "maxItems": 100000,
         "title": "Arnold & Peter",
         "help": "Actors linked to Arnold Schwarzenegger and Peter Weller",
-        "activate": ["Arnold Schwarzenegger", "Peter Weller"],
-        "threshold": 10
+        "centerOn": ["Arnold Schwarzenegger", "Peter Weller"]
       }
 ```
 

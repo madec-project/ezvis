@@ -704,6 +704,17 @@ $(document).ready(function () {
         graphOptions = options;
       }
 
+      if (pref.centerOn && pref.centerOn.length) {
+        var eles = {};
+        pref.centerOn.forEach(function (value) {
+          eles[value] = network.elements('node[id="' + value + '"]').closedNeighborhood();
+        });
+        network.elements().remove();
+        Object.keys(eles).forEach(function (element) {
+          eles[element].restore();
+        });
+      }
+
       // Remove the spinning icon
       $('#' + id + ' i').remove();
 
