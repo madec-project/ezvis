@@ -135,6 +135,7 @@ $(document).ready(function () {
         case 'network':
           // Unselect all nodes
           graphChart.nodes(':selected').unselect();
+          displayNetworkLinks(res.body.data, graphId, graphPref);
           // Select the node
           if (filter.main) {
             graphChart.nodes('[name="' + filter.main + '"]').select();
@@ -424,7 +425,7 @@ $(document).ready(function () {
 
           cy.on('select', 'node', function (e) {
             var node = e.cyTarget;
-            var neighborhood = node.neighborhood().add(node);
+            var neighborhood = node.closedNeighborhood();
 
             cy.elements().addClass('faded');
             neighborhood.removeClass('faded');
@@ -697,6 +698,7 @@ $(document).ready(function () {
       var network = window.network = new cytoscape(options);
       if (isOnlyChart(id)) {
         graphPref    = pref;
+        graphPref.operator = "graph";
         graphId      = id;
         graphChart   = network;
         graphOptions = options;
@@ -831,6 +833,16 @@ $(document).ready(function () {
     .end(function(res) {
       createMap(res.body.data, id, pref);
     });
+  };
+
+  var displayNetworkLinks = function displayNetworkLinks(links, id, pref) {
+    network.nodes().hide();
+    links.forEach(function (link) {
+      var nodes = JSON.parse(link._id);
+      network.nodes('[name="' + nodes[0] + '"]').show();
+      network.nodes('[name="' + nodes[1] + '"]').show();
+    });
+    network.fit(network.nodes(':visible'));
   };
 
   var initNetwork = function(id, pref) {
