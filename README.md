@@ -379,6 +379,21 @@ Centered Network, where only the actors "near" `Arnold Schwarzenegger` and
       }
 ```
 
+Selected Network, where only documents matching the mongodb `selector` are
+visible.
+
+```javascript
+      {
+        "type": "network",
+        "fields": [ "actors" ],
+        "maxItems": 100000,
+        "title": "Actors net 2000",
+        "help": "Actors from films after year 2000",
+        "selector": {
+          "year": { "$gte": "2000" }
+        }
+      }
+```
 
 ### Preferences
 
