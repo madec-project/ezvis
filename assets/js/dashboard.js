@@ -54,36 +54,50 @@ $(document).ready(function () {
     table.draw();
   };
 
+  /**
+   * Return the url for a facet
+   * @param  {Number} facetId Identifier of the facet
+   * @param  {Object} pref    Preference of the facet
+   * @return {String}         URL to get the distinct values of the facet
+   */
+  var facet2url = window.f = function facet2url(facetId, pref) {
+    var sel         = {};
+    var selMain     = {};
+    var selCenter   = {};
+    var selSelector = {};
+    var selArray    = [];
+    if (filter.main) {
+      selMain[currentField] = filter.main;
+      selArray.push(selMain);
+    }
+    if (pref.centerOn && pref.centerOn.length) {
+      selCenter[currentField] = {'$elemMatch':{ '$in': pref.centerOn }};
+      selArray.push(selCenter);
+    }
+    if (pref.selector && typeof pref.selector === 'object') {
+      selSelector = pref.selector;
+      selArray.push(selSelector);
+    }
+
+    var facet = facetsPrefs[facetId];
+    var url   = '/compute.json?o=distinct&f=' + facet.path;
+
+    if (selArray.length && selArray.length < 2) {
+      sel = selArray[0];
+    }
+    else if (selArray.length >= 2) {
+      sel = { '$and': selArray };
+    }
+
+    if (Object.keys(sel).length) {
+      url += '&sel=' + encodeURIComponent(JSON.stringify(sel));
+    }
+    return url;
+  };
+
   var updateFacets = function updateFacets() {
     facets.forEach(function (facetLabel, facetId) {
-      // TODO: make this a function (also used in createFacets)
-      var pref = graphPref;
-      var sel  = {};
-      var selMain = {};
-      var selCenter = {};
-      if (pref.centerOn && pref.centerOn.length) {
-        selCenter[currentField] = {'$elemMatch':{ '$in': pref.centerOn }};
-      }
-
-      var facet = facetsPrefs[facetId];
-      var url = '/compute.json?o=distinct&f=' + facet.path;
-      if (filter.main) {
-        // url += '&sel={"' + currentField + '":"'+encodeURIComponent(filter.main)+'"}';
-        selMain[currentField] = filter.main;
-        if (Object.keys(selCenter).length) {
-          sel = { '$and': [ selMain, selCenter ]};
-        }
-        else {
-          sel = selMain;
-        }
-      }
-      else if (Object.keys(selCenter).length) {
-        sel = selCenter;
-      }
-      if (Object.keys(sel).length) {
-        url += '&sel=' + encodeURIComponent(JSON.stringify(sel));
-      }
-      // end of todo
+      var url = facet2url(facetId, graphPref);
       dtFacets[facetId].ajax.url(url);
       dtFacets[facetId].ajax.reload();
     });
@@ -313,10 +327,10 @@ $(document).ready(function () {
 
   /**
    * Update a network options
-   * @param  {Array}   data   result of the graph operator
+   * @param  {Array}    data   result of the graph operator
    * @param  {String}   id     identifier of the network
    * @param  {Object}   pref   preferences for the network
-   * @param  {Array}   fields array of fields to display
+   * @param  {Array}    fields array of fields to display
    * @param  {Function} cb     cb(err, options)
    */
   var updateNetworkOptions = function updateNetworkOptions(data, id, pref, fields, cb) {
@@ -961,29 +975,7 @@ $(document).ready(function () {
         '  </thead>' +
         '</table>');
 
-      var sel  = {};
-      var selMain = {};
-      var selCenter = {};
-      if (pref.centerOn && pref.centerOn.length) {
-        selCenter[currentField] = {'$elemMatch':{ '$in': pref.centerOn }};
-      }
-
-      var url = '/compute.json?o=distinct&f=' + facet.path;
-      if (filter.main) {
-        selMain[currentField] = filter.main;
-        if (Object.keys(selCenter).length) {
-          sel = { '$and': [ selMain, selCenter ]};
-        }
-        else {
-          sel = selMain;
-        }
-      }
-      else if (Object.keys(selCenter).length) {
-        sel = selCenter;
-      }
-      if (Object.keys(sel).length) {
-        url += '&sel=' + encodeURIComponent(JSON.stringify(sel));
-      }
+      var url = facet2url(facetId, pref);
 
       var options = {
         ajax: url,
@@ -1067,16 +1059,36 @@ $(document).ready(function () {
 
         if (pref.type && (pref.field || pref.fields) ) {
 
+          // Initialize chart
+          if (pref.type === 'histogram') {
+            initHistogram(id, pref);
+          }
+          else if (pref.type === 'horizontalbars') {
+            initHorizontalBars(id, pref);
+          }
+          else if (pref.type === 'pie') {
+            initPie(id, pref);
+          }
+          else if (pref.type === 'network') {
+            initNetwork(id, pref);
+          }
+          else if (pref.type === 'map') {
+            initMap(id, pref);
+          }
+
+          // Add documents and facets
           if (isOnlyChart(id)) {
             var addLink = function addLink(data, type, row) {
               return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
             };
             var url = "/browse.json";
-            // TODO FIXME: add a sel parameter to browse
             if (pref.centerOn && pref.centerOn.length) {
               url += '?sel={"' + (pref.field || pref.fields[0]) + '":' +
                      '{"$elemMatch":{"$in":' + JSON.stringify(pref.centerOn) + '}}' +
                      '}';
+            }
+            else if (pref.selector && typeof pref.selector === 'object') {
+              url += '?sel=' + JSON.stringify(pref.selector);
             }
             var options = {
               search: {
@@ -1124,23 +1136,6 @@ $(document).ready(function () {
               table.column(fieldNb + i).visible(false);
             }
             createFacets(id, pref.facets, pref);
-          }
-
-
-          if (pref.type === 'histogram') {
-            initHistogram(id, pref);
-          }
-          else if (pref.type === 'horizontalbars') {
-            initHorizontalBars(id, pref);
-          }
-          else if (pref.type === 'pie') {
-            initPie(id, pref);
-          }
-          else if (pref.type === 'network') {
-            initNetwork(id, pref);
-          }
-          else if (pref.type === 'map') {
-            initMap(id, pref);
           }
 
           if (isOnlyChart(id)) {
