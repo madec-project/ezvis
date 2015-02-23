@@ -1,10 +1,11 @@
 {
-  "name": "ezvisir",
+  "name": "ezvis",
   "version": "6.0.0",
-  "description": "A Castor theme to visualize a synthesis on a corpus, using pies and histograms, based on SB Admin v2.0",
+  "description": "A dashboard to visualize a synthesis on a structured corpus, using several charts (pie, histogram, ...)",
   "main": "index.js",
   "bin": {
-    "visir": "./cli"
+    "visir": "./cli",
+    "ezvis": "./cli"
   },
   "scripts": {
     "start": "node ./server.js",

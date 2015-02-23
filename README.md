@@ -1,10 +1,10 @@
-VISIR
+EZVIS
 =====
 
 A Castor app to visualize a synthesis on a corpus using pies and histograms,
 based on [SB Admin v2.0](http://startbootstrap.com/templates/sb-admin-2/).
 
-VISIR stands for **vis**ualiztion of **i**nformation in (web) **r**eport.
+ezVIS stands for easy **vis**ualization of information in web report.
 
 Installation
 ------------
@@ -13,7 +13,7 @@ You have to install [mongodb](http://docs.mongodb.org/manual/installation/)
 first, and [node](http://nodejs.org/) too.
 
 ```bash
-$ npm install visir -g
+$ npm install ezvis -g
 ```
 
 Usage
@@ -22,7 +22,7 @@ Usage
 Make sure mongodb is running, and then.
 
 ```bash
-$ visir /path/to/data/repository
+$ ezvis /path/to/data/repository
 ```
 
 Then, point your browser to http://localhost:3000/
@@ -33,7 +33,7 @@ If you don't have a data repository, but already loaded data in mongodb, you
 can use:
 
 ```bash
-$ visir $PWD/data
+$ ezvis $PWD/data
 ```
 
 Before that, you have to configure your mongo connection, by creating a
@@ -72,7 +72,7 @@ charts: [`histogram`](#histogram) and [`pie`](#pie).
 
 ```json
 {
-  "theme": "/path/to/visir",
+  "theme": "/path/to/ezvis",
   "documentFields": {
     "$fields.Themes" : {
       "path" : "content.json.DiscESI",
