@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/madec-project/ezvisir.git"
+    "url": "https://github.com/madec-project/ezvis.git"
   },
   "keywords": [
     "corpus",
@@ -28,9 +28,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/madec-project/ezvisir/issues"
+    "url": "https://github.com/madec-project/ezvis/issues"
   },
-  "homepage": "https://github.com/madec-project/ezvisir",
+  "homepage": "https://github.com/madec-project/ezvis",
   "dependencies": {
     "castor-core": "^2.1.0",
     "jquery": "^2.1.1",
