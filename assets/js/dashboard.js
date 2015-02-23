@@ -911,6 +911,9 @@ $(document).ready(function () {
     if (pref.threshold && typeof pref.threshold === 'number') {
       url += '&query={"$gte":' + pref.threshold + '}';
     }
+    if (pref.selector && typeof pref.selector === 'object') {
+      url += '&sel=' + encodeURIComponent(JSON.stringify(pref.selector));
+    }
 
     if (pref.title && !$('#' + id).prev().length) {
       $('#' + id)
