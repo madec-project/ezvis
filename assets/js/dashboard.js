@@ -1074,9 +1074,9 @@ $(document).ready(function () {
             var url = "/browse.json";
             // TODO FIXME: add a sel parameter to browse
             if (pref.centerOn && pref.centerOn.length) {
-              url += "?sel={" + (pref.field || pref.fields[0]) + ":" +
-                     "{$elemMatch:{$in:" + JSON.stringify(pref.centerOn) + "}}" +
-                     "}";
+              url += '?sel={"' + (pref.field || pref.fields[0]) + '":' +
+                     '{"$elemMatch":{"$in":' + JSON.stringify(pref.centerOn) + '}}' +
+                     '}';
             }
             var options = {
               search: {
