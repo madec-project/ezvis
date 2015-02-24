@@ -417,7 +417,7 @@ together).
 #### size
 
 To specify the size of the pie, add the `size` key to your chart.
-Then, you can follow the [C3's example](http://c3js.org/samples/options_size.html) to fill it.
+The `height` you specify is in pixels, and is used both on dashboard, and on chart pages.
 
 Ex:
 
@@ -467,7 +467,11 @@ preceding offset of 1 column.
 }
 ```
 
+Note: `columns` and `offset` properties are taken into account only on
+dashboard (index) page.
+
 #### legend
+*deprecated*
 
 To specify where you want the legend to be, add the `legend` key to your chart.
 Then, you follow the [C3's example](http://c3js.org/samples/legend_position.html) to fill it.
