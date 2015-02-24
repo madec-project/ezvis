@@ -403,9 +403,10 @@ $(document).ready(function () {
         bootstrapPosition(id, pref.size);
       }
 
+      var edgeWidth = minWeight !== maxWeight ?
+        'mapData(weight, ' + minWeight + ', ' + maxWeight + ', 1, 10)' :
+        5;
 
-      // if (isOnlyChart(id)) {
-      // }
       $('#' + id)
       .addClass('network');
       var options = {
@@ -429,7 +430,7 @@ $(document).ready(function () {
             })
           .selector('edge')
             .css({
-              'width': 'mapData(weight, ' + minWeight + ', ' + maxWeight + ', 1, 10)',
+              'width': edgeWidth,
               'line-color': '#ddd'
             })
           .selector(':selected')
