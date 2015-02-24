@@ -397,6 +397,21 @@ visible.
       }
 ```
 
+Threshold Network, where only links above the threshold value are displayed
+(in the example: the actors linked are those who played at least in 3 films
+together).
+
+```javascript
+      {
+        "type": "network",
+        "fields": [ "actors" ],
+        "maxItems": 100000,
+        "threshold": 3,
+        "title": "Actors net > 3 films",
+        "help": "Network of actors, which common films are at least 3"
+      }
+```
+
 ### Preferences
 
 #### size
