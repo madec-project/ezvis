@@ -8,8 +8,7 @@ charts (pies, histograms, ...), powered by
 
 ezVIS stands for easy **vis**ualization of information in web report.
 
-Installation
-------------
+# Installation
 
 You have to install [mongodb](http://docs.mongodb.org/manual/installation/)
 first, and [node](http://nodejs.org/) too.
@@ -18,8 +17,7 @@ first, and [node](http://nodejs.org/) too.
 $ npm install ezvis -g
 ```
 
-Usage
------
+# Usage
 
 Make sure mongodb is running, and then.
 
@@ -50,8 +48,7 @@ Before that, you have to configure your mongo connection, by creating a
 
 Then, point your browser to http://localhost:3000/
 
-Configuration
--------------
+# Configuration
 
 To make charts appear on the dashboard, you have to configure them.
 
@@ -61,11 +58,8 @@ it's a file with the same name as the data directory
 (besides that directory), appended with `.json`.
 
 The whole dashboard configuration is done inside the `dashboard` key of the
-JSON configuration file. Except, the `documentFields` configuration is documented in [castor-load-custom](https://github.com/castorjs/castor-load-custom)'s
-[README](https://github.com/castorjs/castor-load-custom/blob/master/README.md),
-and `corpusFields` configuration is documented in
-[castor](https://github.com/castorjs/castor-core)'s
-[README](https://github.com/castorjs/castor-core#corpusfields)
+JSON configuration file. Except, the `documentFields` configuration, and
+`corpusFields`.
 
 Each chart has to be described in the `dashboard.charts` key.
 
@@ -98,6 +92,15 @@ charts: [`histogram`](#histogram) and [`pie`](#pie).
   }
 }
 ```
+
+## documentFields
+
+TODO (see [JBJ](https://github.com/castorjs/node-jbj/))
+
+## corpusFields
+
+TODO (see [JBJ](https://github.com/castorjs/node-jbj/))
+
 ## Dashboard
 
 All dashboard settings are inside a `dashboard` key.
@@ -665,7 +668,8 @@ The direct way, is to point to `content.json.keywords`, but that will
 distinguish the `Dashboard` from the first row to the one from the second row.
 Moreover, they will be bound to other keywords on the same row.
 
-The solution is to add a *document field* in the JSON configuration file:
+The solution is to add a *document field* in the JSON configuration file,
+using [JBJ](https://github.com/castorjs/node-jbj)'s syntax:
 
 ```javascript
 "documentFields" : {
@@ -673,7 +677,7 @@ The solution is to add a *document field* in the JSON configuration file:
     "path" : "content.json.Keywords",
     "parseCSV" : ";",
     "foreach"  : {
-      "trim" : null
+      "trim" : true
     }
   }
 },
