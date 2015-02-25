@@ -189,6 +189,33 @@ would produce
 }
 ```
 
+Note: you can use a dot notation in the name of the field to be created. Using
+`"$my.fields.year"` will create a `year` field within the `fields` field
+within the `my` field at the root of the document.
+
+Note 2: the generated fields are truncated at 1000 characters (if they are of
+string type), except if you add `"noindex": true` to the field (in this case,
+performance may be lower, but only if later operations use the field; that is
+to say that a field created only to be displayed, not to be used in
+computations -like charts- is a good candidate to be noindexed).
+
+### text
+
+The `$text` field is used in the documents table to search the documents, as a
+full-text index.
+
+Thus, for the document table to be searchable, you have to build a `$text`
+field, using technique similar to this:
+
+```json
+    "$text": {
+      "get" : ["title", "year", "director", "actors"],
+      "join": "|"
+    }
+```
+
+This field is not truncated at 1000 characters.
+
 ## corpusFields
 
 TODO (see [JBJ](https://github.com/castorjs/node-jbj/))
@@ -477,7 +504,10 @@ Centered Network, where only the actors "near" `Arnold Schwarzenegger` and
 ```
 
 Selected Network, where only documents matching the mongodb `selector` are
-visible.
+visible (using a [MongoDB Match Query
+Criteria](http://docs.mongodb.org/manual/reference/method/db.collection.find
+/#find-documents-that-match-query-criteria), but within a JSON, thus using
+quotes around operators).
 
 ```javascript
       {
