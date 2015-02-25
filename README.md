@@ -74,7 +74,7 @@ charts: [`histogram`](#histogram) and [`pie`](#pie).
       "path" : "content.json.DiscESI",
       "parseCSV" : ";",
       "foreach": {
-        "trim": null
+        "trim": true
       }
     },
   },
@@ -99,7 +99,7 @@ documentFields are fields added to each document at loading/synchronizing files.
 
 They are declared in the JSON settings, in the `documentFields` object.
 
-An simplistic example of a document is:
+A simplistic example of a document is:
 
 ```json
 {
@@ -115,7 +115,7 @@ An simplistic example of a document is:
 }
 ```
 
-If you want to easily access the year of document, you can declare a `year` documentField:
+If you want to easily access the year of document, you can declare a `$year` documentField:
 
 ```json
 {
@@ -146,7 +146,7 @@ which will modify the former document to the following:
 
 `$year` indicates to create a `year` property at the document's root, and the
 [`get` JBJ action](https://github.com/castorjs/node-jbj#get) points to the
-location of the source field in the same `$document.
+location of the source field in the same document.
 
 All [JBJ actions](https://github.com/castorjs/node-jbj#actions) are
 applicable, and for example a `"cast": "number"` after the `get` action will
@@ -802,7 +802,7 @@ keywords):
     "content.json.Keywords",
     "parseCSV" : ";",
     "foreach"  : {
-      "trim" : null
+      "trim" : true
     }
   }
 },
