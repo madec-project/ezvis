@@ -311,14 +311,12 @@ This page is a text, containing JSON. You have to parse it, using
 notation, see
 [the examples](https://github.com/mariocasciaro/object-path#usage)).
 
-Tip: You can transform a `local:///compute.json?operator=count&field=wid' into
+Tip: You can transform a `local:///compute.json?operator=count&field=wid` into
 `http://localhost:3000/compute.json?operator=count&field=wid` and copy-paste
 its content into the input area of the [JBJ
 Playground](http://castorjs.github.io/node-jbj/), and try to enter in the
 stylesheet area the JBJ actions you want to test, and click "Try it" to see if
 the result matches what you want in the corpusField.
-
-TODO (see [JBJ](https://github.com/castorjs/node-jbj/))
 
 ## Dashboard
 
