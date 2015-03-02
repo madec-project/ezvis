@@ -158,6 +158,8 @@
     var pathname = window.location.pathname;
     var Config = {};
     function setconfig(c) { Config = c; };
+    $('a[href="' + window.location.pathname + window.location.search + '"]')
+    .addClass('active');
     </script>
     <script src="/assets/js/alerts.js"></script>
     <script type="text/javascript">
