@@ -418,7 +418,7 @@ $(document).ready(function () {
           var matchingNode = matchingNodes[0];
           toPush.data.color = matchingNode.color ?
                               matchingNode.color :
-                              chroma(toPush.data.color).saturate(3).toString();
+                              chroma(toPush.data.color).saturate(50).toString();
         }
       }
       nodes.push(toPush);
