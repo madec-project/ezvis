@@ -601,6 +601,25 @@ Centered Network, where only the actors "near" `Arnold Schwarzenegger` and
       }
 ```
 
+To change the color of a node, in order to make it more visible, add a `nodes`
+array, in which each element is an object with a `value` and a `color`
+property.
+
+```javascript
+      {
+        "type": "network",
+        "fields": [ "actors" ],
+        "maxItems": 100000,
+        "threshold": 3,
+        "title": "Actors net with colors",
+        "help": "Network of actors, which common films are at least 3, and where Carrie Fisher is highlighed",
+        "nodes": [{
+          "value": "Carrie Fisher",
+          "color": "#33a02c"
+        }]
+      }
+```
+
 Selected Network, where only documents matching the mongodb `selector` are
 visible (using a [MongoDB Match Query
 Criteria](http://docs.mongodb.org/manual/reference/method/db.collection.find
@@ -634,6 +653,20 @@ together).
         "help": "Network of actors, which common films are at least 3"
       }
 ```
+
+To display several fields in the same network, put their names in the `fields`
+property:
+
+```javascript
+      {
+        "type": "network",
+        "fields": [ "director", "year", "title" ],
+        "maxItems": 100000,
+        "title": "Director, year, films",
+        "help": "Network of directors, year and films"
+      }
+```
+
 
 ### Preferences
 

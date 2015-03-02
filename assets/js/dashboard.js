@@ -396,17 +396,29 @@ $(document).ready(function () {
     // fill nodes table
     Object.keys(nodeIds).forEach(function (nodeId, i, a) {
       // node = { "field": "field value" }
-      var node = nodeVal[nodeId];
+      var node     = nodeVal[nodeId];
       var fieldKey = Object.keys(node)[0];
-      var fieldNb = fields.indexOf(fieldKey);
-      nodes.push({
+      var fieldNb  = fields.indexOf(fieldKey);
+      var toPush   = {
         data: {
           id: nodeId,
           name: node[fieldKey],
           field: fieldNb,
           color: scale(fieldNb).toString()
         }
-      });
+      };
+      var isCurrentNode = function isCurrentNode(n) {
+        return n.value === node[fieldKey];
+      }
+      if (pref.nodes && Array.isArray(pref.nodes) && pref.nodes.length) {
+        var matchingNodes = pref.nodes.filter(isCurrentNode);
+        if (matchingNodes.length) {
+          var matchingNode = matchingNodes[0];
+          console.log('matching', matchingNode);
+          toPush.data.color = matchingNode.color ? matchingNode.color : toPush.data.color;
+        }
+      }
+      nodes.push(toPush);
     });
 
     // Override options with configuration values
@@ -454,6 +466,10 @@ $(document).ready(function () {
           .css({
             'opacity': 0.5,
             'text-opacity': 0.25
+          })
+        .selector('.top')
+          .css({
+            'z-index': 1
           }),
 
       layout: {
@@ -519,6 +535,14 @@ $(document).ready(function () {
             updateFacets();
           }
         });
+
+        // Highlight nodes to see
+        if (pref.nodes) {
+          pref.nodes.forEach(function (node) {
+            var selector = '[name="'+node.value+'"]';
+            cy.nodes(selector).addClass('top');
+          });
+        }
 
       }
     };
