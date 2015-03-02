@@ -151,9 +151,7 @@ return JSON data similar to:
 ```
 
 ## graph
-TODO
 
-## total
 `graph` lists the weighted links between all values of one or several fields (it's a non-directed, weighted link). The weight is the number of times two fields' value appear in the same document.
 
 Ex: graph of themes co-occurrences
@@ -199,6 +197,9 @@ return JSON data similar to:
   }
 ]
 ```
+
+## total
+TODO
 
 ## ventilate
 TODO

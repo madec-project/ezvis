@@ -392,6 +392,11 @@ $(document).ready(function () {
     .scale(['#a6cce3','#1f78b4','#b2df8a','#33a02c','#fb9a99'].slice(0,classNb))
     .domain(domain, classNb);
 
+    if (pref.centerOn && !pref.nodes) {
+      pref.nodes = pref.centerOn.map(function (n) {
+        return { "value": n };
+      })
+    }
     // fill nodes table
     Object.keys(nodeIds).forEach(function (nodeId, i, a) {
       // node = { "field": "field value" }
