@@ -47,8 +47,12 @@ $(document).ready(function () {
         table.columns(0).search(value);
       }
       else {
+        console.log(key,value);
+        // FIXME: does not work in multifields network without matching facets
         var facetIndex = facets.indexOf(key);
-        table.columns(fieldNb + facetIndex).search(value);
+        if (facetIndex !== -1) {
+          table.columns(fieldNb + facetIndex).search(value);
+        }
       }
     });
     table.draw();
@@ -202,7 +206,6 @@ $(document).ready(function () {
           updateAll();
         },
         removeAllFilters: function () {
-          updateDocumentsTable();
           Object.keys(filter, function (key) {
             filter.$delete(key);
           });
@@ -326,6 +329,25 @@ $(document).ready(function () {
   };
 
   /**
+   * Convert an object from the graph operator to an id
+   * @param  {Object} node {field: value}
+   * @return {String}      identifier usable in cytoscape
+   * @see    http://stackoverflow.com/a/22429679/93887
+   */
+  var node2id = window.node2id = function node2id (node) {
+    var str = JSON.stringify(node);
+    var i, l;
+    var hval = 0x811c9dc5; // seed
+
+    for (i = 0, l = str.length; i < l; i++) {
+      hval ^= str.charCodeAt(i);
+      hval += (hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
+    }
+
+    return ("0000000" + (hval >>> 0).toString(16)).substr(-8);
+  };
+
+  /**
    * Update a network options
    * @param  {Array}    data   result of the graph operator
    * @param  {String}   id     identifier of the network
@@ -334,170 +356,174 @@ $(document).ready(function () {
    * @param  {Function} cb     cb(err, options)
    */
   var updateNetworkOptions = function updateNetworkOptions(data, id, pref, fields, cb) {
-    // TODO: finish refactoring (async the two ajax queries in updateNetworkOptions)
 
-    // FIXME: distinct operator does not use several fields
-    var nodesUrl = '/compute.json?o=distinct';
-    fields.forEach(function (field) {
-      nodesUrl += '&f=' + field;
-    });
-    nodesUrl += '&itemsPerPage=';
+    var edges     = [];
+    var nodeVal   = {};
+    var nodeIds   = {};
+    var nodes     = [];
+    var maxWeight = -Infinity;
+    var minWeight = +Infinity;
 
-    request
-    .get(nodesUrl)
-    .end(function(res2) {
-      var edges     = [];
-      var nodeIds   = {};
-      var nodes     = [];
-      var maxWeight = -Infinity;
-      var minWeight = +Infinity;
-      var maxOcc    = -Infinity;
-      var minOcc    = +Infinity;
-
-      res2.body.data.forEach(function (e, id) {
-        maxOcc = Math.max(maxOcc, e.value);
-        minOcc = Math.min(minOcc, e.value);
-      });
-
-      data.forEach(function (e, id) {
-        var affEff = JSON.parse(e._id);
-        e.source = affEff[0];
-        e.target = affEff[1];
-        maxWeight = Math.max(maxWeight, e.value);
-        minWeight = Math.min(minWeight, e.value);
-        edges.push({
-          data: {
-            id: '#' + id,
-            weight: e.value,
-            source: e.source,
-            target: e.target
-          }
-        });
-        // memorize nodeIds
-        nodeIds[e.source] = true;
-        nodeIds[e.target] = true;
-      });
-
-      var domain = [minOcc, maxOcc];
-      var scale  = chroma.scale('YlOrRd').domain(domain, 9);
-
-      // fill nodes table
-      Object.keys(nodeIds).forEach(function (nodeId, i, a) {
-        var filteredNodes = res2.body.data.filter(function findNode(n) {
-          return n._id === nodeId;
-        });
-        var node = filteredNodes[0];
-        nodes.push({
-          data: {
-            id: nodeId,
-            name: nodeId,
-            occ: node.value,
-            color: scale(node.value).toString()
-          }
-        });
-      });
-
-      // Override options with configuration values
-      if (pref.size) {
-        options.size = pref.size;
-        bootstrapPosition(id, pref.size);
-      }
-
-      var edgeWidth = minWeight !== maxWeight ?
-        'mapData(weight, ' + minWeight + ', ' + maxWeight + ', 1, 10)' :
-        5;
-
-      $('#' + id)
-      .addClass('network');
-      var options = {
-        container: document.getElementById(id),
-
-        elements: {
-          edges: edges,
-          nodes: nodes
-        },
-
-        style: cytoscape.stylesheet()
-          .selector('node')
-            .css({
-              'content': 'data(id)',
-              'text-valign': 'center',
-              'color': 'black',
-              'background-color': 'data(color)',
-              'text-opacity': 'mapData(occ, ' + minOcc + ', ' +  maxOcc + ', 0.50, 1.00)',
-              'text-outline-width': 2,
-              'text-outline-color': '#888'
-            })
-          .selector('edge')
-            .css({
-              'width': edgeWidth,
-              'line-color': '#ddd'
-            })
-          .selector(':selected')
-            .css({
-              'background-color': 'black',
-              'line-color': 'black'
-            })
-          .selector('.faded')
-            .css({
-              'opacity': 0.5,
-              'text-opacity': 0.25
-            }),
-
-        layout: {
-          name: 'cola',
-          directed: false,
-          padding: 10,
-          avoidOverlap: true,
-          minNodeSpacing: 20,
-          nodeSpacing: function (node) { return 20; },
-          // animate: false
-        },
-
-        ready: function () {
-          var cy = this;
-
-          cy.layout().on('layoutstop', function () {
-            cy.fit(cy.nodes(':visible'), 10);
-          });
-
-          cy.on('select', 'node', function (e) {
-            var node = e.cyTarget;
-            var neighborhood = node.closedNeighborhood();
-
-            cy.elements().addClass('faded');
-            neighborhood.removeClass('faded');
-
-            if (isOnlyChart(id)) {
-              filter.$delete('main');
-              filter.$add('main', node.element(0).data().id);
-              updateDocumentsTable();
-              updateFacets();
-            }
-          });
-
-          cy.on('tap', function (e) {
-            // If tap on no element
-            if (e.cyTarget === cy) {
-              filter.$delete('main');
-              updateDocumentsTable();
-              updateFacets();
-            }
-          });
-
-          cy.on('unselect', 'node', function (e) {
-            cy.elements().removeClass('faded');
-            if (isOnlyChart(id)) {
-              cy.nodes(':selected').unselect();
-              updateDocumentsTable();
-              updateFacets();
-            }
-          });
-
+    data.forEach(function (e, id) {
+      var affEff = JSON.parse(e._id);
+      e.source = affEff[0];
+      e.target = affEff[1];
+      maxWeight = Math.max(maxWeight, e.value);
+      minWeight = Math.min(minWeight, e.value);
+      edges.push({
+        data: {
+          id: '#' + id,
+          weight: e.value,
+          source: node2id(e.source),
+          target: node2id(e.target)
         }
-      };
-      cb(null, options);
+      });
+      // memorize nodes
+      var sourceId = node2id(e.source);
+      var targetId = node2id(e.target);
+      nodeVal[sourceId] = e.source;
+      nodeVal[targetId] = e.target;
+      nodeIds[sourceId] = nodeIds[sourceId] ? nodeIds[sourceId] + 1 : 1;
+      nodeIds[targetId] = nodeIds[targetId] ? nodeIds[targetId] + 1 : 1;
     });
+
+    var domain = [0, fields.length -1];
+    var classNb = fields.length < 3 ? 3 : fields.length;
+    var scale  = chroma
+    .scale(['#a6cce3','#1f78b4','#b2df8a','#33a02c','#fb9a99'].slice(0,classNb))
+    .domain(domain, classNb);
+
+    // fill nodes table
+    Object.keys(nodeIds).forEach(function (nodeId, i, a) {
+      // node = { "field": "field value" }
+      var node = nodeVal[nodeId];
+      var fieldKey = Object.keys(node)[0];
+      var fieldNb = fields.indexOf(fieldKey);
+      nodes.push({
+        data: {
+          id: nodeId,
+          name: node[fieldKey],
+          field: fieldNb,
+          color: scale(fieldNb).toString()
+        }
+      });
+    });
+
+    // Override options with configuration values
+    if (pref.size) {
+      options.size = pref.size;
+      bootstrapPosition(id, pref.size);
+    }
+
+    var edgeWidth = minWeight !== maxWeight ?
+      'mapData(weight, ' + minWeight + ', ' + maxWeight + ', 2, 10)' :
+      5;
+
+    $('#' + id)
+    .addClass('network');
+    var options = {
+      container: document.getElementById(id),
+
+      elements: {
+        edges: edges,
+        nodes: nodes
+      },
+
+      style: cytoscape.stylesheet()
+        .selector('node')
+          .css({
+            'content': 'data(name)',
+            'text-valign': 'center',
+            'color': 'black',
+            'background-color': 'data(color)',
+            'text-opacity': 1,
+            'text-outline-width': 2,
+            'text-outline-color': '#888'
+          })
+        .selector('edge')
+          .css({
+            'width': edgeWidth,
+            'line-color': '#ddd'
+          })
+        .selector(':selected')
+          .css({
+            'background-color': 'black',
+            'line-color': 'black'
+          })
+        .selector('.faded')
+          .css({
+            'opacity': 0.5,
+            'text-opacity': 0.25
+          }),
+
+      layout: {
+        name: 'cola',
+        directed: false,
+        padding: 10,
+        avoidOverlap: true,
+        minNodeSpacing: 20,
+        nodeSpacing: function (node) { return 20; },
+        maxSimulationTime: 9000
+        // animate: false
+      },
+
+      ready: function () {
+        var cy = this;
+
+        cy.layout().on('layoutstop', function () {
+          cy.fit(cy.nodes(':visible'), 10);
+        });
+
+        cy.on('select', 'node', function (e) {
+          var node = e.cyTarget;
+          var neighborhood = node.closedNeighborhood();
+
+          cy.elements().addClass('faded');
+          neighborhood.removeClass('faded');
+
+          if (isOnlyChart(id)) {
+            var nodeField = fields[node.data('field')];
+            if (nodeField === currentField) {
+              filter.$add('main', node.data('name'));
+            }
+            else {
+              filter.$add(nodeField, node.data('name'));
+            }
+            updateDocumentsTable();
+            updateFacets();
+          }
+        });
+
+        cy.on('tap', function (e) {
+          // If tap on no element
+          if (e.cyTarget === cy) {
+            filter.$delete('main');
+            updateDocumentsTable();
+            updateFacets();
+          }
+        });
+
+        cy.on('unselect', 'node', function (e) {
+          cy.elements().removeClass('faded');
+          if (isOnlyChart(id)) {
+            var node = e.cyTarget;
+            var nodeField = fields[node.data('field')];
+            if (nodeField === currentField) {
+              filter.$delete('main');
+            }
+            else {
+              filter.$delete(nodeField);
+            }
+            cy.nodes(':selected').unselect();
+            updateDocumentsTable();
+            updateFacets();
+          }
+        });
+
+      }
+    };
+    cb(null, options);
+
   };
 
   /**
@@ -745,13 +771,15 @@ $(document).ready(function () {
       if (pref.centerOn && pref.centerOn.length) {
         var eles = {};
         pref.centerOn.forEach(function (value) {
-          eles[value] = network.elements('node[id="' + value + '"]').closedNeighborhood();
+          // FIXME identifier should integrate field too
+          eles[value] = network.elements('node[name="' + value + '"]').closedNeighborhood();
         });
         var edges = network.edges();
         network.nodes().remove();
         Object.keys(eles).forEach(function (element) {
           eles[element].restore();
         });
+        // WARNING: this seemed to be useful
         edges.restore();
         // This restores also edges which nodes are still removed, thus yielding
         // messages in console.
@@ -892,8 +920,8 @@ $(document).ready(function () {
     network.nodes().hide();
     links.forEach(function (link) {
       var nodes = JSON.parse(link._id);
-      network.nodes('[name="' + nodes[0] + '"]').show();
-      network.nodes('[name="' + nodes[1] + '"]').show();
+      network.nodes('[id="' + node2id(nodes[0]) + '"]').show();
+      network.nodes('[id="' + node2id(nodes[1]) + '"]').show();
     });
     network.fit(network.nodes(':visible'), 10);
   };
@@ -1107,6 +1135,11 @@ $(document).ready(function () {
             var columns = [{
               data: pref.field || pref.fields[1] || pref.fields[0]
             }];
+            if (pref.type === 'network') {
+              columns = [{
+                data: pref.field || pref.fields[0]
+              }];
+            }
             var facetsNb  = 0;
             var allFields = [];
             fieldNb       = 1;
