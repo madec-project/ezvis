@@ -3,7 +3,7 @@
 Operators allow different treatments on the data.
 
 They can be used explicitly in apps' configuration (such as in the charts of
-[VISIR](https://github.com/castorjs/visir)), or under the hood.
+[ezVIS](https://github.com/madec-project/ezvis)), or under the hood.
 
 They can be used in URL such as:
 `http://localhost:3000/compute.json?o=operator` and their parameters are
