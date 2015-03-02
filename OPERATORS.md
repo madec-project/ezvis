@@ -158,45 +158,92 @@ Ex: graph of themes co-occurrences
 
 `http://localhost:3000/compute.json?o=graph&f=fields.Themes&itemsPerPage=`
 
-return JSON data similar to:
+return JSON `data` similar to:
 
 ```javascript
 [
   {
-    _id: "["Agricultural Sciences","Chemistry"]",
+    _id: "[{"fields.Themes":"Agricultural Sciences"},{"fields.Themes":"Chemistry"}]",
     value: 6
-  },
+    },
   {
-    _id: "["Agricultural Sciences","Clinical Medicine"]",
+    _id: "[{"fields.Themes":"Agricultural Sciences"},{"fields.Themes":"Clinical Medicine"}]",
     value: 1
   },
   {
-    _id: "["Agricultural Sciences","Computer Science"]",
+    _id: "[{"fields.Themes":"Agricultural Sciences"},{"fields.Themes":"Computer Science"}]",
     value: 1
   },
   ...
   {
-    _id: "["Pharmacology & Toxicology","Plant & Animal Science"]",
+    _id: "[{"fields.Themes":"Pharmacology & Toxicology"},{"fields.Themes":"Plant & Animal Science"}]",
     value: 10
   },
   {
-    _id: "["Pharmacology & Toxicology","Social Sciences"]",
+    _id: "[{"fields.Themes":"Pharmacology & Toxicology"},{"fields.Themes":"Social Sciences"}]",
     value: 1
   },
   {
-    _id: "["Physics","Space Science"]",
+    _id: "[{"fields.Themes":"Physics"},{"fields.Themes":"Space Science"}]",
     value: 1
   },
   {
-    _id: "["Plant & Animal Science","Psychiatry/Psychology"]",
+    _id: "[{"fields.Themes":"Plant & Animal Science"},{"fields.Themes":"Psychiatry/Psychology"}]",
     value: 1
   },
   {
-    _id: "["Plant & Animal Science","Social Sciences"]",
+    _id: "[{"fields.Themes":"Plant & Animal Science"},{"fields.Themes":"Social Sciences"}]",
     value: 2
   }
 ]
 ```
+
+Ex: graph of themes and year co-occurrences
+
+`http://localhost:3000/compute.json?o=graph&f=fields.Themes&f=fields.year&itemsPerPage=`
+
+return JSON `data` similar to:
+
+```javascript
+[
+  ...
+  {
+    _id: "[{"fields.Themes":"Agricultural Sciences"},{"fields.Themes":"Physics"}]",
+    value: 1
+  },
+  {
+    _id: "[{"fields.Themes":"Agricultural Sciences"},{"fields.Themes":"Plant & Animal Science"}]",
+    value: 19
+  },
+  {
+    _id: "[{"fields.Themes":"Agricultural Sciences"},{"fields.year":"2009"}]",
+    value: 30
+  },
+  {
+    _id: "[{"fields.Themes":"Agricultural Sciences"},{"fields.year":"2010"}]",
+    value: 33
+  },
+  ...
+  {
+    _id: "[{"fields.Themes":"Plant & Animal Science"},{"fields.Themes":"Psychiatry/Psychology"}]",
+    value: 1
+  },
+  {
+    _id: "[{"fields.Themes":"Plant & Animal Science"},{"fields.Themes":"Social Sciences"}]",
+    value: 2
+  },
+  {
+    _id: "[{"fields.Themes":"Plant & Animal Science"},{"fields.year":"2009"}]",
+    value: 87
+  },
+  {
+    _id: "[{"fields.Themes":"Plant & Animal Science"},{"fields.year":"2010"}]",
+    value: 77
+  },
+  ...
+]
+```
+
 
 ## total
 TODO
