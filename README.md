@@ -603,7 +603,8 @@ Centered Network, where only the actors "near" `Arnold Schwarzenegger` and
 
 To change the color of a node, in order to make it more visible, add a `nodes`
 array, in which each element is an object with a `value` and a `color`
-property.
+property. If you don't provide a color, their color will be the current one,
+saturated.
 
 ```javascript
       {
@@ -616,6 +617,24 @@ property.
         "nodes": [{
           "value": "Carrie Fisher",
           "color": "#33a02c"
+        }]
+      }
+```
+
+You can also precise in which field the value has to be colored.
+
+```javascript
+      {
+        "type": "network",
+        "fields": ["actors", "director"],
+        "maxItems": 100000,
+        "title": "Sylvester Stallone and himself",
+        "help": "A network centered on Sylvester Stallone, as director",
+        "centerOn": ["Sylvester Stallone"],
+        "nodes": [{
+          "field": "director",
+          "value": "Sylvester Stallone",
+          "color": "red"
         }]
       }
 ```

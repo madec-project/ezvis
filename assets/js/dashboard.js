@@ -47,7 +47,6 @@ $(document).ready(function () {
         table.columns(0).search(value);
       }
       else {
-        console.log(key,value);
         // FIXME: does not work in multifields network without matching facets
         var facetIndex = facets.indexOf(key);
         if (facetIndex !== -1) {
@@ -408,14 +407,18 @@ $(document).ready(function () {
         }
       };
       var isCurrentNode = function isCurrentNode(n) {
+        if (n.field && n.field !== fieldKey)  {
+          return false;
+        }
         return n.value === node[fieldKey];
-      }
+      };
       if (pref.nodes && Array.isArray(pref.nodes) && pref.nodes.length) {
         var matchingNodes = pref.nodes.filter(isCurrentNode);
         if (matchingNodes.length) {
           var matchingNode = matchingNodes[0];
-          console.log('matching', matchingNode);
-          toPush.data.color = matchingNode.color ? matchingNode.color : toPush.data.color;
+          toPush.data.color = matchingNode.color ?
+                              matchingNode.color :
+                              chroma(toPush.data.color).saturate(3).toString();
         }
       }
       nodes.push(toPush);
@@ -540,6 +543,9 @@ $(document).ready(function () {
         if (pref.nodes) {
           pref.nodes.forEach(function (node) {
             var selector = '[name="'+node.value+'"]';
+            if (node.field) {
+              selector +=  '[field='+fields.indexOf(node.field)+']';
+            }
             cy.nodes(selector).addClass('top');
           });
         }
