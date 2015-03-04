@@ -189,11 +189,11 @@ would produce
 }
 ```
 
-Note: you can use a dot notation in the name of the field to be created. Using
+> **Note:** you can use a dot notation in the name of the field to be created. Using
 `"$my.fields.year"` will create a `year` field within the `fields` field
 within the `my` field at the root of the document.
 
-Note 2: the generated fields are truncated at 1000 characters (if they are of
+> **Note 2:** the generated fields are truncated at 1000 characters (if they are of
 string type), except if you add `"noindex": true` to the field (in this case,
 performance may be lower, but only if later operations use the field; that is
 to say that a field created only to be displayed, not to be used in
@@ -311,12 +311,11 @@ This page is a text, containing JSON. You have to parse it, using
 notation, see
 [the examples](https://github.com/mariocasciaro/object-path#usage)).
 
-Tip: You can transform a `local:///compute.json?operator=count&field=wid` into
-`http://localhost:3000/compute.json?operator=count&field=wid` and copy-paste
-its content into the input area of the [JBJ
-Playground](http://castorjs.github.io/node-jbj/), and try to enter in the
-stylesheet area the JBJ actions you want to test, and click "Try it" to see if
-the result matches what you want in the corpusField.
+> **Tip:** You can transform a `local:///compute.json?operator=count&field=wid` into
+> `http://localhost:3000/compute.json?operator=count&field=wid` and copy-paste
+> its content into the input area of the  [JBJ Playground](http://castorjs.github.io/node-jbj/), and try to enter in the 
+> stylesheet area the JBJ actions you want to test, and click "Try it" to see if
+> the result matches what you want in the corpusField.
 
 ## Dashboard
 
@@ -640,9 +639,7 @@ You can also precise in which field the value has to be colored.
 ```
 
 Selected Network, where only documents matching the mongodb `selector` are
-visible (using a [MongoDB Match Query
-Criteria](http://docs.mongodb.org/manual/reference/method/db.collection.find
-/#find-documents-that-match-query-criteria), but within a JSON, thus using
+visible (using a [MongoDB Match Query Criteria](http://docs.mongodb.org/manual/reference/method/db.collection.find/#find-documents-that-match-query-criteria), but within a JSON, thus using
 quotes around operators).
 
 ```javascript
@@ -742,7 +739,7 @@ preceding offset of 1 column.
 }
 ```
 
-Note: `columns` and `offset` properties are taken into account only on
+> **Note:** `columns` and `offset` properties are taken into account only on
 dashboard (index) page.
 
 #### legend
@@ -1010,7 +1007,7 @@ There are other operators, and some of them take more than one field.
 For these cases, use `operator` and `fields` keys (`fields` replaces `field`,
 or you can set only one field in this table).
 
-Example: to display, in an `histogram`, the total of citations (by year):
+*Example:* to display, in an `histogram`, the total of citations (by year):
 
 ```json
 {
