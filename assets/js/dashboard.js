@@ -257,6 +257,10 @@ $(document).ready(function () {
       "marginBottom": 0,
       "marginTop"   : 0
     };
+    if (pref.legend) {
+      options.legend = pref.legend;
+      options.labelText = "[[value]]";
+    }
     return options;
   };
 
@@ -287,6 +291,9 @@ $(document).ready(function () {
         "showHanOnHover" : true
       }]
     };
+    if (pref.legend) {
+      options.legend = pref.legend;
+    }
     if (pref.color) {
       options.graphs[0].fillColors = [ pref.color ];
     }
@@ -321,6 +328,9 @@ $(document).ready(function () {
       }],
       "creditsPosition": "right"
     };
+    if (pref.legend) {
+      options.legend = pref.legend;
+    }
     if (pref.color) {
       options.graphs[0].fillColors = [ pref.color ];
     }

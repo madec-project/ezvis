@@ -761,12 +761,17 @@ preceding offset of 1 column.
 dashboard (index) page.
 
 #### legend
-*deprecated*
 
-To specify where you want the legend to be, add the `legend` key to your chart.
-Then, you follow the [C3's example](http://c3js.org/samples/legend_position.html) to fill it.
+To specify where you want the legend to be, add the `legend` key to your chart, with an object as a value.
 
-There are currently only two positions: `bottom` and `right`.
+In general, you can find what's possible in `legend` in 
+[amCharts documentation](http://docs.amcharts.com/3/javascriptcharts/AmLegend).
+
+The `position` can take 4 values:
+1. 'bottom'  (default)
+2. 'right'
+3. 'left'
+4. 'top'
 
 Ex:
 
@@ -775,22 +780,35 @@ Ex:
   "field": "fields.Themes",
   "type": "pie",
   "legend": {
-    "position": "bottom"
+    "position": "left"
   }
 }
 ```
 
-You can also hide/show the legend, using `"show": false` or `"show": true`:
+If you don't want a legend, remove `legend` key from the chart.
+
+If you need one, simply add `"legend": {}` in the chart.
+
+```json
+{
+  "field": "fields.Themes",
+  "type": "pie",
+  "legend": {}
+}
+```
+
+Or use the `enabled` property:
 
 ```json
 {
   "field": "fields.Themes",
   "type": "pie",
   "legend": {
-    "show": false
+    "enabled": true
   }
 }
 ```
+
 
 #### color
 You can set a `color` value (hexadecimal color value).
