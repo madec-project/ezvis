@@ -683,6 +683,24 @@ property:
       }
 ```
 
+##### fieldsColor
+You can set the color of the nodes field by field.
+
+Example: `actors` field in green and `director` field in blue.
+
+```javascript
+      {
+        "type": "network",
+        "fields": ["actors", "director"],
+        "maxItems": 100000,
+        "title": "Actors and director colored",
+        "help": "A network with actors in green and directors in blue",
+        "fieldsColor": {
+          "actors": "green",
+          "director": "blue"
+        }
+      }
+```
 
 ### Preferences
 

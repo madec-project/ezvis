@@ -411,6 +411,9 @@ $(document).ready(function () {
           color: scale(fieldNb).toString()
         }
       };
+      if (pref.fieldsColor && pref.fieldsColor[fieldKey]) {
+        toPush.data.color = pref.fieldsColor[fieldKey];
+      }
       var isCurrentNode = function isCurrentNode(n) {
         if (n.field && n.field !== fieldKey)  {
           return false;
