@@ -395,7 +395,7 @@ $(document).ready(function () {
     if (pref.centerOn && !pref.nodes) {
       pref.nodes = pref.centerOn.map(function (n) {
         return { "value": n };
-      })
+      });
     }
     // fill nodes table
     Object.keys(nodeIds).forEach(function (nodeId, i, a) {
@@ -1196,6 +1196,7 @@ $(document).ready(function () {
                 .append('<th>' + facet.label + '</th>');
               });
             }
+            options.language = { search: "Filter" };
             options.columns = columns;
             options.columnDefs = [{
               "render": addLink,
