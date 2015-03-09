@@ -342,6 +342,13 @@ Used to fill the pie chart quarters.
 There are some configuration possible: [`size`](#size) of the pie, 
 [`colors`](#colors) of the slices, and position of the [`legend`](#legend).
 
+You can also use `groupPercent`: if there is more than one slice whose
+percentage of the pie is less than this number, those slices will be grouped
+together into one slice. This is the "other" slice. It will always be the last
+slice in a pie.
+
+To name the possible grouped slice, use `groupedTitle`.
+
 #### horizontalbars
 
 Used to display the number of documents associated to a field value (for

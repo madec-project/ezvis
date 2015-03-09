@@ -264,6 +264,12 @@ $(document).ready(function () {
     if (pref.colors) {
       options.colors = pref.colors ;
     }
+    if (pref.groupPercent) {
+      options.groupPercent = pref.groupPercent;
+    }
+    if (pref.groupedTitle) {
+      options.groupedTitle = pref.groupedTitle;
+    }
     console.log(options);
     return options;
   };
