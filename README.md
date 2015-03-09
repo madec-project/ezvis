@@ -339,8 +339,8 @@ Possible configuration: [`size`](#size), [`legend`](#legend), and [`color`](#col
 
 Used to fill the pie chart quarters.
 
-There are some configuration possible: [`size`](#size) of the pie, and
-position of the [`legend`](#legend).
+There are some configuration possible: [`size`](#size) of the pie, 
+[`colors`](#colors) of the slices, and position of the [`legend`](#legend).
 
 #### horizontalbars
 

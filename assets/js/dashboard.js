@@ -261,6 +261,10 @@ $(document).ready(function () {
       options.legend = pref.legend;
       options.labelText = "[[value]]";
     }
+    if (pref.colors) {
+      options.colors = pref.colors ;
+    }
+    console.log(options);
     return options;
   };
 
