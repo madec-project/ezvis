@@ -280,6 +280,9 @@ $(document).ready(function () {
       "dataProvider" : data,
       "categoryField": "_id",
       "startDuration": 1,
+      "valueAxes"    : [{
+        "minimum": 0
+      }],
       "graphs" : [{
         "type"        : "column",
         "alphaField"  : "alpha",
@@ -316,6 +319,9 @@ $(document).ready(function () {
       "dataProvider" : data,
       "categoryField": "_id",
       "startDuration": 1,
+      "valueAxes"    : [{
+        "minimum": 0
+      }],
       "graphs" : [{
         "type"        : "column",
         "alphaField"  : "alpha",
