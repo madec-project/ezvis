@@ -652,6 +652,7 @@ $(document).ready(function () {
         unlistedAreasAlpha: 0.7
       },
       legend: {
+        enabled: true,
         width: (maxCars - 3) * 5 + 55,
         marginRight: 0,
         equalWidths: true,
