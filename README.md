@@ -359,6 +359,23 @@ Possible configuration: [`size`](#size), [`color`](#color), and `maxItems`.
 
 `maxItems` limit the number of bars to its value (default value: `100`).
 
+If you want to shorten the field value to display on the chart, use an
+associative array to replace too long fields values with shorter ones:
+
+```javascript
+      {
+        "field": "fields.Themes",
+        "type": "horizontalbars",
+        "title": "Themes (bars)",
+        "maxItems" : 10,
+        "labels": {
+          "Biology & Biochemistry"    : "Bio & Bio",
+          "Pharmacology & Toxicology" : "Pharmaco & Toxico",
+          "Plant & Animal Science"    : "Plant & Animal"
+        }
+      },
+```
+
 #### map
 
 Used to project country-related numbers on a geographical map.

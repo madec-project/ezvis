@@ -329,12 +329,6 @@ $(document).ready(function () {
       "valueAxes"    : [{
         "minimum": 0
       }],
-      "categoryAxis": {
-        "labelFunction": function (valueText, serialDataItem, categoryAxis) {
-          console.log("label",valueText);
-          return valueText/*.slice(0,10)*/;
-        }
-      },
       "graphs" : [{
         "type"        : "column",
         "alphaField"  : "alpha",
@@ -347,6 +341,19 @@ $(document).ready(function () {
       }],
       "creditsPosition": "right"
     };
+    if (pref.labels) {
+      console.log('labels', pref.labels);
+      options.categoryAxis = {
+        labelFunction: function (valueText, serialDataItem, categoryAxis) {
+          if (pref.labels[valueText]) {
+            return pref.labels[valueText];
+          }
+          else {
+            return valueText;
+          }
+        }
+      };
+    }
     if (pref.color) {
       options.graphs[0].fillColors = [ pref.color ];
     }
