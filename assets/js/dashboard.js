@@ -289,6 +289,8 @@ $(document).ready(function () {
       "pathToImages" : "assets/amcharts/images/",
       "dataProvider" : data,
       "categoryField": "_id",
+      "categoryAxis" : {
+      },
       "startDuration": 1,
       "valueAxes"    : [{
         "minimum": 0
@@ -304,6 +306,9 @@ $(document).ready(function () {
         "showHanOnHover" : true
       }]
     };
+    if (pref.parseDates) {
+      options.categoryAxis.parseDates = true;
+    }
     if (pref.color) {
       options.graphs[0].fillColors = [ pref.color ];
     }

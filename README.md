@@ -335,6 +335,18 @@ time).
 
 Possible configuration: [`size`](#size), and [`color`](#color).
 
+If you want to display the holes in time too (e.g., year with no documents),
+add `"parseDates": true` in the configuration:
+
+```javascript
+      {
+        "field": "content.json.year",
+        "type": "histogram",
+        "title": "Per year",
+        "parseDates": true
+      }
+```
+
 #### pie
 
 Used to fill the pie chart quarters.
