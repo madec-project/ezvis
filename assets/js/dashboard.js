@@ -304,9 +304,6 @@ $(document).ready(function () {
         "showHanOnHover" : true
       }]
     };
-    if (pref.legend) {
-      options.legend = pref.legend;
-    }
     if (pref.color) {
       options.graphs[0].fillColors = [ pref.color ];
     }
@@ -332,6 +329,12 @@ $(document).ready(function () {
       "valueAxes"    : [{
         "minimum": 0
       }],
+      "categoryAxis": {
+        "labelFunction": function (valueText, serialDataItem, categoryAxis) {
+          console.log("label",valueText);
+          return valueText/*.slice(0,10)*/;
+        }
+      },
       "graphs" : [{
         "type"        : "column",
         "alphaField"  : "alpha",
@@ -344,9 +347,6 @@ $(document).ready(function () {
       }],
       "creditsPosition": "right"
     };
-    if (pref.legend) {
-      options.legend = pref.legend;
-    }
     if (pref.color) {
       options.graphs[0].fillColors = [ pref.color ];
     }
@@ -758,7 +758,6 @@ $(document).ready(function () {
 
     if (isOnlyChart(id)) {
       chart.addListener("rendered", function addBarsListeners() {
-        console.info('rendered');
         chart.addListener('clickGraphItem', function (event) {
           console.info('clickItem', event);
           var filterValue = event.item.category;

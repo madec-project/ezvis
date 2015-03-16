@@ -333,7 +333,7 @@ Used to represent evolution of the number of documents along the time (so,
 this field is often a publication year, or anything indicating a point in
 time).
 
-Possible configuration: [`size`](#size), [`legend`](#legend), and [`color`](#color).
+Possible configuration: [`size`](#size), and [`color`](#color).
 
 #### pie
 
@@ -355,7 +355,7 @@ Used to display the number of documents associated to a field value (for
 example, for keywords: how many documents match a keyword?).
 Bars are sorted by descending number of documents.
 
-Possible configuration: [`size`](#size), [`color`](#color), [`legend`](#legend), and `maxItems`.
+Possible configuration: [`size`](#size), [`color`](#color), and `maxItems`.
 
 `maxItems` limit the number of bars to its value (default value: `100`).
 
