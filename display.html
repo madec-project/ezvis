@@ -38,3 +38,18 @@
   </div>
 </div>
 {% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+$(document).ready(function() {
+  var values = $('table#documents td:nth-child(2)');
+  for (var i=0; i < values.length; i++) {
+    var value = values[i];
+    var str   = value.innerHTML;
+    if (str.slice(0,7) === 'http://' || str.slice(0,8) === 'https://') {
+      value.innerHTML = '<a href="' + str + '">' + str + '</a>';
+    }
+  }
+});
+</script>
+{% endblock %}
