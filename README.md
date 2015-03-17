@@ -1192,18 +1192,9 @@ of `Occ` by default.
 To indicate the title of a document, use the `documentFields` named `$title`.
 
 ## Fields
-In order to make the `/display/id.html` page work, one filter has
-to be declared in the configuration:
 
-```json
-{
-  "filters": {
-    "objectPath": "objectPath"
-  }
-}
-```
-
-Then, you have to declare all the fields you want in the document's page.
+In order to make the `/display/id.html` page work, you have to declare all the
+fields you want in the document's page.
 
 They have to be in `display.fields`, they'll be displayed in the same
 order as their declaration's order.
@@ -1231,19 +1222,23 @@ Ex:
 }
 ```
 
-## Fields' number
-To modify the number of fields displayed per page, change the
-`display.fieldsPerPage` value in the configuration.
-
-Ex:
+To change the fields column's width, use `fieldsWidth` within `display` key:
 
 ```json
 {
-  "display" : {
-    "fieldsPerPage": 10
+  "display": {
+    "fields": {
+      "title"   : "Title",
+      "year"    : "Year",
+      "director": "Director",
+      "vactors" : "Actors"
+    },
+    "fieldsWidth": "50%"
   }
 }
 ```
+
+Any CSS width will work. However, be aware that it is preferable to let it be responsive.
 
 # Pages settings
 
