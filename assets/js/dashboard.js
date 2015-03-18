@@ -44,7 +44,12 @@ $(document).ready(function () {
     // Apply filter to the search
     Object.keys(filter, function (key, value) {
       if (key === 'main') {
-        table.columns(0).search(value);
+        if (typeof value !== 'object') {
+          table.columns(0).search(value);
+        }
+        else {
+          table.columns(0).search(value.code);
+        }
       }
       else {
         // FIXME: does not work in multifields network without matching facets
@@ -70,7 +75,14 @@ $(document).ready(function () {
     var selSelector = {};
     var selArray    = [];
     if (filter.main) {
-      selMain[currentField] = filter.main;
+      switch(typeof filter.main) {
+      case 'object':
+        selMain[currentField] = filter.main.code;
+        break;
+      default:
+        selMain[currentField] = filter.main;
+        break;
+      }
       selArray.push(selMain);
     }
     if (pref.centerOn && pref.centerOn.length) {
@@ -194,6 +206,7 @@ $(document).ready(function () {
   };
 
   if (pathname === "/chart.html") {
+    // Vue.config('debug', true);
     var vm = new Vue({
       el: '#filters',
       data: {
@@ -804,16 +817,20 @@ $(document).ready(function () {
       var options = {};
       options = updateMapOptions(data, id, pref);
 
-      var map = AmCharts.makeChart("#" + id, options);
+      var map = window.map = AmCharts.makeChart("#" + id, options);
 
       if (isOnlyChart(id)) {
 
         // Seems to work only when map.areasSettings.autoZoom or selectable is true!
         map.addListener('clickMapObject', function (event) {
+          console.log('event.mapObject', event.mapObject);
+          console.log('event.mapObject.title', event.mapObject.title);
           var filterValue = event.mapObject.id;
           if (filter.main !== filterValue) {
             filter.$delete('main');
-            filter.$add('main', filterValue);
+            var newMain = { code: filterValue, label: event.mapObject.title };
+            console.log('newMain', newMain);
+            filter.$add('main', newMain);
           }
           else if (!event.mapObject.map) {
             filter.$delete('main');
