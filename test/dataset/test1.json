@@ -1,0 +1,7 @@
+{
+  "title": "Test 1",
+  "collectionName": "test1",
+  "description": "Simple tests",
+  "connexionURI": "mongodb://localhost:27017/test/",
+  "port": 20000
+}

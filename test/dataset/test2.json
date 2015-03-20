@@ -1,0 +1,22 @@
+{
+  "title": "Test 2",
+  "collectionName": "test2",
+  "description": "Load data",
+  "connexionURI": "mongodb://localhost:27017/test/",
+  "port": 20002,
+
+  "documentFields": {
+    "$year": { 
+      "get": "content.json.year",
+      "visible": true
+    },
+    "$person": {
+      "get": "content.json.person",
+      "visible": true
+    },
+    "$country": {
+      "get": "content.json.country",
+      "visible": true
+    }
+  }
+}

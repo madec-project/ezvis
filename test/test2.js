@@ -1,6 +1,6 @@
 /*jshint node:true*/
 
-var conf  = require('./dataset/data2.json');
+var conf  = require('./dataset/test2.json');
 
 var nbRecordsPresent = function () {
   var inputs = document.getElementById('input-sm');
@@ -18,6 +18,8 @@ module.exports = {
     .waitFor(nbRecordsPresent)
     .assert.exists('div#dataTables-documents_info.dataTables_info', '"Showing 1 to 4 of 4 entries"')
     .assert.text('div#dataTables-documents_info.dataTables_info', "Showing 1 to 4 of 4 entries", '"Showing 1 to 4 of 4 entries"')
+    .assert.text('#dataTables-documents tbody tr:first-child td:first-child a', '1906','"1906" in first line')
+    .assert.text('#dataTables-documents tbody tr:first-child td:nth-child(2) a', 'Kurt Gödel','"Kurt Gödel" in first line')
     .done();
   }
 };

@@ -1,6 +1,6 @@
 /*jshint node:true*/
 
-var conf  = require('./dataset/data1.json');
+var conf  = require('./dataset/test1.json');
 
 module.exports = {
   'Has a title': function (test) {
