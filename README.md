@@ -495,7 +495,6 @@ Here an example:
           "Ireland": "IRL",
           "Iran": "IRN",
           "Iraq" : "IRQ",
-          "Iceland" : "ISL",
           "Israel": "ISR",
           "Italy" : "ITA",
           "Jamaica" : "JAM",
