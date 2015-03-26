@@ -20,6 +20,9 @@ module.exports = {
     .assert.text('div#dataTables-documents_info.dataTables_info', "Showing 1 to 4 of 4 entries", '"Showing 1 to 4 of 4 entries"')
     .assert.text('#dataTables-documents tbody tr:first-child td:first-child a', '1906','"1906" in first line')
     .assert.text('#dataTables-documents tbody tr:first-child td:nth-child(2) a', 'Kurt Gödel','"Kurt Gödel" in first line')
+    .click('#dataTables-documents tbody tr:nth-child(4) td:first:first-child a')
+    .waitForElement('#documents tbody tr:first-child')
+    .assert.numberOfElements('#documents tbody tr', 3, '3 fields displayed')
     .done();
   }
 };

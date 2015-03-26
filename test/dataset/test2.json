@@ -18,5 +18,13 @@
       "get": "content.json.country",
       "visible": true
     }
+  },
+
+  "display": {
+    "fields": {
+      "content.json.person" : "Name",
+      "content.json.country": "Country",
+      "content.json.year"   : "Birth year"
+    }
   }
 }
