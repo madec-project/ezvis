@@ -11,3 +11,5 @@ module.exports = {
     "sum_field1_by_field2"  : "sumby.js"
   }
 };
+
+module.exports.package = pkg = require('./package.json');
