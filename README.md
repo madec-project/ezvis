@@ -1312,3 +1312,7 @@ Using `plain` will bypass `sha1` value.
 
 `sha1` is the SHA-1 hash of the password (so that it will not be stored in the settings).
 
+> **Warning:** when you access the ezVIS report from the same machine as the
+> one running the server, you will not be asked for your identity. This is
+> to allow `local:///` protocol to work, even when not knowing the password
+> (see #corpusFields).

@@ -20,6 +20,12 @@ module.exports = function(config) {
     };
 
     var user = basicAuth(req);
+    // Authorize local:/// protocol (for corpusFields)
+    if (!user) {
+      if (req.ip === "127.0.0.1") {
+        return next();
+      }
+    }
     if (!user || user.name !== access.login) {
       return sendAuthorizationRequired();
     }
