@@ -9,7 +9,10 @@ module.exports = {
   "operators": {
     "count_field1_by_field2": "countby.js",
     "sum_field1_by_field2"  : "sumby.js"
+  },
+  "middlewares": {
+    "/*" : "basicAuth.js"
   }
 };
 
-module.exports.package = pkg = require('./package.json');
+module.exports.package = require('./package.json');

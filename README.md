@@ -1298,3 +1298,17 @@ For example, to enable castor to load XML files, each containing several documen
     }
   ]
 ```
+
+# Access restriction by login/password
+
+If you want restrict access to your ezVIS, add an `access` key containing
+`login` and `plain` or `sha1` subkeys.
+
+Using `plain` will bypass `sha1` value.
+
+`login` is a username.
+
+`plain` is plain password.
+
+`sha1` is the SHA-1 hash of the password (so that it will not be stored in the settings).
+
