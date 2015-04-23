@@ -317,6 +317,17 @@ notation, see
 > stylesheet area the JBJ actions you want to test, and click "Try it" to see if
 > the result matches what you want in the corpusField.
 
+## flyingFields
+
+Once in a while, you need to combine a `corpusField` and a `documentField` (to normalize a value, or to use reference table in a `corpusField`).
+
+`flyingFields` are like `documentFields`, except that they are computed just in time, thus they can interoperate with `corpusFields`.
+
+> **Warning:** if you have a `corpusFields` with the same name as a
+> `documentFields`, one of them will be replaced by the other.
+> So don't name them the same way.
+
+
 ## Dashboard
 
 All dashboard settings are inside a `dashboard` key.
