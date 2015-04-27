@@ -1219,16 +1219,16 @@ Often, the operator will return a JSON page containing at least:
 ```json
 {
 
-  recordsTotal: 108,
-  recordsFiltered: 108,
-  data: [
+  "recordsTotal": 108,
+  "recordsFiltered": 108,
+  "data": [
     {
-      _id: "Albania",
-      value: 2
+      "_id": "Albania",
+      "value": 2
     },
     {
-      _id: "Algeria",
-      value: 15
+      "_id": "Algeria",
+      "value": 15
     }
   ]
 }
@@ -1241,8 +1241,8 @@ If you declared a `flyingFields` like:
       "$_id": {
         "get": "_id",
         "mapping": {
-          "Albania": "ALB"
-          "Algeria": "DZA",
+          "Albania": "ALB",
+          "Algeria": "DZA"
         }
       },
       "mask": "_id,value"
@@ -1256,16 +1256,16 @@ the data projected to the chart will be the previous `data`, treated by
 ```json
 {
 
-  recordsTotal: 108,
-  recordsFiltered: 108,
-  data: [
+  "recordsTotal": 108,
+  "recordsFiltered": 108,
+  "data": [
     {
-      _id: "ALB",
-      value: 2
+      "_id": "ALB",
+      "value": 2
     },
     {
-      _id: "DZA",
-      value: 15
+      "_id": "DZA",
+      "value": 15
     }
   ]
 }
