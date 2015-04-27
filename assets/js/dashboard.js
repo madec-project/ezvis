@@ -126,9 +126,13 @@ $(document).ready(function () {
     var operator = graphPref.operator ? graphPref.operator : "distinct";
     var maxItems = graphPref.maxItems ? graphPref.maxItems : 0;
     var fields   = graphPref.fields ? graphPref.fields : [graphPref.field];
+    var flyings  = graphPref.flying ? graphPref.flying : [];
     var url      = '/compute.json?o=' + operator;
     fields.forEach(function (field) {
       url += '&f=' + field;
+    });
+    flyings.forEach(function (flying) {
+      url += '&ff=' + flying;
     });
     url += '&itemsPerPage=' + maxItems;
 
@@ -283,7 +287,6 @@ $(document).ready(function () {
     if (pref.groupedTitle) {
       options.groupedTitle = pref.groupedTitle;
     }
-    console.log(options);
     return options;
   };
 
@@ -888,9 +891,13 @@ $(document).ready(function () {
   var initPie = function(id, pref) {
     var operator = pref.operator ? pref.operator : "distinct";
     var fields   = pref.fields ? pref.fields : [pref.field];
+    var flyings  = pref.flying ? pref.flying : [];
     var url      = '/compute.json?o=' + operator;
     fields.forEach(function (field) {
       url += '&f=' + field;
+    });
+    flyings.forEach(function (flying) {
+      url += '&ff=' + flying;
     });
     url += '&columns[0][data]=value&columns[0][orderable]=true';
     url += '&order[0][column]=0&order[0][dir]=desc';
@@ -920,9 +927,13 @@ $(document).ready(function () {
   var initHistogram = function(id, pref) {
     var operator = pref.operator ? pref.operator : "distinct";
     var fields   = pref.fields ? pref.fields : [pref.field];
+    var flyings  = pref.flying ? pref.flying : [];
     var url      = '/compute.json?o=' + operator;
     fields.forEach(function (field) {
       url += '&f=' + field;
+    });
+    flyings.forEach(function (flying) {
+      url += '&ff=' + flying;
     });
     url += '&itemsPerPage=';
 
@@ -951,9 +962,13 @@ $(document).ready(function () {
     var operator = pref.operator ? pref.operator : "distinct";
     var maxItems = pref.maxItems ? pref.maxItems : 0;
     var fields   = pref.fields ? pref.fields : [pref.field];
+    var flyings  = pref.flying ? pref.flying : [];
     var url      = '/compute.json?o=' + operator;
     fields.forEach(function (field) {
       url += '&f=' + field;
+    });
+    flyings.forEach(function (flying) {
+      url += '&ff=' + flying;
     });
     url += '&columns[0][data]=value&columns[0][orderable]=true';
     url += '&order[0][column]=0&order[0][dir]=desc';
@@ -983,10 +998,14 @@ $(document).ready(function () {
   var initMap = function(id, pref) {
     var operator    = pref.operator ? pref.operator : "distinct";
     var fields      = pref.fields ? pref.fields : [pref.field];
+    var flyings     = pref.flying ? pref.flying : [];
     var url         = '/compute.json?o=' + operator;
 
     fields.forEach(function (field) {
       url += '&f=' + field;
+    });
+    flyings.forEach(function (flying) {
+      url += '&ff=' + flying;
     });
     url += '&columns[0][data]=value&columns[0][orderable]=true';
     url += '&order[0][column]=0&order[0][dir]=desc';
@@ -1023,9 +1042,13 @@ $(document).ready(function () {
     var operator = pref.operator ? pref.operator : "graph";
     var maxItems = pref.maxItems ? pref.maxItems : 1000;
     var fields   = pref.fields ? pref.fields : [pref.field];
+    var flyings  = pref.flying ? pref.flying : [];
     var url      = '/compute.json?o=' + operator;
     fields.forEach(function (field) {
       url += '&f=' + field;
+    });
+    flyings.forEach(function (flying) {
+      url += '&ff=' + flying;
     });
     url += '&columns[0][data]=value&columns[0][orderable]=true';
     url += '&order[0][column]=0&order[0][dir]=desc';
