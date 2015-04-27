@@ -1083,7 +1083,7 @@ This help text is a markdown text, and will appear after the title of the page
 
 #### Simple configuration
 
-To indicate which field is used by a chart, you have to specify it inside the can use the JSON configuration field.
+To indicate which field is used by a chart, you have to specify it inside the chart.
 
 These are used to point inside the mongodb document, using the dot notation.
 
@@ -1208,6 +1208,69 @@ or you can set only one field in this table).
 ```
 
 See [operators](OPERATORS.md).
+
+### flying
+
+`flying` indicates to a chart that you want to apply the JBJ actions of the
+said `flyingFields` to the data elements returned by the operator.
+
+Often, the operator will return a JSON page containing at least:
+
+```json
+{
+
+  recordsTotal: 108,
+  recordsFiltered: 108,
+  data: [
+    {
+      _id: "Albania",
+      value: 2
+    },
+    {
+      _id: "Algeria",
+      value: 15
+    }
+  ]
+}
+```
+
+If you declared a `flyingFields` like:
+
+```json
+    "$country2iso": {
+      "$_id": {
+        "get": "_id",
+        "mapping": {
+          "Albania": "ALB"
+          "Algeria": "DZA",
+        }
+      },
+      "mask": "_id,value"
+    }
+```
+
+and added a `flying` key to the chart, and its value was `country2iso`, then
+the data projected to the chart will be the previous `data`, treated by
+`country2iso`:
+
+```json
+{
+
+  recordsTotal: 108,
+  recordsFiltered: 108,
+  data: [
+    {
+      _id: "ALB",
+      value: 2
+    },
+    {
+      _id: "DZA",
+      value: 15
+    }
+  ]
+}
+```
+
 
 ## Documents table
 
