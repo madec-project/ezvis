@@ -272,7 +272,8 @@ $(document).ready(function () {
       "pullOutOnlyOne": true,
       "startDuration": 1,
       "marginBottom": 0,
-      "marginTop"   : 0
+      "marginTop"   : 0,
+      "creditsPosition": "bottom-right"
     };
     if (pref.legend) {
       options.legend = pref.legend;
@@ -320,7 +321,8 @@ $(document).ready(function () {
         "title"       : pref.title ? pref.title : "",
         "valueField"  : "value",
         "showHanOnHover" : true
-      }]
+      }],
+      "creditsPosition": "bottom-right"
     };
     if (pref.parseDates) {
       options.categoryAxis.parseDates = true;
@@ -360,7 +362,7 @@ $(document).ready(function () {
         "valueField"  : "value",
         "showHanOnHover" : true
       }],
-      "creditsPosition": "right"
+      "creditsPosition": "bottom-right"
     };
     if (pref.labels) {
       console.log('labels', pref.labels);
@@ -698,7 +700,8 @@ $(document).ready(function () {
         right: 0,
         data: legendData,
         backgroundAlpha: 0.5
-      }
+      },
+      "creditsPosition": "bottom-right"
     };
     return options;
   };
