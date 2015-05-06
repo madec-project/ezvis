@@ -475,6 +475,8 @@ slice in a pie.
 
 To name the possible grouped slice, use `groupedTitle`.
 
+To remove the labels around the slices, set `removeLabels` to `true`.
+
 #### horizontalbars
 
 Used to display the number of documents associated to a field value (for

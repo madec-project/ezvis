@@ -288,6 +288,9 @@ $(document).ready(function () {
     if (pref.groupedTitle) {
       options.groupedTitle = pref.groupedTitle;
     }
+    if (pref.removeLabels) {
+      options.labelsEnabled = false;
+    }
     return options;
   };
 
