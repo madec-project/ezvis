@@ -333,6 +333,18 @@ $(document).ready(function () {
     if (pref.color) {
       options.graphs[0].fillColors = [ pref.color ];
     }
+    if (pref.labels) {
+      options.categoryAxis = {
+        labelFunction: function (valueText, serialDataItem, categoryAxis) {
+          if (pref.labels[valueText]) {
+            return pref.labels[valueText];
+          }
+          else {
+            return valueText;
+          }
+        }
+      };
+    }
     return options;
   };
 

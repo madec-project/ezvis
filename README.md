@@ -461,6 +461,24 @@ add `"parseDates": true` in the configuration:
       }
 ```
 
+If you want to shorten the field value to display on the chart, use an
+associative array to replace too long fields values with shorter ones:
+
+```javascript
+      {
+        "field": "fields.Themes",
+        "type": "histogram",
+        "title": "Themes (histogram)",
+        "maxItems" : 10,
+        "labels": {
+          "Biology & Biochemistry"    : "Bio & Bio",
+          "Pharmacology & Toxicology" : "Pharmaco & Toxico",
+          "Plant & Animal Science"    : "Plant & Animal"
+        }
+      },
+```
+
+
 #### pie
 
 Used to fill the pie chart quarters.
