@@ -216,6 +216,23 @@ field, using technique similar to this:
 
 This field is not truncated at 1000 characters.
 
+### nosave
+
+The `nosave` property of a variable prevent its value to be saved in the
+document.
+This is useful for external resources, like `http:` or `local:` protocols.
+
+```json
+    "$country2iso": {
+      "nosave": true,
+      "$?" : "http://localhost:35000/country2iso3.json",
+      "parseJSON": true
+    },
+    "$codes": {
+      "mappingVar": ["country","country2iso"]
+    },
+```
+
 ## corpusFields
 
 corpusFields are computed after documents loading/synchronizing.
