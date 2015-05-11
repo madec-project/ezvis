@@ -278,6 +278,21 @@ $(document).ready(function () {
     if (pref.legend) {
       options.legend = pref.legend;
       options.labelText = "[[value]]";
+      // Change legend labels
+      if (pref.labels) {
+        var legendData = [];
+        var defaultColors = ["#FF0F00", "#FF6600", "#FF9E01", "#FCD202", "#F8FF01", "#B0DE09", "#04D215", "#0D8ECF", "#0D52D1", "#2A0CD0", "#8A0CCF", "#CD0D74", "#754DEB", "#DDDDDD", "#999999", "#333333", "#000000", "#57032A", "#CA9726", "#990000", "#4B0C25"];
+        for (var i = 0; i < data.length; i++) {
+          legendData.push({
+            title: pref.labels[data[i]._id] ? pref.labels[data[i]._id] : data[i]._id,
+            value: data[i].value,
+            color: pref.colors? pref.colors[i%pref.colors.length] : defaultColors[i%defaultColors.length]
+          });
+        }
+        options.legend = {
+          data: legendData
+        };
+      }
     }
     if (pref.colors) {
       options.colors = pref.colors ;
