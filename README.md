@@ -512,6 +512,22 @@ To name the possible grouped slice, use `groupedTitle`.
 
 To remove the labels around the slices, set `removeLabels` to `true`.
 
+If you want to shorten the field value to display in the legend, use an
+associative array to replace too long fields values with shorter ones:
+
+```javascript
+      {
+        "field": "Thematique",
+        "type": "pie",
+        "title": "Themes (pie)",
+        "labels": {
+          "Clinical Medicine": "Clinic",
+          "Biology & Biochemistry": "Bio",
+          "Neurosciences & Behavior": "Neuro"
+        }
+      },
+```
+
 #### horizontalbars
 
 Used to display the number of documents associated to a field value (for
