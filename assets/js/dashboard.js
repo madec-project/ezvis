@@ -139,10 +139,21 @@ $(document).ready(function () {
 
     // add filter to the URL
     var sel = filter2Selector();
+    var jsonSel = JSON.parse(sel);
     if (graphPref.type !== 'histogram') {
       url +=
          '&columns[0][data]=value&columns[0][orderable]=true' +
          '&order[0][column]=0&order[0][dir]=desc';
+      if (graphPref.type === 'network') {
+        /// threshold is not wanted there
+        // if (graphPref.threshold && typeof graphPref.threshold === 'number') {
+        //   url += '&query={"$gte":' + graphPref.threshold + '}';
+        // }
+        if (graphPref.selector && typeof graphPref.selector === 'object') {
+          // WARNING: when the key is the same, it is overwritten
+          sel = /*encodeURIComponent(*/JSON.stringify(jQuery.extend(jsonSel, graphPref.selector))/*)*/;
+        }
+      }
     }
     if (sel.length && sel !== '{}') {
       url += '&sel=' + sel;
