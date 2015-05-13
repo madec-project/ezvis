@@ -760,7 +760,13 @@ $(document).ready(function () {
         data: legendData,
         backgroundAlpha: 0.5
       },
-      "creditsPosition": "bottom-right"
+      "creditsPosition": "bottom-right",
+      "export": {
+        "enabled": true,
+        "libs": {
+          "path": "/assets/ammap/plugins/export/libs/"
+        }
+      }
     };
     return options;
   };
