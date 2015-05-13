@@ -680,6 +680,22 @@ $(document).ready(function () {
   };
 
   /**
+   * Export the network as a png image.
+   * @param {String} filename Name of the file to export
+   */
+  var exportNetworkPng = window.exportNetworkPng = function (filename) {
+    filename = filename || "network.png";
+    $('#charts')
+    .append(
+      '<a id="exportpng" href="' + network.png() + '"' +
+      ' download="' + filename + '"' +
+      ' style="display:none" ' +
+      '>export</a>');
+    $('#exportpng')[0].click();
+    $('#exportpng').remove();
+  };
+
+  /**
    * Update the options of an AmMap
    * @param  {Array}  areas   result of an Ajax request
    * @param  {String} id      identifier of the DIV
@@ -1133,9 +1149,13 @@ $(document).ready(function () {
       .before('<div class="panel-heading">' +
         '<h2 class="panel-title">' +
         pref.title +
+        ' <i id="exportnetworkpng" title="Export" class="fa fa-download" style="float:right; cursor:pointer; cursor:hand"></i>' +
         '</h2></div>');
       $('#' + id)
       .append('<i class="fa fa-refresh fa-spin"></i>');
+      $('#exportnetworkpng').click(function () {
+        exportNetworkPng();
+      });
     }
 
     request
