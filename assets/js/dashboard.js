@@ -284,7 +284,13 @@ $(document).ready(function () {
       "startDuration": 1,
       "marginBottom": 0,
       "marginTop"   : 0,
-      "creditsPosition": "bottom-right"
+      "creditsPosition": "bottom-right",
+      "export": {
+        "enabled": true,
+        "libs": {
+          "path": "/assets/amcharts/plugins/export/libs/"
+        }
+      }
     };
     if (pref.legend) {
       options.legend = pref.legend;
@@ -351,7 +357,13 @@ $(document).ready(function () {
         "valueField"  : "value",
         "showHanOnHover" : true
       }],
-      "creditsPosition": "bottom-right"
+      "creditsPosition": "bottom-right",
+      "export": {
+        "enabled": true,
+        "libs": {
+          "path": "/assets/amcharts/plugins/export/libs/"
+        }
+      }
     };
     if (pref.parseDates) {
       options.categoryAxis.parseDates = true;
@@ -403,7 +415,13 @@ $(document).ready(function () {
         "valueField"  : "value",
         "showHanOnHover" : true
       }],
-      "creditsPosition": "bottom-right"
+      "creditsPosition": "bottom-right",
+      "export": {
+        "enabled": true,
+        "libs": {
+          "path": "/assets/amcharts/plugins/export/libs/"
+        }
+      }
     };
     if (pref.labels) {
       console.log('labels', pref.labels);
