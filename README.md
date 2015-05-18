@@ -1529,6 +1529,9 @@ For example, to enable castor to load XML files, each containing several documen
   ]
 ```
 
+There is an example of TSV settings in the 
+[showcase](https://github.com/madec-project/showcase).
+
 # Access restriction by login/password
 
 If you want restrict access to your ezVIS, add an `access` key containing
