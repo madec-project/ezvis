@@ -1145,17 +1145,23 @@ $(document).ready(function () {
     }
 
     if (pref.title && !$('#' + id).prev().length) {
-      $('#' + id)
-      .before('<div class="panel-heading">' +
+      var strPanelHeading = '<div class="panel-heading">' +
         '<h2 class="panel-title">' +
-        pref.title +
-        ' <i id="exportnetworkpng" title="Export" class="fa fa-download" style="float:right; cursor:pointer; cursor:hand"></i>' +
-        '</h2></div>');
+        pref.title;
+      if (isOnlyChart(id)) {
+        strPanelHeading +=
+        ' <i id="exportnetworkpng' + id + '" title="Export" class="fa fa-download" style="float:right; cursor:pointer; cursor:hand"></i>';
+      }
+      strPanelHeading += '</h2></div>';
+      $('#' + id)
+      .before(strPanelHeading);
       $('#' + id)
       .append('<i class="fa fa-refresh fa-spin"></i>');
-      $('#exportnetworkpng').click(function () {
-        exportNetworkPng();
-      });
+      if (isOnlyChart(id)) {
+        $('#exportnetworkpng' + id).click(function () {
+          exportNetworkPng();
+        });        
+      }
     }
 
     request
