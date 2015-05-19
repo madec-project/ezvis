@@ -1160,7 +1160,7 @@ $(document).ready(function () {
       if (isOnlyChart(id)) {
         $('#exportnetworkpng' + id).click(function () {
           exportNetworkPng();
-        });        
+        });
       }
     }
 
