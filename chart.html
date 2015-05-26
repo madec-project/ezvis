@@ -61,6 +61,27 @@
       </thead>
     </table>
   </div>
+  <div class="pull-right">
+    <div id="chart-exports" class="btn-group dropup">
+      <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+        Export <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <li>
+        <a v-attr="href: csv"><i class="fa fa-file-excel-o"></i> CSV</a>
+        </li>
+        <li>
+        <a v-attr="href: atom"><i class="fa fa-file-code-o"></i> Atom</a>
+        </li>
+        <li>
+        <a v-attr="href: rss"><i class="fa fa-rss"></i>  RSS</a>
+        </li>
+        <li>
+        <a v-attr="href: json"><i class="fa fa-file-o"></i> JSON</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

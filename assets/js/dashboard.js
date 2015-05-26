@@ -1384,6 +1384,33 @@ $(document).ready(function () {
               table.column(fieldNb + i).visible(false);
             }
             createFacets(id, pref.facets, pref);
+
+            // exports
+            var vexp = new Vue( {
+              el: '#chart-exports',
+              data: {
+                csv: '/browse.csv',
+                json: '/browse.json',
+                rss: '/browse.rss',
+                atom: '/browse.atom'
+              },
+              ready: function() {
+                var self = this;
+              },
+              filters: {
+              }
+            });
+
+            var qs = require('qs');
+
+            table.on('xhr', function () {
+              var params = '?' + qs.stringify(table.ajax.params());
+              vexp.$data.csv = table.ajax.url().replace('.json', '.csv') + params;
+              vexp.$data.rss = table.ajax.url().replace('.json', '.rss') + params;
+              vexp.$data.atom = table.ajax.url().replace('.json', '.atom') + params;
+              vexp.$data.json = table.ajax.url().replace('.json', '.json') + params;
+            });
+
           }
 
           if (isOnlyChart(id)) {
