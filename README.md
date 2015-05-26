@@ -14,8 +14,11 @@ You have to install [mongodb](http://docs.mongodb.org/manual/installation/)
 first, and [node](http://nodejs.org/) too.
 
 ```bash
-$ npm install ezvis -g
+$ npm install --production ezvis -g
 ```
+
+> **Note:** the `--production` options is not required, it prevents the
+> installation of development dependencies.
 
 # Usage
 
