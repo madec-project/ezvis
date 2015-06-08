@@ -60,9 +60,12 @@ The configuration is done in the JSON file of
 it's a file with the same name as the data directory
 (besides that directory), appended with `.json`.
 
+The *fields* are set separated from the *dashboard* and its charts itself. They
+form the [`documentFields`](#documentfields), [`corpusFields`](#corpusfields)
+and [`flyingFields`](#flyingfields) parts.
+
 The whole dashboard configuration is done inside the `dashboard` key of the
-JSON configuration file. Except, the `documentFields` configuration, and
-`corpusFields`.
+JSON configuration file.
 
 Each chart has to be described in the `dashboard.charts` key.
 
@@ -147,9 +150,10 @@ which will modify the former document to the following:
 }
 ```
 
-`$year` indicates to create a `year` property at the document's root, and the
-[`get` JBJ action](https://github.com/castorjs/node-jbj#get) points to the
-location of the source field in the same document.
+`$year` indicates to create a `year` property at the document's root (or a
+[variable](https://github.com/castorjs/node-jbj#variables), in JBJ's
+terminology), and the [`get` JBJ action](https://github.com/castorjs/node-jbj#get)
+points to the location of the source field in the same document.
 
 All [JBJ actions](https://github.com/castorjs/node-jbj#actions) are
 applicable, and for example a `"cast": "number"` after the `get` action will
@@ -202,6 +206,9 @@ performance may be lower, but only if later operations use the field; that is
 to say that a field created only to be displayed, not to be used in
 computations -like charts- is a good candidate to be noindexed).
 
+> **Note 3:** the '$?' [source](https://github.com/castorjs/node-jbj#source)
+is available in `documentFields` (but only with the `http:` protocol).
+
 ### text
 
 The `$text` field is used in the documents table to search the documents, as a
@@ -221,7 +228,7 @@ This field is not truncated at 1000 characters.
 
 ### nosave
 
-The `nosave` property of a variable prevent its value to be saved in the
+The `nosave` property of a variable prevents its value to be saved in the
 document.
 This is useful for external resources, like `http:` or `local:` protocols.
 
@@ -235,6 +242,8 @@ This is useful for external resources, like `http:` or `local:` protocols.
       "mappingVar": ["country","country2iso"]
     },
 ```
+
+However, the field is available to other `documentFields`.
 
 ## corpusFields
 
@@ -264,10 +273,10 @@ from [font-awesome](http://fortawesome.github.io/Font-Awesome/icons/).
 
 From `"$?"` on, the properties are [JBJ actions](https://github.com/castorjs/node-jbj#actions).
 
-The `"$?"` action means that the remaining actions will be applied to the
-result of the `/compute` route of ezvis, using the
+That `"$?"` action (with `local:` protocol) means that the remaining actions
+will be applied to the result of the `/compute` route of ezvis, using the
 [`count` operator](https://github.com/madec-project/ezvis/blob/master/OPERATORS.md#count)
-on the `wid` `field`.
+on the `wid` field.
 
 It's a [source](https://github.com/castorjs/node-jbj#source) using the `local`
 protocol, which is a shortcut to `http://localhost:port` (useful because the
@@ -339,9 +348,11 @@ notation, see
 
 ## flyingFields
 
-Once in a while, you need to combine a `corpusField` and a `documentField` (to normalize a value, or to use reference table in a `corpusField`).
+Once in a while, you need to combine a `corpusField` and a `documentField` (to
+normalize a value, or to use reference table in a `corpusField`).
 
-`flyingFields` are like `documentFields`, except that they are computed just in time, thus they can interoperate with `corpusFields`.
+`flyingFields` are like `documentFields`, except that they are computed just in
+time, thus they can interoperate with `corpusFields`.
 
 > **Warning:** if you have a `corpusFields` with the same name as a
 > `documentFields`, one of them will be replaced by the other.
@@ -353,7 +364,8 @@ URL begins with `/compute.json?operator=` followed by the operator name (often
 `distinct`), followed by `&field=` and by a field name. Then you can add
 `&flying=` and the name of the `flyingField`.
 
-Example where you replace the name of a country by the ISO code of the country, using an external table.
+Example where you replace the name of a country by the ISO code of the
+country, using an external table.
 
 If you have a `documentFields` named `country`:
 
@@ -397,7 +409,8 @@ URL in `$?` returns):
 }
 ```
 
-The `distinct` operator on `country` `documentFields` will be called with http://localhost:3000/compute.json?operator=distinct&field=country:
+The `distinct` operator on `country` `documentFields` will be called with 
+http://localhost:3000/compute.json?operator=distinct&field=country:
 
 ```json
 {
