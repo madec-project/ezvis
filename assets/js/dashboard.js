@@ -383,7 +383,28 @@ $(document).ready(function () {
         }
       };
     }
-    return options;
+    if (pref.overlay) {
+      options.graphs[1] = {
+        "id": "graph2",
+        "balloonText": (pref.overlay.label||"") + " [[value]]",
+        "bullet": "round",
+        "lineThickness": 3,
+        "bulletSize": 7,
+        "bulletBorderAlpha": 1,
+        "bulletColor": "#FFFFFF",
+        "useLineColorForBulletBorder": true,
+        "bulletBorderThickness": 3,
+        "fillAlphas": 0,
+        "lineAlpha": 1,
+        "title": "Citations",
+        "valueField": "value2"
+      };
+      console.log(options);
+      return options;
+    }
+    else {
+      return options;
+    }
   };
 
   /**
@@ -1019,6 +1040,12 @@ $(document).ready(function () {
     flyings.forEach(function (flying) {
       url += '&ff=' + flying;
     });
+
+    if (pref.overlay && pref.overlay.flying) {
+      url = '/corpus.json?l=1' +
+            '&columns[0][data]=computedDate&order[0][column]=0&order[0][dir]=desc' +
+            '&firstOnly=true&ff=' + pref.overlay.flying[0];
+    }
     url += '&itemsPerPage=';
 
     if (pref.title && !$('#' + id).prev().length) {
