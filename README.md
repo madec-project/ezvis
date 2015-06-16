@@ -494,7 +494,7 @@ add `"parseDates": true` in the configuration:
       }
 ```
 
-If you want to shorten the field value to display on the chart, use an
+If you want to shorten the field value to display on the chart, use a `labels`
 associative array to replace too long fields values with shorter ones:
 
 ```javascript
@@ -511,6 +511,73 @@ associative array to replace too long fields values with shorter ones:
       },
 ```
 
+##### overlay
+
+If you want to superimpose a new series of values to the one already displayed
+in columns (but as a line), you can use the `overlay` property of an
+`histogram`.
+
+You have to indicate a `label` and a `flying` array.
+
+The `flying` is a [flyingFields](#flyingfields) that return an array of elements containing:
+
+- `_id`: the identifier of the column
+- `value`: the height of the column
+- `value2`: the value to be displayed in the line
+
+Example: to display an histogram the number of documents (publications) per
+year, *overlayed* by a line containing the citations per year.
+
+```javascript
+ "corpusFields": {
+    "$publiPerYear": {
+      "$?": "local:///compute.json?operator=distinct&field=Year",
+      "parseJSON": true,
+      "select": ".data :nth-child(n)"
+    },
+    "$citationsPerYear": {
+      "$?": "local:///compute.json?operator=sum_field1_by_field2&field=NbCitations&field=Year",
+      "parseJSON": true,
+      "select": ".data :nth-child(n)"
+    }
+  },
+  "flyingFields": {
+    "$publiCitationPerYear": {
+      "zip": ["publiPerYear","citationsPerYear"],
+      "foreach": {
+        "$value": {
+          "get": "publiPerYear"
+        },
+        "$value2": {
+          "get": "citationsPerYear"
+        },
+        "mask": "_id,value,value2"
+      }
+    }
+  },
+  "dashboard": {
+    "charts": [
+      {
+        "fields": ["content.json.Py"],
+        "type": "histogram",
+        "title": "Années & citations",
+        "help": "Nombre total de publications et de citations par année",
+        "size": {
+          "height": 400
+        },
+        "color": "#5496cf",
+        "overlay": {
+          "label": "Citation ratio:",
+          "flying": [ "publiCitationPerYear" ]
+        }
+      }
+    ]
+  }
+```
+
+> **Warning:** using facets with an overlay (which is computed from
+> `corpusFields`) is not a good idea: the selected facets will not modify
+> the chart, as other chart types do.
 
 #### pie
 
