@@ -4,6 +4,7 @@
 .npmignore
 
 # Added manually
-data/*
-data.json
-
+data*/*
+data*.json
+assets/amcharts-*
+assets/ammap-*
