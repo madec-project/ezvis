@@ -345,6 +345,13 @@ $(document).ready(function () {
       },
       "startDuration": 1,
       "valueAxes"    : [{
+        "id": "v1",
+        "position": "left",
+        "minimum": 0
+      },{
+        "id": "v2",
+        "position": "right",
+        "gridAlpha": 0,
         "minimum": 0
       }],
       "graphs" : [{
@@ -355,7 +362,8 @@ $(document).ready(function () {
         "dashLengthField": "dashLengthColumn", // REMOVE ?
         "title"       : pref.title ? pref.title : "",
         "valueField"  : "value",
-        "showHanOnHover" : true
+        "valueAxis"   : "v1",
+        "showHandOnHover" : true
       }],
       "creditsPosition": "bottom-right",
       "export": {
@@ -397,7 +405,9 @@ $(document).ready(function () {
         "fillAlphas": 0,
         "lineAlpha": 1,
         "title": "Citations",
-        "valueField": "value2"
+        "valueField": "value2",
+        "valueAxis": "v2",
+        "showHandOnHover" : true
       };
       console.log(options);
       return options;
