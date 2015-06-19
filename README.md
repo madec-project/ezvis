@@ -568,6 +568,7 @@ year, *overlayed* by a line containing the citations per year.
         "color": "#5496cf",
         "overlay": {
           "label": "Citation ratio:",
+          "firstOnly": true,
           "flying": [ "publiCitationPerYear" ]
         }
       }
@@ -578,6 +579,112 @@ year, *overlayed* by a line containing the citations per year.
 > **Warning:** using facets with an overlay (which is computed from
 > `corpusFields`) is not a good idea: the selected facets will not modify
 > the chart, as other chart types do.
+
+<a id="firstonly"></a>
+The `firstOnly` property is here to prevent the URL to return a `data`
+containing an array containing an array with only one element, which the chart
+won't interpret correctly.
+
+If you don't see anything on the chart, try inverting the value of `firstOnly`
+(false by default).
+
+In the example, if you omit `"firstOnly": true`, the URL will be http://localhost:3000/compute.json?o=distinct&f=content.json.Py&ff=publiCitationPerYear&itemsPerPage= and return a `data` like:
+
+```json
+[
+  [
+    {
+      _id: "2007",
+      value: 5,
+      value2: 868
+    },
+    {
+      _id: "2008",
+      value: 3,
+      value2: 39
+    },
+    {
+      _id: "2009",
+      value: 4,
+      value2: 46
+    },
+    {
+      _id: "2010",
+      value: 1,
+      value2: 5
+    },
+    {
+      _id: "2011",
+      value: 1,
+      value2: 106
+    }
+  ],
+  [
+    {
+      _id: "2007",
+      value: 5,
+      value2: 868
+    },
+    {
+      _id: "2008",
+      value: 3,
+      value2: 39
+    },
+    {
+      _id: "2009",
+      value: 4,
+      value2: 46
+    },
+    {
+      _id: "2010",
+      value: 1,
+      value2: 5
+    },
+    {
+      _id: "2011",
+      value: 1,
+      value2: 106
+    }
+  ],
+  [...],
+  [...],
+  [...]
+]
+```
+
+which ezVIS can't project on the chart. If you use `"firstOnly": true`, the
+URL will be http://localhost:3000/compute.json?o=distinct&f=content.json.Py&firstOnly=true&ff=publiCitationPerYear&itemsPerPage=
+and will return a `data` like:
+
+```json
+[
+  {
+    _id: "2007",
+    value: 5,
+    value2: 868
+  },
+  {
+    _id: "2008",
+    value: 3,
+    value2: 39
+  },
+  {
+    _id: "2009",
+    value: 4,
+    value2: 46
+  },
+  {
+    _id: "2010",
+    value: 1,
+    value2: 5
+  },
+  {
+    _id: "2011",
+    value: 1,
+    value2: 106
+  }
+]
+```
 
 #### pie
 

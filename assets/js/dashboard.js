@@ -1052,9 +1052,10 @@ $(document).ready(function () {
     });
 
     if (pref.overlay && pref.overlay.flying) {
-      url = '/corpus.json?l=1' +
-            '&columns[0][data]=computedDate&order[0][column]=0&order[0][dir]=desc' +
-            '&firstOnly=true&ff=' + pref.overlay.flying[0];
+      if (pref.overlay.firstOnly) {
+        url += '&firstOnly=true';
+      }
+      url += '&ff=' + pref.overlay.flying[0];
     }
     url += '&itemsPerPage=';
 
