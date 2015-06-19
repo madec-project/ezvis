@@ -686,6 +686,45 @@ and will return a `data` like:
 ]
 ```
 
+Example with a `"firstOnly": false`, each `normalizeCitationRatioPerYear`
+treatment will be applied to an object containing a year (`_id`) and a number
+of publications (`value`):
+
+```json
+{
+  "dashboard": {
+    "charts": [{
+      "fields": ["content.json.Py"],
+      "type": "histogram",
+      "title": "Years & normalized citations ratio",
+      "help": "Total number of publications and normalized citations ratio per year",
+      "overlay": {
+        "label": "Normalized citation ratio per year:",
+        "flying": [ "normalizeCitationRatioPerYear" ]
+      }
+    }]
+  },
+  "flyingFields": {
+    "$normalizeCitationRatioPerYear": {
+      "$cpy": {
+        "get": "citationsPerYear",
+        "array2object": true
+      },
+      "$citations": {
+        "getpropertyvar": ["cpy","_id"]
+      },
+      "$globalCitation":{
+        "getpropertyvar": ["globalCitationRatios","_id"]
+      },
+      "$value2": {
+        "compute": "citations / value / globalCitation"
+      },
+      "mask": "_id,value,value2"
+    }
+  }
+}
+```
+
 #### pie
 
 Used to fill the pie chart quarters.
