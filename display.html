@@ -38,9 +38,11 @@
   </div>
 </div>
 
+{% if config.addlinkstojbj %}
 <p id="jbjlink">
   <a class="btn btn-default" href="http://castorjs.github.io/node-jbj/?input=" role="button">JBJ</a>
 </p>
+{% endif %}
 {% endblock %}
 
 {% block scripts %}
@@ -55,10 +57,12 @@ $(document).ready(function() {
     }
   }
 
+{% if config.addlinkstojbj %}
   var a = $('#jbjlink > a');
   var link = a.attr('href');
   link += window.location.href.replace('.html','.json');
   a.attr('href', link);
+{% endif %}
 });
 </script>
 {% endblock %}
