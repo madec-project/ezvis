@@ -37,6 +37,10 @@
     </table>
   </div>
 </div>
+
+<p id="jbjlink">
+  <a class="btn btn-default" href="http://castorjs.github.io/node-jbj/?input=" role="button">JBJ</a>
+</p>
 {% endblock %}
 
 {% block scripts %}
@@ -50,6 +54,11 @@ $(document).ready(function() {
       value.innerHTML = '<a href="' + str + '">' + str + '</a>';
     }
   }
+
+  var a = $('#jbjlink > a');
+  var link = a.attr('href');
+  link += window.location.href.replace('.html','.json');
+  a.attr('href', link);
 });
 </script>
 {% endblock %}
