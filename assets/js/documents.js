@@ -68,4 +68,12 @@ $(document).ready(function() {
   else {
     $('#dataTables-documents').parent().append('<div  class="alert alert-danger" role="alert">' + 'No field is marked as visible !' + '</div>');
   }
+
+  var a = $('#jbjlink > a');
+  if (a.length) {
+    var link = a.attr('href');
+    link += window.location.href.replace('documents.html','browse.json');
+    a.attr('href', link);
+  }
+
 });
