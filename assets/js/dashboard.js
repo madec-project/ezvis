@@ -1456,6 +1456,44 @@ $(document).ready(function () {
             if (pref.help) {
               $('.specificHelp').append(marked(pref.help));
             }
+
+            var a = $('#jbjlink > a');
+            if (a.length) {
+              var link = a.attr('href');
+              var createUrlForChart = function () {
+                if (!options) return;
+                if (!(pref.type || options.data || options.data.type || options.data.types)) return;
+
+                var operator = pref.operator ? pref.operator : (pref.type === "network" ? "graph" : "distinct");
+                var maxItems = pref.maxItems ? pref.maxItems : (pref.type === "network" ? 1000 : 0);
+                var fields   = pref.fields ? pref.fields : [pref.field];
+                var flyings  = pref.flying ? pref.flying : [];
+                var url      = '/compute.json?o=' + operator;
+                fields.forEach(function (field) {
+                  url += '&f=' + field;
+                });
+                flyings.forEach(function (flying) {
+                  url += '&ff=' + flying;
+                });
+                if (pref.type === 'horizontalbars' || pref.type === 'pie' || pref.type === 'network') {
+                  url += '&columns[0][data]=value&columns[0][orderable]=true';
+                  url += '&order[0][column]=0&order[0][dir]=desc';
+                }
+                if (pref.threshold && typeof pref.threshold === 'number') {
+                  url += '&query={"$gte":' + pref.threshold + '}';
+                }
+                if (pref.selector && typeof pref.selector === 'object') {
+                  url += '&sel=' + encodeURIComponent(JSON.stringify(pref.selector));
+                }
+
+                url += '&itemsPerPage=' + maxItems;
+                return url;
+              }
+
+              link += window.location.origin + createUrlForChart();
+              a.attr('href', link);
+            }
+
           }
           else {
             $('#' + id).after(

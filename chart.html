@@ -1,10 +1,17 @@
 {% extends "layout.html" %}
 
 {% block content %}
+{% if config.addlinkstojbj %}
+  <p id="jbjlink">
+    If you want to configure <code>dashboard.charts</code>, you may want to see data returned by the operator in  
+    <a class="btn btn-default" href="http://castorjs.github.io/node-jbj/?input=" role="button">JBJ</a> playground (use <code>"get": "data"</code>).
+  </p>
+{% endif %}
 {% if config.pages.chart.help %}
 <div class="row lead">
   {{ config.pages.chart.help | markdown }}
 </div>
+
 {% endif %}
 
 <div class="row lead specificHelp">
