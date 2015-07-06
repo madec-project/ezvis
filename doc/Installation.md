@@ -29,7 +29,7 @@ avaible by default on Ubuntu 12.04, for example.
 
 Use a 0.10.* or a 0.12.* version of [nodejs](http://nodejs.org/).
 
-Tip: use [nvm](https://github.com/creationix/nvm) to be able to choose
+> Tip: use [nvm](https://github.com/creationix/nvm) to be able to choose
 nodejs's version.
 
 ## Windows

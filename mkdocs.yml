@@ -8,7 +8,7 @@ include_search: true
 pages:
 - ['index.md','Home']
 - ['Installation.md', 'Installation']
-#- ['ConfigurationFile.md', 'Configuration', 'Configuration file']
+- ['ConfigurationFile.md', 'Configuration', 'Configuration file']
 #- ['DocumentFields.md', 'Configuration', 'documentFields']
 #- ['CorpusFields.md', 'Configuration', 'corpusFields']
 #- ['FlyingFields.md', 'Configuration', 'flyingFields']
