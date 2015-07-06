@@ -28,7 +28,7 @@ From `"$?"` on, the properties are [JBJ actions](https://github.com/castorjs/nod
 
 That `"$?"` action (with `local:` protocol) means that the remaining actions
 will be applied to the result of the `/compute` route of ezvis, using the
-[`count` operator](https://github.com/madec-project/ezvis/blob/master/OPERATORS.md#count)
+[`count` operator](https://github.com/madec-project/ezvis/blob/master/Operators.md#count)
 on the `wid` field.
 
 It's a [source](https://github.com/castorjs/node-jbj#source) using the `local`
