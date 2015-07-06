@@ -40,7 +40,7 @@ To find which version of Windows you are running, enter the following command in
 
 ```
 wmic os get osarchitecture
-````
+```
 
 ### MongoDB
 
