@@ -34,11 +34,11 @@ charts: [`histogram`](histogram.md) and [`pie`](pie.md).
   "dashboard" : {
     "charts": [
         {
-            "field": "content.json.Py",
+            "fields": ["content.json.Py"],
             "type": "histogram"
         },
         {
-            "field": "fields.Themes",
+            "fields": ["fields.Themes"],
             "type": "pie"
         }
     ]
