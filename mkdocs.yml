@@ -11,7 +11,7 @@ pages:
 - ['ConfigurationFile.md', 'Configuration', 'Configuration file']
 - ['DocumentFields.md', 'Configuration', 'documentFields']
 - ['CorpusFields.md', 'Configuration', 'corpusFields']
-#- ['FlyingFields.md', 'Configuration', 'flyingFields']
+- ['FlyingFields.md', 'Configuration', 'flyingFields']
 #- ['Dashboard.md', 'Configuration', 'Dashboard']
 #- ['Histogram.md', 'Configuration', 'histogram']
 #- ['HorizontalBars.md', 'Configuration', 'horizontalbars']
