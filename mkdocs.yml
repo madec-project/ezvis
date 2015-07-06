@@ -18,7 +18,7 @@ pages:
 - ['Pie.md', 'Dashboard', 'pie']
 - ['Map.md', 'Dashboard', 'map']
 - ['Network.md', 'Dashboard', 'network']
-- ['Preferences.md', 'Dashboard', 'Charts\' preferences']
+- ['Preferences.md', 'Dashboard', 'Charts preferences']
 #- ['Facets.md', 'Dashboard', 'Facets']
 #- ['Fields.md', 'Routes', 'Field parameters to charts']
 #- ['Operators.md', 'Routes', 'Operator parameter to charts']
