@@ -7,7 +7,7 @@ docs_dir: doc
 include_search: true
 pages:
 - ['index.md','Home']
-#- ['Installation.md', 'Installation']
+- ['Installation.md', 'Installation']
 #- ['ConfigurationFile.md', 'Configuration', 'Configuration file']
 #- ['DocumentFields.md', 'Configuration', 'documentFields']
 #- ['CorpusFields.md', 'Configuration', 'corpusFields']
