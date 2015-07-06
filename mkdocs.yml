@@ -9,7 +9,7 @@ pages:
 - ['index.md','Home']
 - ['Installation.md', 'Installation']
 - ['ConfigurationFile.md', 'Configuration', 'Configuration file']
-#- ['DocumentFields.md', 'Configuration', 'documentFields']
+- ['DocumentFields.md', 'Configuration', 'documentFields']
 #- ['CorpusFields.md', 'Configuration', 'corpusFields']
 #- ['FlyingFields.md', 'Configuration', 'flyingFields']
 #- ['Dashboard.md', 'Configuration', 'Dashboard']
