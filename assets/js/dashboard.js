@@ -1488,7 +1488,7 @@ $(document).ready(function () {
 
                 url += '&itemsPerPage=' + maxItems;
                 return url;
-              }
+              };
 
               link += window.location.origin + createUrlForChart();
               a.attr('href', link);
