@@ -8,10 +8,11 @@ include_search: true
 pages:
 - ['index.md','Home']
 - ['Installation.md', 'Installation']
-- ['ConfigurationFile.md', 'Configuration', 'Configuration file']
+- ['ConfigurationFile.md', 'Configuration', 'JSON file']
 - ['DocumentFields.md', 'Configuration', 'documentFields']
 - ['CorpusFields.md', 'Configuration', 'corpusFields']
 - ['FlyingFields.md', 'Configuration', 'flyingFields']
+- ['Access.md', 'Configuration', 'Access restriction by login/password']
 - ['Dashboard.md', 'Dashboard', 'Dashboard']
 - ['Histogram.md', 'Dashboard', 'histogram']
 - ['HorizontalBars.md', 'Dashboard', 'horizontalbars']
@@ -27,5 +28,4 @@ pages:
 - ['Display.md', 'Other Pages', 'Document''s page']
 - ['Pages.md', 'Other Pages', 'Pages'' labels and texts']
 - ['Loaders.md', 'Data', 'Loaders by format']
-#- ['Access.md', 'Configuration', 'Access restriction by login/password']
 #- ['JBJ.md', 'JBJ', 'Configuration syntax: JBJ']
