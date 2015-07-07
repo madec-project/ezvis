@@ -21,7 +21,7 @@ pages:
 - ['Preferences.md', 'Dashboard', 'Charts'' preferences']
 - ['Facets.md', 'Dashboard', 'Facets']
 - ['Fields.md', 'Routes', 'Field parameters to charts']
-#- ['Operators.md', 'Routes', 'Operator parameter to charts']
+- ['Operators.md', 'Routes', 'Operator parameter to charts']
 #- ['Flying.md', 'Routes', 'Flying parameter to charts']
 #- ['Documents.md', 'Other Pages', 'Documents table']
 #- ['Display.md', 'Other Pages', 'Document\'s page']
