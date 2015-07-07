@@ -6,7 +6,7 @@ site_description: Documentation for ezVIS
 docs_dir: doc
 include_search: true
 pages:
-- ['index.md','Home']
+- ['index.md','Summary']
 - ['Installation.md', 'Installation']
 - ['ConfigurationFile.md', 'Configuration', 'JSON file']
 - ['DocumentFields.md', 'Configuration', 'documentFields']
@@ -21,11 +21,11 @@ pages:
 - ['Network.md', 'Dashboard', 'network']
 - ['Preferences.md', 'Dashboard', 'Charts'' preferences']
 - ['Facets.md', 'Dashboard', 'Facets']
-- ['Fields.md', 'Routes', 'Field parameters to charts']
-- ['Operators.md', 'Routes', 'Operator parameter to charts']
-- ['Flying.md', 'Routes', 'Flying parameter to charts']
-- ['Documents.md', 'Other Pages', 'Documents table']
-- ['Display.md', 'Other Pages', 'Document''s page']
-- ['Pages.md', 'Other Pages', 'Pages'' labels and texts']
+- ['Fields.md', 'Chart parameters', 'Field parameters to charts']
+- ['Operators.md', 'Chart parameters', 'Operator parameter to charts']
+- ['Flying.md', 'Chart parameters', 'Flying parameter to charts']
+- ['Documents.md', 'Pages', 'Documents table']
+- ['Display.md', 'Pages', 'Document''s page']
+- ['Pages.md', 'Pages', 'Pages'' labels and texts']
 - ['Loaders.md', 'Data', 'Loaders by format']
 - ['JBJ.md', 'Annex', 'JBJ']
