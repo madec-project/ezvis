@@ -19,7 +19,7 @@ pages:
 - ['Map.md', 'Dashboard', 'map']
 - ['Network.md', 'Dashboard', 'network']
 - ['Preferences.md', 'Dashboard', 'Charts'' preferences']
-#- ['Facets.md', 'Dashboard', 'Facets']
+- ['Facets.md', 'Dashboard', 'Facets']
 #- ['Fields.md', 'Routes', 'Field parameters to charts']
 #- ['Operators.md', 'Routes', 'Operator parameter to charts']
 #- ['Flying.md', 'Routes', 'Flying parameter to charts']
