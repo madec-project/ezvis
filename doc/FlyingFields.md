@@ -1,5 +1,3 @@
-# flyingFields
-
 Once in a while, you need to combine a `corpusField` and a `documentField` (to
 normalize a value, or to use reference table in a `corpusField`).
 

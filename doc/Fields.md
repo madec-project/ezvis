@@ -1,5 +1,3 @@
-# Field configuration
-
 ## Simple configuration
 
 To indicate which field is used by a chart, you have to specify it inside the chart.

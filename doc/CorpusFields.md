@@ -1,5 +1,3 @@
-# corpusFields
-
 corpusFields are computed after documents loading/synchronizing.
 
 They are used to compute metrics on the whold corpus (hence, the name).

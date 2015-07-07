@@ -1,5 +1,3 @@
-# Documents table
-
 In `/chart.html` pages, you can see a chart, and a table with documents. This table display the fields you chose to put in the `documentFields` key.
 
 Here is an example, displaying `Year`, `Title`, `Authors`, and `Keywords`:

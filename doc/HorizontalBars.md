@@ -1,5 +1,3 @@
-## horizontalbars
-
 Used to display the number of documents associated to a field value (for
 example, for keywords: how many documents match a keyword?).
 Bars are sorted by descending number of documents.

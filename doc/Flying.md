@@ -1,5 +1,3 @@
-# flying
-
 `flying` indicates to a chart that you want to apply the JBJ actions of the
 said `flyingFields` to the data elements returned by the [operator](Operators.md).
 

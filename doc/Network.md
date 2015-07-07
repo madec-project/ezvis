@@ -1,5 +1,3 @@
-## network
-
 ex:
 
 Classical Network, with all links (at least until 100k).

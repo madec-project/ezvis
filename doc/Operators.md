@@ -1,5 +1,3 @@
-# Operators
-
 By default, the charts operator is [`distinct`](#distinct), which count the distinct values of one field.
 
 There are other operators, and some of them take more than one field.

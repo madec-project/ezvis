@@ -1,5 +1,3 @@
-## pie
-
 Used to fill the pie chart quarters.
 
 There are some configuration possible: [`size`](Preferences.md#size) of the pie, 

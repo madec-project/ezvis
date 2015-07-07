@@ -1,5 +1,3 @@
-# Preferences
-
 ## size
 
 To specify the size of the pie, add the `size` key to your chart.

@@ -1,5 +1,3 @@
-# JSON Configuration file
-
 To make charts appear on the dashboard, you have to configure them.
 
 The configuration is done in the JSON file of

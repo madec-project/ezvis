@@ -1,5 +1,3 @@
-# documentFields
-
 documentFields are fields added to each document at loading/synchronizing files.
 
 They are declared in the JSON settings, in the `documentFields` object.

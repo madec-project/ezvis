@@ -1,5 +1,3 @@
-## histogram
-
 Used to represent evolution of the number of documents along the time (so,
 this field is often a publication year, or anything indicating a point in
 time).

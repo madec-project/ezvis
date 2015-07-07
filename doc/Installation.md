@@ -1,5 +1,3 @@
-# Installation
-
 Installing ezVIS requires to have both
 [mongodb](http://docs.mongodb.org/manual/installation/) 2.4+ and
 [nodejs](http://nodejs.org/) 0.10 or 0.12 installed.
