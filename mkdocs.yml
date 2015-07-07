@@ -8,6 +8,7 @@ include_search: true
 pages:
 - ['index.md','Summary']
 - ['Installation.md', 'Installation']
+- ['GettingStarted.md','Getting Started']
 - ['ConfigurationFile.md', 'Configuration', 'JSON file']
 - ['DocumentFields.md', 'Configuration', 'documentFields']
 - ['CorpusFields.md', 'Configuration', 'corpusFields']

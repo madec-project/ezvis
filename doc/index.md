@@ -5,6 +5,7 @@
 ezVIS stands for easy **vis**ualization of information in web report.
 
 # [Installation](Installation.md)
+# [Getting Started](GettingStarted.md)
 # Configuration
 - [JSON file](ConfigurationFile.md)
 - [documentFields](DocumentFields.md)
@@ -32,4 +33,3 @@ ezVIS stands for easy **vis**ualization of information in web report.
 - [Loaders by format](Loaders.md)
 # Annex
 - [JBJ](JBJ.md)
-- 
