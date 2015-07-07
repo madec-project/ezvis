@@ -14,7 +14,11 @@ $ git clone https://github.com/madec-project/getting-started-with-ezvis.git
 
 - zip: get the [zip file](https://github.com/madec-project/getting-started-with-ezvis/archive/master.zip) and unzip it.
 
-- tar.gz: get the [tar.gz](https://github.com/madec-project/getting-started-with-ezvis/archive/master.tar.gz) and unzip it.
+- tar.gz: get the [tar.gz](https://github.com/madec-project/getting-started-with-ezvis/archive/master.tar.gz) and unzip it:
+
+```bash
+$ tar xvzf getting-started-with-ezvis-master.tar.gz
+```
 
 # Visit one example
 
