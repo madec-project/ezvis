@@ -7,9 +7,11 @@ has an example to quickly see what can be done with ezVIS.
 To get the example, several methods are available:
 
 - git clone
+  
   ```bash
   $ git clone https://github.com/madec-project/getting-started-with-ezvis.git
   ```
+
 - zip: get the [zip file](https://github.com/madec-project/getting-started-with-ezvis/archive/master.zip) and unzip it.
 - tar.gz: get the [tar.gz](https://github.com/madec-project/getting-started-with-ezvis/archive/master.tar.gz) and unzip it.
 
