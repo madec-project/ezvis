@@ -28,4 +28,4 @@ pages:
 - ['Display.md', 'Other Pages', 'Document''s page']
 - ['Pages.md', 'Other Pages', 'Pages'' labels and texts']
 - ['Loaders.md', 'Data', 'Loaders by format']
-#- ['JBJ.md', 'JBJ', 'Configuration syntax: JBJ']
+- ['JBJ.md', 'Annex', 'JBJ']

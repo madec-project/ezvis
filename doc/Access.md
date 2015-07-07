@@ -22,7 +22,7 @@ Example for a `pwd` value of the password:
 > **Warning:** when you access the ezVIS report from the same machine as the
 > one running the server, you will not be asked for your identity. This is
 > to allow `local:///` protocol to work, even when not knowing the password
-> (see #corpusFields).
+> (see [corpusFields](CorpusFields.md)).
 
 > **Tip:** to generate a SHA1, either use a Linux commande like `sha1sum` or
 > `shasum` (be careful: don't integrate any carriage return, use `^D` at the
