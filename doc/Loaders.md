@@ -49,7 +49,7 @@ After the creation of a file in the data directory (upload, or copy, or any othe
 Most of the record consists of file metadata:
 
 ```bash
-$mongo castor
+$ mongo castor
 MongoDB shell version: 2.6.10
 connecting to: castor
 > db.films.findOne()
@@ -145,14 +145,6 @@ will produce:
 ```json
 {
   "text" : "Rocky|1976|John G. Avildsen|Sylvester Stallone,Talia Shire,Carl Weathers,Burt Young",
-  "content" : {
-    "json" : {
-      "title" : "Rocky",
-      "year" : "1976",
-      "director" : "John G. Avildsen",
-      "actors" : "Sylvester Stallone/Talia Shire/Carl Weathers/Burt Young"
-    }
-  },
   "number" : 1,
   "title" : "Rocky",
   "year" : "1976",
