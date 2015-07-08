@@ -36,10 +36,12 @@ $ ezvis films
 
 and point your browser to [http://localhost:3000/](http://localhost:3000/).
 
+The file in the `films` directory (`films.csv`) is loaded into MongoDB at ezVIS launching. Then it is served in the form of a web report:
+
+![Principle for laoding and visualizing data with ezVIS](img/ezvis_files.png)
+
+Both loader and web application are configurated in the `films.json`.
+
 If you want to go farther, take a look at the `films.json` file, which
 contains all the report's configuration (which is explained later in this
 documentation).
-
-The file in the `films` directory (`films.csv`) is loaded into MongoDB at ezVIS launching. Then it is serve in the form of a web report:
-
-![Principle for laoding and visualizing data with ezVIS](img/ezvis_files.png)
