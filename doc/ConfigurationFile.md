@@ -15,7 +15,7 @@ JSON configuration file.
 Each chart has to be described in the `dashboard.charts` key.
 
 Below is an example with an histogram, and a pie chart. There are two types of
-charts: [`histogram`](histogram.md) and [`pie`](pie.md).
+charts: [`histogram`](Histogram.md) and [`pie`](Pie.md).
 
 ```json
 {
