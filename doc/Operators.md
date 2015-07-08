@@ -138,7 +138,26 @@ data: [
 TODO
 
 ## count
-TODO
+`count` counts (!) the number of occurrences of a field in all documents.
+
+Often used to count the number of documents in the corpus (using the `wid`
+identifier, which is always present in the records of the database via
+[http://localhost:3000/compute.json?operator=count&field=wid](http://localhost:3000/compute.json?operator=count&field=wid)).
+
+Ex: `http://localhost:3000/compute.json?operator=count&field=wid`
+
+return JSON similar to:
+
+```json
+{
+  "recordsFiltered": 1,
+  "recordsTotal": 1,
+  "data": [{
+    "_id": "wid",
+    "value": 29
+  }]
+}
+```
 
 ## distinct
 `distinct` count the distinct values of a field.
@@ -266,7 +285,10 @@ return JSON `data` similar to:
 
 
 ## total
-TODO
+`total` operator apply the `+` operator to all the occurrences of the specified field.
+
+> **Warning:** if the field has a string format, `+` will only concatenate the
+>              strings, not add the number they may contain.
 
 ## ventilate
 TODO
