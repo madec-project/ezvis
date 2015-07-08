@@ -42,4 +42,4 @@ documentation).
 
 The file in the `films` directory (`films.csv`) is loaded into MongoDB at ezVIS launching. Then it is serve in the form of a web report:
 
-![Principle for laoding and visualizing data with ezVIS](img/ezvis_files.svg)
+![Principle for laoding and visualizing data with ezVIS](img/ezvis_files.png)
