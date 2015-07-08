@@ -145,7 +145,6 @@ will produce:
 ```json
 {
   "text" : "Rocky|1976|John G. Avildsen|Sylvester Stallone,Talia Shire,Carl Weathers,Burt Young",
-  "number" : 1,
   "title" : "Rocky",
   "year" : "1976",
   "director" : "John G. Avildsen",
