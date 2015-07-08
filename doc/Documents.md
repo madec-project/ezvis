@@ -32,8 +32,9 @@ present in the table.
 
 By default, `visible` key value is `false`.
 
-The `Search` field above the documents table uses a field named `text`, which
-must contain the content of all fields you want to be able to search.
+The `Search` field above the documents table uses a field named
+[`text`](DocumentFields.md#text), which must contain the content of all fields
+you want to be able to search.
 
 Ex:
 
