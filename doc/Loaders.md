@@ -42,7 +42,7 @@ There is an example of TSV settings in the
 
 # Loaded matter
 
-After the creation of a file in the data directory (upload, or copy, or any other method of creation), or even after a modification of any file in that directory, the loader reads the file(s), and convert it(them) to JSON in order to be synchronized with the Mongo database.
+After the creation of a file in the data directory (upload, or copy, or any other method of creation), or even after a modification of any file in that directory, the loader reads the file(s), and converts it(them) to JSON in order to be synchronized with the Mongo database.
 
 ![Principle for laoding and visualizing data with ezVIS](img/ezvis_files.png)
 
