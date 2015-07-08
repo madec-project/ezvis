@@ -39,3 +39,7 @@ and point your browser to [http://localhost:3000/](http://localhost:3000/).
 If you want to go farther, take a look at the `films.json` file, which
 contains all the report's configuration (which is explained later in this
 documentation).
+
+The file in the `films` directory (`films.csv`) is loaded into MongoDB at ezVIS launching. Then it is serve in the form of a web report:
+
+![Principle for laoding and visualizing data with ezVIS](img/ezvis_files.svg)
