@@ -33,3 +33,5 @@ ezVIS stands for easy **vis**ualization of information in web report.
 - [Loaders by format](Loaders.md)
 # Annex
 - [JBJ](JBJ.md)
+- [Showcase](Showcase.md)
+- [Blog](MADEC.md)

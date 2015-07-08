@@ -30,3 +30,5 @@ pages:
 - ['Pages.md', 'Pages', 'Pages'' labels and texts']
 - ['Loaders.md', 'Data', 'Loaders by format']
 - ['JBJ.md', 'Annex', 'JBJ']
+- ['Showcase.md', 'Annex', 'Showcase']
+- ['MADEC.md', 'Annex', 'Blog']

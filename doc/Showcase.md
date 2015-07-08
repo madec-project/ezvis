@@ -1,0 +1,1 @@
+Some configuration files and their data are shared in the [MADEC-Project Showcase](https://github.com/madec-project/showcase/).
