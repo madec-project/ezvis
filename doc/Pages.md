@@ -17,3 +17,6 @@ For example, you may customize the `/index.html` page using:
 ```
 
 Notice that the path for `index` settings is `pages.index`.
+
+`help` may contain MarkDown formatted text, allowing to integrate links to other pages, lists, etc.
+If you don't know MarkDown, take a look at [GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown/), or [Markdown: Basics](http://daringfireball.net/projects/markdown/basics).
