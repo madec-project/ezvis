@@ -4,6 +4,8 @@
 
 ezVIS stands for easy **vis**ualization of information in web report.
 
+![Example of ezVIS Dashboard](img/ezvis_films_dashboard.png)
+
 # [Installation](Installation.md)
 # [Getting Started](GettingStarted.md)
 # Configuration
