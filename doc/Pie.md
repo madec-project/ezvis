@@ -1,3 +1,5 @@
+![Example of ezVIS Pie](img/ezvis_tv_pie.png)
+
 Used to fill the pie chart quarters.
 
 There are some configuration possible: [`size`](Preferences.md#size) of the pie, 
