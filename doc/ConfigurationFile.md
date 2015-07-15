@@ -5,6 +5,13 @@ The configuration is done in the JSON file of
 it's a file with the same name as the data directory
 (besides that directory), appended with `.json`.
 
+```
+.
+├── data
+│   └── data.csv
+└── data.json
+```
+
 The *fields* are set separated from the *dashboard* and its charts itself. They
 form the [`documentFields`](DocumentFields.md), [`corpusFields`](CorpusFields.md)
 and [`flyingFields`](FlyingFields.md) parts.
