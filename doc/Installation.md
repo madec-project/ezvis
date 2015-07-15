@@ -29,7 +29,7 @@ avaible by default on Ubuntu 12.04, for example.
 
 Use a 0.10.* or a 0.12.* version of [nodejs](http://nodejs.org/).
 
-> Tip: use [nvm](https://github.com/creationix/nvm) to be able to choose
+> **Tip:** use [nvm](https://github.com/creationix/nvm) to be able to choose
 nodejs's version.
 
 Once node is installed, go to the [`npm` step](#npm-installation).
@@ -86,7 +86,7 @@ $ npm install --production ezvis -g
 
 > **Note:** the `--production` option is not required, it only prevents the
 >  installation of development (and test) dependencies. If you don't intend
->  to run these tests, you can safely add this option.
+>  to run these tests, you can safely remove this option.
 
 
 # Usage
