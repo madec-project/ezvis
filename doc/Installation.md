@@ -75,6 +75,19 @@ Install [Homebrew](http://brew.sh/), and then use it to install
 and [node](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager#osx).
 
 
+# npm installation
+
+Once node is installed, you can install the `ezvis` command itself by:
+
+```bash
+$ npm install --production ezvis -g
+```
+
+> **Note:** the `--production` option is not required, it only prevents the
+>  installation of development (and test) dependencies. If you don't intend
+>  to run these tests, you can safely add this option.
+
+
 # Usage
 
 Make sure mongodb is running, and then.
@@ -105,16 +118,3 @@ Before that, you have to configure your mongo connection, by creating a
 ```
 
 Then, point your browser to http://localhost:3000/
-
-
-# npm installation
-
-Once node is installed, you can install the `ezvis` command itself by:
-
-```bash
-$ npm install --production ezvis -g
-```
-
-> **Note:** the `--production` option is not required, it only prevents the
->  installation of development (and test) dependencies. If you don't intend
->  to run these tests, you can safely add this option.
