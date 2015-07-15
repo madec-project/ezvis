@@ -32,6 +32,8 @@ Use a 0.10.* or a 0.12.* version of [nodejs](http://nodejs.org/).
 > Tip: use [nvm](https://github.com/creationix/nvm) to be able to choose
 nodejs's version.
 
+Once node is installed, go to the [`npm` step](#npm-installation).
+
 ## Windows
 
 In general, pay attention to the version of Windows you use (32-bit or 64-bit), and download an MSI installer.
