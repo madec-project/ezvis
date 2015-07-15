@@ -1,3 +1,5 @@
+# Requirements
+
 Installing ezVIS requires to have both
 [mongodb](http://docs.mongodb.org/manual/installation/) 2.4+ and
 [nodejs](http://nodejs.org/) 0.10 or 0.12 installed.
@@ -104,3 +106,15 @@ Before that, you have to configure your mongo connection, by creating a
 
 Then, point your browser to http://localhost:3000/
 
+
+# npm installation
+
+Once node is installed, you can install the `ezvis` command itself by:
+
+```bash
+$ npm install --production ezvis -g
+```
+
+> **Note:** the `--production` option is not required, it only prevents the
+>  installation of development (and test) dependencies. If you don't intend
+>  to run these tests, you can safely add this option.
