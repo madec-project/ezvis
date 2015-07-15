@@ -65,8 +65,7 @@ On [nodejs's downloads page](http://nodejs.org/download/), get the Windows MSI I
 
 ### Command Prompt
 
-To launch ezVIS, you'll need to open a new command prompt, then return to the [README](./README.md),
-at the `npm` step.
+To launch ezVIS, you'll need to open a new command prompt, then go to the [`npm` step](#npm-installation).
 
 ## MacOS
 
