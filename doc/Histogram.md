@@ -1,3 +1,5 @@
+![Example of ezVIS Histogram](img/ezvis_films_histogram.png)
+
 Used to represent evolution of the number of documents along the time (so,
 this field is often a publication year, or anything indicating a point in
 time).
@@ -5,7 +7,7 @@ time).
 Possible configuration: [`size`](Preferences.md#size), and [`color`](Preferences.md#color).
 
 If you want to display the holes in time too (e.g., year with no documents),
-add `"parseDates": true` in the configuration:
+add `"parseDates": true` (default value: `false`) in the configuration:
 
 ```javascript
       {
@@ -116,56 +118,56 @@ In the example, if you omit `"firstOnly": true`, the URL will be http://localhos
 [
   [
     {
-      _id: "2007",
-      value: 5,
-      value2: 868
+      "_id": "2007",
+      "value": 5,
+      "value2": 868
     },
     {
-      _id: "2008",
-      value: 3,
-      value2: 39
+      "_id": "2008",
+      "value": 3,
+      "value2": 39
     },
     {
-      _id: "2009",
-      value: 4,
-      value2: 46
+      "_id": "2009",
+      "value": 4,
+      "value2": 46
     },
     {
-      _id: "2010",
-      value: 1,
-      value2: 5
+      "_id": "2010",
+      "value": 1,
+      "value2": 5
     },
     {
-      _id: "2011",
-      value: 1,
-      value2: 106
+      "_id": "2011",
+      "value": 1,
+      "value2": 106
     }
   ],
   [
     {
-      _id: "2007",
-      value: 5,
-      value2: 868
+      "_id": "2007",
+      "value": 5,
+      "value2": 868
     },
     {
-      _id: "2008",
-      value: 3,
-      value2: 39
+      "_id": "2008",
+      "value": 3,
+      "value2": 39
     },
     {
-      _id: "2009",
-      value: 4,
-      value2: 46
+      "_id": "2009",
+      "value": 4,
+      "value2": 46
     },
     {
-      _id: "2010",
-      value: 1,
-      value2: 5
+      "_id": "2010",
+      "value": 1,
+      "value2": 5
     },
     {
-      _id: "2011",
-      value: 1,
-      value2: 106
+      "_id": "2011",
+      "value": 1,
+      "value2": 106
     }
   ],
   [...],
@@ -181,29 +183,29 @@ and will return a `data` like:
 ```json
 [
   {
-    _id: "2007",
-    value: 5,
-    value2: 868
+    "_id": "2007",
+    "value": 5,
+    "value2": 868
   },
   {
-    _id: "2008",
-    value: 3,
-    value2: 39
+    "_id": "2008",
+    "value": 3,
+    "value2": 39
   },
   {
-    _id: "2009",
-    value: 4,
-    value2: 46
+    "_id": "2009",
+    "value": 4,
+    "value2": 46
   },
   {
-    _id: "2010",
-    value: 1,
-    value2: 5
+    "_id": "2010",
+    "value": 1,
+    "value2": 5
   },
   {
-    _id: "2011",
-    value: 1,
-    value2: 106
+    "_id": "2011",
+    "value": 1,
+    "value2": 106
   }
 ]
 ```
