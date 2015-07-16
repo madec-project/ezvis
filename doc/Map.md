@@ -1,3 +1,5 @@
+![Example of ezVIS geographical Map](img/ezvis_lorraine_map.png)
+
 Used to project country-related numbers on a geographical map.
 
 At the moment, there is only one usable map: "world".
