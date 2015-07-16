@@ -12,7 +12,9 @@ fields, or of charts configuration: set `addlinkstojbj` to `true`.
 This is intented to be used during configuration time, not production time.
 A link to [JBJ Playground](http://castorjs.github.io/node-jbj/) will be proposed, with the input area already filled in with the data used in the pages where the button appear.
 
-Generally, you'll need access to the `data` part of the input JSON. So, begin with this stylesheet:
+To access the same part as what is in a record (in `documentFields`), you need
+to select to the `data` part of the input JSON. So, begin with this
+stylesheet:
 
 ```json
 {
