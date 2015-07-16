@@ -1,3 +1,5 @@
+![Example of ezVIS facets](img/ezvis_lorraine_facets.png)
+
 In a chart page, you can add facets: others fields' values.
 
 Thus, you can have facets in each chart. Example:
