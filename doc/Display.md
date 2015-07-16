@@ -36,6 +36,8 @@ Ex:
 }
 ```
 
+![Example of ezVIS document's display](img/ezvis_films_display.png)
+
 To change the fields column's width, use `fieldsWidth` within `display` key:
 
 ```json

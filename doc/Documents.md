@@ -1,4 +1,7 @@
+![Example of ezVIS documents table](img/ezvis_films_documents.png)
+
 In `/chart.html` pages, you can see a chart, and a table with documents. This table display the fields you chose to put in the `documentFields` key.
+This table is also the only element present in `/documents.html` page.
 
 Here is an example, displaying `Year`, `Title`, `Authors`, and `Keywords`:
 
