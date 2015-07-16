@@ -293,7 +293,7 @@ $(document).ready(function () {
       }
     };
     if (pref.legend) {
-      options.legend = pref.legend;
+      options.legend = pref.legend || {};
       options.labelText = "[[value]]";
       // Change legend labels
       if (pref.labels) {
@@ -306,9 +306,7 @@ $(document).ready(function () {
             color: pref.colors? pref.colors[i%pref.colors.length] : defaultColors[i%defaultColors.length]
           });
         }
-        options.legend = {
-          data: legendData
-        };
+        options.legend.data = legendData;
       }
     }
     if (pref.colors) {
