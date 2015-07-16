@@ -64,6 +64,8 @@ You can also precise in which field the value has to be colored.
       }
 ```
 
+![Example of ezVIS network](img/ezvis_films_network.png)
+
 Selected Network, where only documents matching the mongodb `selector` are
 visible (using a [MongoDB Match Query Criteria](http://docs.mongodb.org/manual/reference/method/db.collection.find/#find-documents-that-match-query-criteria), but within a JSON, thus using
 quotes around operators).
