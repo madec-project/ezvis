@@ -12,4 +12,12 @@ fields, or of charts configuration: set `addlinkstojbj` to `true`.
 This is intented to be used during configuration time, not production time.
 A link to [JBJ Playground](http://castorjs.github.io/node-jbj/) will be proposed, with the input area already filled in with the data used in the pages where the button appear.
 
+Generally, you'll need access to the `data` part of the input JSON. So, begin with this stylesheet:
+
+```json
+{
+    "get": "data"
+}
+```
+
 Make sure you set `addlinkstojbj` to `false` before deploying in production environment (or simply remove the key from the [configuration file](ConfigurationFile.md)).
