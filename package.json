@@ -35,10 +35,10 @@
     "basic-auth": "^1.0.0",
     "castor-core": "^2.4.0",
     "jquery": "^2.1.1",
-    "marked": "^0.3.2",
+    "marked": "^0.3.3",
     "moment": "^2.8.3",
     "qs": "^2.2.4",
-    "sha1": "^1.1.0",
+    "sha1": "^1.1.1",
     "vue": "^0.10.6"
   },
   "devDependencies": {
