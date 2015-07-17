@@ -1,15 +1,15 @@
 {% extends "layout.html" %}
 
 {% block content %}
-{% if config.pages.documents.help %}
-<div class="row lead">
-	{{ config.pages.documents.help | markdown }}
 {% if config.addlinkstojbj %}
 	<p id="jbjlink">
 		If you want to configure <code>documentFields</code>, you may want to see the JSON documents in 
 		<a class="btn btn-default" href="http://castorjs.github.io/node-jbj/?input=" role="button">JBJ</a> playground.
 	</p>
 {% endif %}
+{% if config.pages.documents.help %}
+<div class="row lead">
+	{{ config.pages.documents.help | markdown }}
 </div>
 {% endif %}
 <div class="panel-body">
