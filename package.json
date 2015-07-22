@@ -1,6 +1,6 @@
 {
   "name": "ezvis",
-  "version": "6.7.3",
+  "version": "6.8.0",
   "description": "A dashboard to visualize a synthesis on a structured corpus, using several charts (pie, histogram, ...)",
   "main": "index.js",
   "bin": {
