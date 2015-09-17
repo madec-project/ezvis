@@ -26,7 +26,6 @@ charts: [`histogram`](Histogram.md) and [`pie`](Pie.md).
 
 ```json
 {
-  "theme": "/path/to/ezvis",
   "documentFields": {
     "$fields.Themes" : {
       "path" : "content.json.DiscESI",
