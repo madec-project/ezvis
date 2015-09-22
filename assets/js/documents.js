@@ -53,7 +53,8 @@ $(document).ready(function() {
         "targets" : allFields
       }],
       "dom": '<"dtTop"<"dtLeft"li><"dtRight"f>><rt><"dtBottom"ip><"clear">',
-      "stateSave": true
+      "stateSave": true,
+      "language": { "search": "Filter" }
     });
     table.on('xhr', function () {
       var params = '?' + qs.stringify(table.ajax.params());
