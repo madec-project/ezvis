@@ -45,3 +45,4 @@ ezVIS stands for easy **vis**ualization of information in web report.
 - [JBJ](JBJ.md)
 - [Showcase](Showcase.md)
 - [Blog](MADEC.md)
+- [Thanks](PoweredBy.md)
