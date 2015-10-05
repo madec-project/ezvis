@@ -22,7 +22,7 @@ module.exports = function(config) {
     var user = basicAuth(req);
     // Authorize local:/// protocol (for corpusFields)
     if (!user) {
-      if (req.ip === "127.0.0.1") {
+      if (!req.headers['x-forwarded-for'] && req.ip === "127.0.0.1") {
         return next();
       }
     }
