@@ -1,7 +1,7 @@
 site_name: ezVIS Documentation
 repo_url: https://github.com/madec-project/ezvis/
 repo_name: GitHub
-theme: ReadTheDocs
+theme: readthedocs
 site_description: Documentation for ezVIS
 docs_dir: doc
 include_search: true
