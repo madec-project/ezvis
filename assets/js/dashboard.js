@@ -407,7 +407,9 @@ $(document).ready(function () {
         "valueAxis": "v2",
         "showHandOnHover" : true
       };
-      console.log(options);
+      if (pref.overlay.color) {
+        options.graphs[1].lineColor = pref.overlay.color;
+      }
       return options;
     }
     else {

@@ -92,6 +92,7 @@ year, *overlayed* by a line containing the citations per year.
         "color": "#5496cf",
         "overlay": {
           "label": "Citation ratio:",
+          "color": "red",
           "firstOnly": true,
           "flying": [ "publiCitationPerYear" ]
         }
@@ -99,6 +100,8 @@ year, *overlayed* by a line containing the citations per year.
     ]
   }
 ```
+
+`overlay` has a `color` option, if you don't like the default color for the line.
 
 > **Warning:** using facets with an overlay (which is computed from
 > `corpusFields`) is not a good idea: the selected facets will not modify
