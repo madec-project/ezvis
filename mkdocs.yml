@@ -6,30 +6,35 @@ site_description: Documentation for ezVIS
 docs_dir: doc
 include_search: true
 pages:
-- ['index.md','Summary']
-- ['Installation.md', 'Installation']
-- ['GettingStarted.md','Getting Started']
-- ['ConfigurationFile.md', 'Configuration', 'JSON file']
-- ['DocumentFields.md', 'Configuration', 'documentFields']
-- ['CorpusFields.md', 'Configuration', 'corpusFields']
-- ['FlyingFields.md', 'Configuration', 'flyingFields']
-- ['Access.md', 'Configuration', 'Access restriction by login/password']
-- ['Dashboard.md', 'Dashboard', 'Dashboard']
-- ['Histogram.md', 'Dashboard', 'histogram']
-- ['HorizontalBars.md', 'Dashboard', 'horizontalbars']
-- ['Pie.md', 'Dashboard', 'pie']
-- ['Map.md', 'Dashboard', 'map']
-- ['Network.md', 'Dashboard', 'network']
-- ['Preferences.md', 'Dashboard', 'Charts'' preferences']
-- ['Facets.md', 'Dashboard', 'Facets']
-- ['Fields.md', 'Chart parameters', 'Field parameters to charts']
-- ['Operators.md', 'Chart parameters', 'Operator parameter to charts']
-- ['Flying.md', 'Chart parameters', 'Flying parameter to charts']
-- ['Documents.md', 'Pages', 'Documents table']
-- ['Display.md', 'Pages', 'Document''s page']
-- ['Pages.md', 'Pages', 'Pages'' labels and texts']
-- ['Loaders.md', 'Data', 'Loaders by format']
-- ['JBJ.md', 'Annexes', 'JBJ']
-- ['Showcase.md', 'Annexes', 'Showcase']
-- ['MADEC.md', 'Annexes', 'Blog']
-- ['PoweredBy.md', 'Annexes', 'Thanks']
+- Summary: index.md
+- Installation: Installation.md
+- Getting Started: GettingStarted.md
+- Configuration:
+    - JSON file: ConfigurationFile.md
+    - corpusFields: CorpusFields.md
+    - flyingFields: FlyingFields.md
+    - Access restriction by login/password: Access.md
+- Dashboard:
+    - Dashboard: Dashboard.md
+    - histogram: Histogram.md
+    - horizontalbars: HorizontalBars.md
+    - pie: Pie.md
+    - map: Map.md
+    - network: Network.md
+    - Charts preferences: Preferences.md
+    - Facets: Facets.md
+- Chart parameters:
+    - Field parameteres to charts: Fields.md
+    - Operator parameter to charts: Operators.md
+    - Flying parameter to charts: Flying.md
+- Pages:
+    - Documents table: Documents.md
+    - Documents page: Display.md
+    - Pages labels and texts: Pages.md
+- Data:
+    - Loaders by format: Loaders.md
+- Annexes:
+    - JBJ: JBJ.md
+    - Showcase: Showcase.md
+    - Blog: MADEC.md
+    - Thanks: PoweredBy.md
