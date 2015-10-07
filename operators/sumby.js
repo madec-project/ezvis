@@ -4,11 +4,11 @@
 /**
  * Operator sum field1 by field2
  *
- * 
- * Return the sum of the values from field1 for each value of 
+ *
+ * Return the sum of the values from field1 for each value of
  * field2.
  *
- * Ex: count citaitons by year /compute.json?o=count_field1_by_field2&f=fields.citations&f=content.json.year&itemsPerPage=0
+ * Ex: count citaitons by year /-/v2/compute.json?o=count_field1_by_field2&f=fields.citations&f=content.json.year&itemsPerPage=0
  *
  * doc      year       citations
  * #1       2001        10

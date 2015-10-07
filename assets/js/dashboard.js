@@ -95,7 +95,7 @@ $(document).ready(function () {
     }
 
     var facet = facetsPrefs[facetId];
-    var url   = '/compute.json?o=distinct&f=' + facet.path;
+    var url   = '/-/v2/compute.json?o=distinct&f=' + facet.path;
 
     if (selArray.length && selArray.length < 2) {
       sel = selArray[0];
@@ -127,7 +127,7 @@ $(document).ready(function () {
     var maxItems = graphPref.maxItems ? graphPref.maxItems : 0;
     var fields   = graphPref.fields ? graphPref.fields : [graphPref.field];
     var flyings  = graphPref.flying ? graphPref.flying : [];
-    var url      = '/compute.json?o=' + operator;
+    var url      = '/-/v2/compute.json?o=' + operator;
     fields.forEach(function (field) {
       url += '&f=' + field;
     });
@@ -1005,7 +1005,7 @@ $(document).ready(function () {
     var operator = pref.operator ? pref.operator : "distinct";
     var fields   = pref.fields ? pref.fields : [pref.field];
     var flyings  = pref.flying ? pref.flying : [];
-    var url      = '/compute.json?o=' + operator;
+    var url      = '/-/v2/compute.json?o=' + operator;
     fields.forEach(function (field) {
       url += '&f=' + field;
     });
@@ -1041,7 +1041,7 @@ $(document).ready(function () {
     var operator = pref.operator ? pref.operator : "distinct";
     var fields   = pref.fields ? pref.fields : [pref.field];
     var flyings  = pref.flying ? pref.flying : [];
-    var url      = '/compute.json?o=' + operator;
+    var url      = '/-/v2/compute.json?o=' + operator;
     fields.forEach(function (field) {
       url += '&f=' + field;
     });
@@ -1083,7 +1083,7 @@ $(document).ready(function () {
     var maxItems = pref.maxItems ? pref.maxItems : 0;
     var fields   = pref.fields ? pref.fields : [pref.field];
     var flyings  = pref.flying ? pref.flying : [];
-    var url      = '/compute.json?o=' + operator;
+    var url      = '/-/v2/compute.json?o=' + operator;
     fields.forEach(function (field) {
       url += '&f=' + field;
     });
@@ -1119,7 +1119,7 @@ $(document).ready(function () {
     var operator    = pref.operator ? pref.operator : "distinct";
     var fields      = pref.fields ? pref.fields : [pref.field];
     var flyings     = pref.flying ? pref.flying : [];
-    var url         = '/compute.json?o=' + operator;
+    var url         = '/-/v2/compute.json?o=' + operator;
 
     fields.forEach(function (field) {
       url += '&f=' + field;
@@ -1163,7 +1163,7 @@ $(document).ready(function () {
     var maxItems = pref.maxItems ? pref.maxItems : 1000;
     var fields   = pref.fields ? pref.fields : [pref.field];
     var flyings  = pref.flying ? pref.flying : [];
-    var url      = '/compute.json?o=' + operator;
+    var url      = '/-/v2/compute.json?o=' + operator;
     fields.forEach(function (field) {
       url += '&f=' + field;
     });
@@ -1357,9 +1357,9 @@ $(document).ready(function () {
           // Add documents and facets
           if (isOnlyChart(id)) {
             var addLink = function addLink(data, type, row) {
-              return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
+              return '<a href="/-/v2/display/' + row.wid + '.html">' + data + '</a>';
             };
-            var url = "/browse.json";
+            var url = "/-/v2/browse.json";
             if (pref.centerOn && pref.centerOn.length) {
               url += '?sel={"' + (pref.field || pref.fields[0]) + '":' +
                      '{"$elemMatch":{"$in":' + JSON.stringify(pref.centerOn) + '}}' +
@@ -1425,10 +1425,10 @@ $(document).ready(function () {
             var vexp = new Vue( {
               el: '#chart-exports',
               data: {
-                csv: '/browse.csv',
-                json: '/browse.json',
-                rss: '/browse.rss',
-                atom: '/browse.atom'
+                csv: '/-/v2/browse.csv',
+                json: '/-/v2/browse.json',
+                rss: '/-/v2/browse.rss',
+                atom: '/-/v2/browse.atom'
               },
               ready: function() {
                 var self = this;
@@ -1466,7 +1466,7 @@ $(document).ready(function () {
                 var maxItems = pref.maxItems ? pref.maxItems : (pref.type === "network" ? 1000 : 0);
                 var fields   = pref.fields ? pref.fields : [pref.field];
                 var flyings  = pref.flying ? pref.flying : [];
-                var url      = '/compute.json?o=' + operator;
+                var url      = '/-/v2/compute.json?o=' + operator;
                 fields.forEach(function (field) {
                   url += '&f=' + field;
                 });

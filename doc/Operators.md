@@ -26,7 +26,7 @@ They can be used explicitly in apps' configuration (such as in the charts of
 ezVIS), or under the hood.
 
 They can be used in URL such as:
-`http://localhost:3000/compute.json?o=operator` and their parameters are
+`http://localhost:3000/-/v2/compute.json?o=operator` and their parameters are
 fields (`f`).
 
 List:
@@ -50,7 +50,7 @@ order is significant.
 
 Ex: to sum the citation field of all documents, grouped year field:
 
-`http://localhost:3000/compute.json?o=sum_field1_by_field2&f=content.json.citation&f=content.json.year&itemsPerPage=`
+`http://localhost:3000/-/v2/compute.json?o=sum_field1_by_field2&f=content.json.citation&f=content.json.year&itemsPerPage=`
 
 will return a JSON containing data similar to:
 
@@ -77,6 +77,8 @@ data: [
 
 (`itemsPerPage` limits the number of year returned, and `0` means all)
 
+> **Note:** versions 6.8.0 and previous ones used URL like `http://localhost:3000/-/v2/compute.json?o=sum_field1_by_field2&f=content.json.citation&f=content.json.year&itemsPerPage=` (without `-/v2/` at the beginning).
+
 ## count_field1_by_field2
 `count_field1_by_field2` counts the different values of a field `field1` when they co-occur with the values of another field `field2`.
 
@@ -85,7 +87,7 @@ order is significant.
 
 Ex: to count different sections by year:
 
-`http://localhost:3000/compute.json?o=count_field1_by_field2&f=fields.Section&f=content.json.year&itemsPerPage=`
+`http://localhost:3000/-/v2/compute.json?o=count_field1_by_field2&f=fields.Section&f=content.json.year&itemsPerPage=`
 
 will return a JSON containing data similar to:
 
@@ -142,9 +144,9 @@ TODO
 
 Often used to count the number of documents in the corpus (using the `wid`
 identifier, which is always present in the records of the database via
-[http://localhost:3000/compute.json?operator=count&field=wid](http://localhost:3000/compute.json?operator=count&field=wid)).
+[http://localhost:3000/-/v2/compute.json?operator=count&field=wid](http://localhost:3000/-/v2/compute.json?operator=count&field=wid)).
 
-Ex: `http://localhost:3000/compute.json?operator=count&field=wid`
+Ex: `http://localhost:3000/-/v2/compute.json?operator=count&field=wid`
 
 return JSON similar to:
 
@@ -164,7 +166,7 @@ return JSON similar to:
 
 Ex: count the number of documents by year.
 
-`http://lcoalhost:3000/compute.json?o=distinct&f=content.json.year&itemsPerPage=`
+`http://lcoalhost:3000/-/v2/compute.json?o=distinct&f=content.json.year&itemsPerPage=`
 
 return JSON data similar to:
 
@@ -195,7 +197,7 @@ return JSON data similar to:
 
 Ex: graph of themes co-occurrences
 
-`http://localhost:3000/compute.json?o=graph&f=fields.Themes&itemsPerPage=`
+`http://localhost:3000/-/v2/compute.json?o=graph&f=fields.Themes&itemsPerPage=`
 
 return JSON `data` similar to:
 
@@ -239,7 +241,7 @@ return JSON `data` similar to:
 
 Ex: graph of themes and year co-occurrences
 
-`http://localhost:3000/compute.json?o=graph&f=fields.Themes&f=fields.year&itemsPerPage=`
+`http://localhost:3000/-/v2/compute.json?o=graph&f=fields.Themes&f=fields.year&itemsPerPage=`
 
 return JSON `data` similar to:
 

@@ -10,7 +10,7 @@ For example, to get the number of documents in the corpus:
       "visible": true,
       "label"  : "films",
       "icon"   : "hand-o-right",
-      "$?"       : "local:///compute.json?operator=count&field=wid",
+      "$?"       : "local:///-/v2/compute.json?operator=count&field=wid",
       "parseJSON": true,
       "get"      : "data.0.value",
       "cast"     : "number"
@@ -47,9 +47,9 @@ could return a page like:
     hash: null,
     search: "?operator=count&field=wid",
     query: "operator=count&field=wid",
-    pathname: "/compute.json",
-    path: "/compute.json?operator=count&field=wid",
-    href: "http://localhost:3000/compute.json?operator=count&field=wid"
+    pathname: "/-/v2/compute.json",
+    path: "/-/v2/compute.json?operator=count&field=wid",
+    href: "http://localhost:3000/-/v2/compute.json?operator=count&field=wid"
   },
   parameters: {
     field: [
@@ -91,8 +91,13 @@ This page is a text, containing JSON. You have to parse it, using
 notation, see
 [the examples](https://github.com/mariocasciaro/object-path#usage)).
 
-> **Tip:** You can transform a `local:///compute.json?operator=count&field=wid` into
-> `http://localhost:3000/compute.json?operator=count&field=wid` and copy-paste
+> **Tip:** You can transform a `local:///-/v2/compute.json?operator=count&field=wid` into
+> `http://localhost:3000/-/v2/compute.json?operator=count&field=wid` and copy-paste
 > its content into the input area of the  [JBJ Playground](http://castorjs.github.io/node-jbj/), and try to enter in the 
 > stylesheet area the JBJ actions you want to test, and click "Try it" to see if
 > the result matches what you want in the corpusField.
+
+> **Note:** versions 6.8.0 and previous ones used URL like
+> `http://localhost:3000/-/v2/compute.json?operator=count&field=wid`
+> (without `-/v2/` at the beginning). This applies to `local:///` protocol
+> too.

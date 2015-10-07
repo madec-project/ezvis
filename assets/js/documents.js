@@ -7,7 +7,7 @@ $(document).ready(function() {
   var qs = require('qs');
 
   var addLink = function addLink(data, type, row) {
-    return '<a href="/display/' + row.wid + '.html">' + data + '</a>';
+    return '<a href="/-/v2/display/' + row.wid + '.html">' + data + '</a>';
   };
 
   var fieldNb = Object.keys(Config.documentFields).reduce(function(p, c) {
@@ -25,10 +25,10 @@ $(document).ready(function() {
   var vexp = new Vue( {
       el: '#exports',
       data: {
-        csv: '/browse.csv',
-        json: '/browse.json',
-        rss: '/browse.rss',
-        atom: '/browse.atom'
+        csv: '/-/v2/browse.csv',
+        json: '/-/v2/browse.json',
+        rss: '/-/v2/browse.rss',
+        atom: '/-/v2/browse.atom'
       },
       ready: function() {
         var self = this;
@@ -45,7 +45,7 @@ $(document).ready(function() {
       },
       "ordering" : true,
       "serverSide" : true,
-      "ajax" : "/browse.json",
+      "ajax" : "/-/v2/browse.json",
       "lengthMenu" : [ Config.itemsPerPage || 5,10,25,50,100],
       "columns" : columns,
       "columnDefs" : [ {
@@ -73,7 +73,7 @@ $(document).ready(function() {
   var a = $('#jbjlink > a');
   if (a.length) {
     var link = a.attr('href');
-    link += window.location.href.replace('documents.html','browse.json');
+    link += window.location.href.replace('documents.html','-/v2/browse.json');
     a.attr('href', link);
   }
 

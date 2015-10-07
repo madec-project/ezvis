@@ -4,10 +4,10 @@
 /**
  * Operator count field1 by field2
  *
- * Return the distribution of the values from field1 for each value of 
+ * Return the distribution of the values from field1 for each value of
  * field2.
  *
- * Ex: count keywords by year /compute.json?o=count_field1_by_field2&f=fields.keyword&f=content.json.year&itemsPerPage=0
+ * Ex: count keywords by year /-/v2/compute.json?o=count_field1_by_field2&f=fields.keyword&f=content.json.year&itemsPerPage=0
  *
  * doc      year       keyword
  * #1       2001        a, b

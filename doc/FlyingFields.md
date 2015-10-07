@@ -10,7 +10,7 @@ time, thus they can interoperate with `corpusFields`.
 
 A `flyingField` can be seen as a post-treatment (written in JBJ) applicable
 through the use of a compute [operator](Operators.md) on a specific field. The
-URL begins with `/compute.json?operator=` followed by the operator name (often
+URL begins with `/-/v2/compute.json?operator=` followed by the operator name (often
 `distinct`), followed by `&field=` and by a field name. Then you can add
 `&flying=` and the name of the `flyingField`.
 
@@ -60,7 +60,7 @@ URL in `$?` returns):
 ```
 
 The `distinct` operator on `country` `documentFields` will be called with 
-http://localhost:3000/compute.json?operator=distinct&field=country:
+http://localhost:3000/-/v2/compute.json?operator=distinct&field=country:
 
 ```json
 {
@@ -113,3 +113,5 @@ fields, to only keep `_id` and `value`, the previous URL can be added with
   ]
 }
 ```
+
+> **Note:** versions 6.8.0 and previous ones used URL like `http://localhost:3000/-/v2/compute.json?o=sum_field1_by_field2&f=content.json.citation&f=content.json.year&itemsPerPage=` (without `-/v2/` at the beginning).
