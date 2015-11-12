@@ -65,6 +65,12 @@ Once MongoDb is running, you can skip the following steps to install NodeJS.
 
 On [nodejs's downloads page](http://nodejs.org/download/), get the Windows MSI Installer, and use it.
 
+### Requirements
+
+These requirements maybe already fullfilled on your machine:
+- Python 2 installed
+- .NET Framework 2.0 SDK (installed, and in the PATH)
+
 ### Command Prompt
 
 To launch ezVIS, you'll need to open a new command prompt, then go to the [`npm` step](#npm-installation).
@@ -88,6 +94,8 @@ $ npm install --production ezvis -g
 >  installation of development (and test) dependencies. If you don't intend
 >  to run these tests, you can safely remove this option.
 
+> **Note 2:** under Windows, you may need to use the `--msvs_version=2012`
+> option, see this [StackOverflow page](http://stackoverflow.com/questions/14278417/cannot-install-node-modules-that-require-compilation-on-windows-7-x64-vs2012).
 
 # Usage
 
