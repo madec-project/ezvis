@@ -45,3 +45,5 @@ Both loader and web application are configurated in the `films.json`.
 If you want to go farther, take a look at the `films.json` file, which
 contains all the report's configuration (which is explained later in this
 documentation).
+
+And there are more examples (often including data) in the [showcase](https://github.com/madec-project/showcase/).
