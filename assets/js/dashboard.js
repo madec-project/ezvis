@@ -155,6 +155,11 @@ $(document).ready(function () {
         }
       }
     }
+    else {
+      url +=
+         '&columns[0][data]=_id&columns[0][orderable]=true' +
+         '&order[0][column]=0&order[0][dir]=asc';
+    }
     if (sel.length && sel !== '{}') {
       url += '&sel=' + sel;
     }
@@ -1050,6 +1055,9 @@ $(document).ready(function () {
     flyings.forEach(function (flying) {
       url += '&ff=' + flying;
     });
+    url +=
+       '&columns[0][data]=_id&columns[0][orderable]=true' +
+       '&order[0][column]=0&order[0][dir]=asc';
 
     if (pref.overlay && pref.overlay.flying) {
       if (pref.overlay.firstOnly) {
