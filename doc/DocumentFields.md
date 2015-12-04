@@ -48,8 +48,8 @@ which will modify the former document to the following:
 ```
 
 `$year` indicates to create a `year` property at the document's root (or a
-[variable](https://github.com/castorjs/node-jbj#variables), in JBJ's
-terminology), and the [`get` JBJ action](https://github.com/castorjs/node-jbj#get)
+[variable](https://github.com/Inist-CNRS/node-jbj#variables), in JBJ's
+terminology), and the [`get` JBJ action](https://github.com/Inist-CNRS/node-jbj#get)
 points to the location of the source field in the same document.
 
 All [JBJ actions](https://github.com/castorjs/node-jbj#actions) are

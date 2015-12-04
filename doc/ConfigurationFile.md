@@ -50,4 +50,4 @@ charts: [`histogram`](Histogram.md) and [`pie`](Pie.md).
 }
 ```
 
-> **Tip:** to make `documentFields`, and `charts` configuration easier, you can set `addlinkstojbj` to `true`. This will add links from charts, documents list, and document display to the JBJ Playground, filling the `input` area with JSON data useful to configuration.
+> **Tip:** to make `documentFields`, and `charts` configuration easier, you can set `addlinkstojbj` to `true`. This will add links from charts, documents list, and document display to the [JBJ Playground](http://Inist-CNRS.github.io/jbj-playground/), filling the `input` area with JSON data useful to configuration.

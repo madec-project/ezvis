@@ -5,12 +5,12 @@ charts ([histogram](Histogram.md), [horizontalbars](HorizontalBars.md),
 
 See the whole documentation of JBJ at
 [ReadTheDocs](http://jbj.readthedocs.org/) or at
-[GitHub](https://github.com/castorjs/node-jbj).
+[GitHub](https://github.com/Inist-CNRS/node-jbj).
 
 However, there is a trick included in ezVIS, to facilitate the building of
 fields, or of charts configuration: set `addlinkstojbj` to `true`.
 This is intented to be used during configuration time, not production time.
-A link to [JBJ Playground](http://castorjs.github.io/node-jbj/) will be proposed, with the input area already filled in with the data used in the pages where the button appear.
+A link to [JBJ Playground](http://Inist-CNRS.github.io/jbj-playground/) will be proposed, with the input area already filled in with the data used in the pages where the button appear.
 
 To access the same part as what is in a record (in `documentFields`), you need
 to select the `data` part of the input JSON. So, begin with this

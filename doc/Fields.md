@@ -40,7 +40,7 @@ distinguish the `Dashboard` from the first row to the one from the second row.
 Moreover, they will be bound to other keywords on the same row.
 
 The solution is to add a *document field* in the JSON configuration file,
-using [JBJ](https://github.com/castorjs/node-jbj)'s syntax:
+using [JBJ](https://github.com/Inist-CNRS/node-jbj)'s syntax:
 
 ```javascript
 "documentFields" : {
