@@ -1,0 +1,17 @@
+ezvis:
+  image: inistcnrs/ezvis
+  links:
+    - ezvis_db:mongo
+  volumes:
+    - ${EZVIS_DATA_DIR}:/root/data
+    - ${EZVIS_DATA_CONF}:/root/data.json
+  environment:
+    http_proxy:  ${http_proxy}
+    https_proxy: ${https_proxy}
+    NODE_ENV: "production"
+  ports:
+    - 3000:3000
+
+ezvis_db:
+  image: mongo:3.0.7
+  command: --smallfiles
