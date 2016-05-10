@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+
+  ezvis:
+    container_name: ezvis
+    image: inistcnrs/ezvis
+    build:
+      context: .
+      args:
+        - http_proxy
+        - https_proxy
+    links:
+      - ezvis_db
+    volumes:
+      - ${EZVIS_DATA_DIR}:/root/data
+      - ${EZVIS_DATA_CONF}:/root/data.json
+    environment:
+      http_proxy:  ${http_proxy}
+      https_proxy: ${https_proxy}
+      NODE_ENV: "production"
+      MONGO_URI: "ezvis_db:27017"
+    ports:
+      - 3000:3000
+    restart: always
+
+  ezvis_db:
+    container_name: ezvis_db
+    image: mongo:3.0.7
+    command: --smallfiles
