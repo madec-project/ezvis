@@ -1,7 +1,7 @@
 ezvis:
   image: inistcnrs/ezvis
   links:
-    - ezvis_db:mongo
+    - ezvis_db
   volumes:
     - ${EZVIS_DATA_DIR}:/root/data
     - ${EZVIS_DATA_CONF}:/root/data.json
