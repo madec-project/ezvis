@@ -20,6 +20,7 @@ services:
       https_proxy: ${https_proxy}
       NODE_ENV: "production"
       MONGO_URI: "ezvis_db:27017"
+      MONGO_DATABASE: "castor"
     ports:
       - 3000:3000
     restart: always
