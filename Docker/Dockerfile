@@ -10,7 +10,11 @@ RUN apt-get install npm -y
 RUN npm install --production ezvis -g
  
 ADD startup.sh /
- 
+
 EXPOSE 3000
  
 CMD bash /startup.sh
+
+RUN sudo mkdir -p /opt/ezmaster/config/
+RUN sudo ln -s /root/data.json /opt/ezmaster/config/config.json
+RUN sudo ln -s /root/data /opt/ezmaster/data
