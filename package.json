@@ -5,13 +5,13 @@
   "main": "index.js",
   "bin": {
     "visir": "./cli",
-    "ezvis": "./cli",
-    "version": "./tools/make-version",
-    "postversion": "git push && git push --tags"
+    "ezvis": "./cli"
   },
   "scripts": {
     "start": "node ./server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version": "./tools/make-version",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
