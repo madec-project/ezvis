@@ -5,7 +5,9 @@
   "main": "index.js",
   "bin": {
     "visir": "./cli",
-    "ezvis": "./cli"
+    "ezvis": "./cli",
+    "version": "./tools/make-version",
+    "postversion": "git push && git push --tags"
   },
   "scripts": {
     "start": "node ./server.js",
