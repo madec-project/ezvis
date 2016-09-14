@@ -3,6 +3,9 @@
 [![npm version](https://badge.fury.io/js/ezvis.svg)](http://badge.fury.io/js/ezvis)
 [![Documentation Status](https://readthedocs.org/projects/ezvis/badge/?version=latest)](https://readthedocs.org/projects/ezvis/?badge=latest)
 
+[![Docker status](http://dockeri.co/image/inistcnrs/ezvis)](https://registry.hub.docker.com/u/inistcnrs/ezvis/)
+
+
 A web dashboard to visualize a synthesis on a structured corpus, using several
 charts (pies, histograms, ...).
 
