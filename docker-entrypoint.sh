@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$MONGO_HOST_PORT" == "" ]; then
-  MONGO_HOST_PORT=${EZMASTER_MONGODB_HOST_PORT:-ezvis_db:27017}
+  MONGO_HOST_PORT=${EZMASTER_MONGODB_HOST_PORT:-localhost:27017}
 fi
 if [ "$MONGO_DATABASE" == "" ]; then
   MONGO_DATABASE=${EZMASTER_TECHNICAL_NAME:-ezvis}
