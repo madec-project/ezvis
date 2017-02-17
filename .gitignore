@@ -25,3 +25,4 @@ data*/*
 data*.json
 assets/amcharts-*
 assets/ammap-*
+.vscode
