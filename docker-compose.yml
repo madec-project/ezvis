@@ -4,7 +4,7 @@ services:
 
   ezvis:
     container_name: ezvis
-    image: inistcnrs/ezvis:6.8.11
+    image: inistcnrs/ezvis:6.8.12
     links:
       - ezvis_db
     # volumes:
