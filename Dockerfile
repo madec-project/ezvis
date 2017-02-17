@@ -3,7 +3,6 @@ FROM node:4.4.0
 WORKDIR /app
 COPY ./package.json /app
 RUN npm install --production
-COPY . /app
 
 # add few dataset to have something to play with
 RUN mkdir -p /app/example/data
@@ -20,6 +19,8 @@ RUN echo '{ \
   "configPath": "/app/example/data.json", \
   "dataPath":   "/app/example/data/" \
 }' > /etc/ezmaster.json
+
+COPY . /app
 
 ENTRYPOINT ./docker-entrypoint.sh
 EXPOSE 3000
