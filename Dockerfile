@@ -18,8 +18,6 @@ RUN chmod 777 /app/example/data/films.csv /app/example/data.json
 
 RUN jq '.MONGO_HOST_PORT = "mongo-db:27017"' /app/example/data.json > /tmp/data.json \
     && cat /tmp/data.json > /app/example/data.json
-RUN jq '.MONGO_DATABASE = "ezvis"' /app/example/data.json > /tmp/data.json \
-    && cat /tmp/data.json > /app/example/data.json
 
 # ezmasterization of ezvis
 # see https://github.com/Inist-CNRS/ezmaster
