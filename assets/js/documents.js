@@ -54,7 +54,8 @@ $(document).ready(function() {
       }],
       "dom": '<"dtTop"<"dtLeft"li><"dtRight"f>><rt><"dtBottom"ip><"clear">',
       "stateSave": true,
-      "language": { "search": "Filter" }
+	  "processing" : true,
+      "language": { "search": "Filter", "processing": '<i class="fa fa-refresh fa-spin"></i>' }
     });
     table.on('xhr', function () {
       var params = '?' + qs.stringify(table.ajax.params());
