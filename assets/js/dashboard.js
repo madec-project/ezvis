@@ -1274,7 +1274,9 @@ $(document).ready(function () {
           { "data": "_id" },
           { "data": "value" }
         ],
-        "order": [[1, "desc"]]
+        "order": [[1, "desc"]],
+		processing : true,
+		language : {processing: '<i class="fa fa-refresh fa-spin"></i>'}
       };
       if (facet.paging === false) {
         options.dom = "rti";
@@ -1423,6 +1425,8 @@ $(document).ready(function () {
               "render": addLink,
               "targets": allFields
             }];
+			options.processing = true;
+            options.language = { search: "Filter", processing: '<i class="fa fa-refresh fa-spin"></i>'};
             table = $('#dataTables-documents').DataTable(options);
             table.column(0).visible(false);
             // facets
